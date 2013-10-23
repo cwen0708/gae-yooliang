@@ -58,6 +58,21 @@
     <div class="row-fluid">
         <div class="span12">
             <div class="control-group">
+                <label class="control-label" for="type_image" data-lang="圖示分類"></label>
+                <select class="span12" name="type_image" id="type_image">
+                    <option value="1">(藍色) 投資太陽能系統Green Money</option>
+                    <option value="2">(紅色) 綠色能源系統Green Energy</option>
+                    <option value="3">(綠色) 幸福家庭綠色空間Green Space</option>
+                    <option value="4">(橘色) 監測系統Green Monitor(Eyes)</option>
+                    <option value="5">(灰色) 養耕共生系統Green Farm</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
                 <label class="control-label" for="system_type" data-lang="系統類別"></label>
                 <div class="controls">
                     <input type="text" id="system_type" placeholder="" name="system_type" class="span12" value="{{ record.system_type }}" />
@@ -150,4 +165,7 @@
         <button type="submit" class="btn btn-danger btn-large span3" data-lang="field_submit"></button>
     </div>
 </form>
-
+<script type="text/javascript">
+    var img_type = '{{ record.type_image }}';
+    $("#type_image").val(img_type);
+</script>

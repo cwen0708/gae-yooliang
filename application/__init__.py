@@ -8,7 +8,7 @@
 
 RELATIONSHIP = [
     {"app": u"a0002", "name": u"開發環境", "host": u"localhost"},
-    {"app": u"a0002", "name": u"測試環境", "host": u"5.yooliang-technology.appspot.com"},
+    {"app": u"a0002", "name": u"測試環境", "host": u"5.greenshepherdcomtw.appspot.com"},
     {"app": u"a0002", "name": u"牧陽能控", "host": u"www.greenshepherd.com.tw"},
 ]
 

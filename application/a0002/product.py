@@ -80,7 +80,7 @@ class edit(AdministratorHandler):
                 item_sub["is_select"] = (int(self.record["category"]) == int(item_sub["id"]))
                 self.results.append(item_sub)
 
-        if self.record["images"] is not None:
+        if self.record["images"] is not None and self.record["images"] is not u"" and self.record["images"] is not "":
             self.images = self.record["images"].split(",")
 
     def post(self, *args):
