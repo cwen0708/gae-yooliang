@@ -1,7 +1,4 @@
-application: yooliang-technology
-#application: yooliang-technology
-#application: ashine-lin
-#application: greenshepherdcomtw
+application: greenshepherdcomtw
 version: 3
 runtime: python27
 api_version: 1
