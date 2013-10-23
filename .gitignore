@@ -2,6 +2,7 @@
 ## Eclipse
 #################
 .idea/
+application/__init__.py
 *.pydevproject
 .project
 .metadata
