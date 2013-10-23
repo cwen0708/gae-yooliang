@@ -1,0 +1,67 @@
+#application: yooliang-technology
+#application: yooliang-technology
+#application: ashine-lin
+application: greenshepherdcomtw
+version: 3
+runtime: python27
+api_version: 1
+threadsafe: true
+
+builtins:
+- appstats: on
+- deferred: on
+- remote_api: on
+
+inbound_services:
+
+
+error_handlers:
+- file: templates/system/default_error.html
+
+- error_code: over_quota
+  file: templates/system/over_quota.html
+
+- error_code: dos_api_denial
+  file: templates/system/dos_api_denial.html
+
+- error_code: timeout
+  file: templates/system/timeout.html
+
+libraries:
+- name: jinja2
+  version: "2.6"
+
+- name: webapp2
+  version: "latest"
+
+- name: PIL
+  version: "1.1.7"
+
+pagespeed:
+  enabled_rewriters:
+  - MinifyCss
+  - ProxyCss
+  - ProxyImages
+  - ProxyJs
+  - ConvertMetaTags
+  - InlineCss
+  - ImageStripColorProfile
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
+
+- url: /robots.txt
+  static_files: static/robots.txt
+  upload: static/robots.txt
+
+- url: /template/(.*\.(gif|png|jpg|js|css|swf|otf|eot|svg|ttf|woff))
+  static_files: template/\1
+  upload: template/(.*\.(gif|png|jpg|js|css|swf|otf|eot|svg|ttf|woff))
+
+- url: /.*
+  script: application.app
