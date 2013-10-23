@@ -14,6 +14,7 @@ class Index(HomeHandler):
         page = self.params.get_integer("page", 1)
         self.list = self.sql.query_all('SELECT * FROM PastCase WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
         for item in self.list:
+            item["first_image"] = u""
             if item["images"] is not None and item["images"] is not u"" and item["images"] is not "":
                 images = item["images"].split(",")
                 item["first_image"] = images[0]
