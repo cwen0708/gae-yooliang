@@ -1,0 +1,169 @@
+/*
+	Slideshow
+*/
+
+.iBanner #slides {
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:100;
+	width:1000px;
+	height:450px;
+}
+
+/*
+	Slides container
+	Important:
+	Set the width of your slides container
+	Set to display none, prevents content flash
+*/
+
+.iBanner .slides_container {
+	width:1000px;
+	overflow:hidden;
+	position:relative;
+	display:none;
+}
+
+/*
+	Each slide
+	Important:
+	Set the width of your slides
+	If height not specified height will be set by the slide content
+	Set to display block
+*/
+
+.iBanner .slides_container div.slide {
+	width:1000px;
+	height:450px;
+	display:block;
+}
+
+
+/*
+	Next/prev buttons
+*/
+
+.iBanner #slides .next,#slides .prev {
+	position:absolute;
+	top:197px;
+	width:36px;
+	height:55x;
+	display:block;
+	z-index:101;
+}
+.iBanner #slides .prev {
+	left:0;
+}
+.iBanner #slides .next {
+	right:0;
+}
+
+/*
+	Pagination
+*/
+
+.iBanner .pagination {
+	margin:0 auto;
+	position:absolute;
+	z-index:1000;
+	bottom:5px;
+	right:5px;
+}
+
+.iBanner .pagination li {
+	float:left;
+	margin:0 1px;
+	list-style:none;
+}
+
+.iBanner .pagination li a {
+	display:block;
+	width:12px;
+	height:0;
+	padding-top:12px;
+	background-image:url(../images/pagination.png);
+	background-position:0 0;
+	float:left;
+	overflow:hidden;
+}
+
+.iBanner .pagination li.current a {
+	background-position:0 -12px;
+}
+
+
+/*
+	Slideshow
+*/
+
+.pBanner #slides {
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:100;
+	width:1000px;
+	height:300px;
+}
+
+/*
+	Slides container
+	Important:
+	Set the width of your slides container
+	Set to display none, prevents content flash
+*/
+
+.pBanner .slides_container {
+	width:1000px;
+	overflow:hidden;
+	position:relative;
+	display:none;
+}
+
+/*
+	Each slide
+	Important:
+	Set the width of your slides
+	If height not specified height will be set by the slide content
+	Set to display block
+*/
+
+.pBanner .slides_container div.slide {
+	width:1000px;
+	height:300px;
+	display:block;
+}
+
+
+/*
+	Pagination
+*/
+
+.pBanner .pagination {
+	margin:0 auto;
+	position:absolute;
+	z-index:1000;
+	bottom:5px;
+	right:5px;
+}
+
+.pBanner .pagination li {
+	float:left;
+	margin:0 1px;
+	list-style:none;
+}
+
+.pBanner .pagination li a {
+	display:block;
+	width:12px;
+	height:0;
+	padding-top:12px;
+	background-image:url(../images/pagination.png);
+	background-position:0 0;
+	float:left;
+	overflow:hidden;
+}
+
+.pBanner .pagination li.current a {
+	background-position:0 -12px;
+}
