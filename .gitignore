@@ -1,6 +1,7 @@
 #################
 ## Yooliang
 #################
+app.yaml
 .idea/
 application/__init__.py
 mysql-connector-java-5.1.26-bin.jar
