@@ -24,6 +24,7 @@
             var marker{{ item.row_id }} = new google.maps.Marker({
                 position: new google.maps.LatLng({{ item.address }}),
                 map: map,
+                icon: '/template/0002/images/LogoIcon_{{ item.type_image }}.gif',
                 title: '{{ item.title }}',
                 case_id: '{{ item.id }}' });
                 google.maps.event.addListener(marker{{ item.row_id }}, 'click', function () {
