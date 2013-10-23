@@ -1,0 +1,27 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_learn">最新消息 {{category_name}}</h1>
+</div><!--top_抬頭區end-->
+<div class="container">
+    <div style="margin: 10 30px; padding-left: 50px;">
+        <span style="border:solid 1px #fff; padding: 5px;"><b>分類 :</b></span>
+        {% for item in faq_category_list %}
+        <a href="{{item.link}}" style="border:solid 1px #ddd; padding: 5px;">{{ item.category_name }}</a>
+        {% endfor %}
+
+    </div>
+    <div class="c_main">
+        <div class="newslist">
+            <ul>
+                {% for item in faq_list %}
+                <li><a href="/learn_view.html?id={{item.id}}"><span>{{item.create_date}}</span>{{item.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="pager pagination" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+        <!--內容頁end-->
+    </div>
+    <div class="clean"></div>
+</div>
+{% endblock %}

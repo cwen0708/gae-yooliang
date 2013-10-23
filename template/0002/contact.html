@@ -1,0 +1,280 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_contact">聯絡我們</h1>
+</div><!--top_抬頭區end-->
+<div class="container">
+    <div class="c_contact">
+
+        <br/>
+
+        <div class="contact_info">
+            <div class="contact_l">
+                <div class="contact_title">聯絡資料</div>
+                {{ "com_address"|websetting }}
+                <br/>
+                <br/>
+                電話: {{ "com_tel"|websetting }}<br/>
+                信箱: {{ "com_email"|websetting }} <br/>
+                網址: {{ "com_web"|websetting }}<br/><br/><br/>
+
+                <a href="contact_step_1.html" style="color:#eee;">test</a>
+                <div id="map-canvas" style="width: 225px; height: 420px;"></div>
+                <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+                    <script>
+                var map;
+                var TILE_SIZE = 250;
+                var chicago = new google.maps.LatLng(22.995948,120.219483);
+
+                function bound(value, opt_min, opt_max) {
+                  if (opt_min != null) value = Math.max(value, opt_min);
+                  if (opt_max != null) value = Math.min(value, opt_max);
+                  return value;
+                }
+
+                function degreesToRadians(deg) {
+                  return deg * (Math.PI / 180);
+                }
+
+                function radiansToDegrees(rad) {
+                  return rad / (Math.PI / 180);
+                }
+
+                /** @constructor */
+                function MercatorProjection() {
+                  this.pixelOrigin_ = new google.maps.Point(TILE_SIZE / 2,
+                      TILE_SIZE / 2);
+                  this.pixelsPerLonDegree_ = TILE_SIZE / 360;
+                  this.pixelsPerLonRadian_ = TILE_SIZE / (2 * Math.PI);
+                }
+
+                MercatorProjection.prototype.fromLatLngToPoint = function(latLng,
+                    opt_point) {
+                  var me = this;
+                  var point = opt_point || new google.maps.Point(0, 0);
+                  var origin = me.pixelOrigin_;
+
+                  point.x = origin.x + latLng.lng() * me.pixelsPerLonDegree_;
+
+                  // Truncating to 0.9999 effectively limits latitude to 89.189. This is
+                  // about a third of a tile past the edge of the world tile.
+                  var siny = bound(Math.sin(degreesToRadians(latLng.lat())), -0.9999,
+                      0.9999);
+                  point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) *
+                      -me.pixelsPerLonRadian_;
+                  return point;
+                };
+
+                MercatorProjection.prototype.fromPointToLatLng = function(point) {
+                  var me = this;
+                  var origin = me.pixelOrigin_;
+                  var lng = (point.x - origin.x) / me.pixelsPerLonDegree_;
+                  var latRadians = (point.y - origin.y) / -me.pixelsPerLonRadian_;
+                  var lat = radiansToDegrees(2 * Math.atan(Math.exp(latRadians)) -
+                      Math.PI / 2);
+                  return new google.maps.LatLng(lat, lng);
+                };
+
+                function createInfoWindowContent() {
+                  var numTiles = 1 << map.getZoom();
+                  var projection = new MercatorProjection();
+                  var worldCoordinate = projection.fromLatLngToPoint(chicago);
+                  var pixelCoordinate = new google.maps.Point(
+                      worldCoordinate.x * numTiles,
+                      worldCoordinate.y * numTiles);
+                  var tileCoordinate = new google.maps.Point(
+                      Math.floor(pixelCoordinate.x / TILE_SIZE),
+                      Math.floor(pixelCoordinate.y / TILE_SIZE));
+
+                  return [
+                    '牧陽能控有限公司',
+                    '{{ "com_address"|websetting }}',
+                    '{{ "com_tel"|websetting }}',
+                  ].join('<br>');
+                }
+
+                function initialize() {
+                  var mapOptions = {
+                    zoom: 14,
+                    center: chicago,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                  };
+
+                  map = new google.maps.Map(document.getElementById('map-canvas'),
+                      mapOptions);
+
+                  var coordInfoWindow = new google.maps.InfoWindow();
+                  coordInfoWindow.setContent(createInfoWindowContent());
+                  coordInfoWindow.setPosition(chicago);
+                  coordInfoWindow.open(map);
+
+                  google.maps.event.addListener(map, 'zoom_changed', function() {
+                    coordInfoWindow.setContent(createInfoWindowContent());
+                    coordInfoWindow.open(map);
+                  });
+
+                }
+                google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+            </div>
+            <div id="info_done" style="padding: 100px; line-height: 300px; display: none;"></div>
+            <div class="contact_r">
+                <div class="rp" style="display: none;">
+                    <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 電表號碼：</strong>
+                    <input name="power_number" type="text" class="power_number" style="width:85px"/><br />
+                </div>
+                <form id="form_c">
+                <div class="contact_title">線上評估</div>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th colspan="3" style="color: #3399ff; text-align: left;">聯絡資料</th>
+                    </tr>
+                    <tr>
+                        <td style="width:250px;">
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 聯絡人：</strong>
+                            <input name="contact_name" type="text" class="contact_text" style="width:145px"/>
+                            <span id="info_contact_name" class="error"></span></td>
+                        <td style="width:250px;">
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 電　話：</strong>
+                            <input name="contact_tel" type="text" class="contact_text" style="width:145px"/>
+                            <span id="info_contact_tel" class="error"></span></td>
+                        <td style="width:160px;"><br /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 地　址：</strong>
+                            <input name="contact_address" type="text" class="contact_text" style="width:396px"/>
+                            <span id="info_contact_address" class="error"></span>
+                        </td>
+                        <td rowspan="2">
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 希望的聯絡方式： </strong><br />
+                            　　<input id= "c_tel" type="checkbox" name="contact_want_1" />
+                            <label for="c_tel">電話</label><br />
+                            　　<input id= "c_mail" type="checkbox" name="contact_want_2" />
+                            <label for="c_mail">Email</label><br /><br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 信　箱：</strong>
+                            <input name="contact_mail" type="text" class="contact_text" style="width:396px"/>
+                            <span id="info_contact_mail" class="error"></span>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <br />
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th colspan="2" style="color: #3399ff; text-align: left;">用電情形</th>
+                    </tr>
+                    <tr>
+                        <td style="width:330px;">
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 屋頂材質：</strong>
+                            <select name="roof_materials" style="width:100px;">
+                                <option value="">請選擇</option>
+                                <option value="磚瓦">磚瓦</option>
+                                <option value="RC混擬土">RC混擬土</option>
+                                <option value="浪板">浪板</option>
+                            </select>
+                            </td>
+                        <td rowspan="3" valign="top" style="vertical-align: top;">
+                            <div style="margin:6px;">
+                                <input type="button" id="sub_power_number" class="submit" style="float: right;" value="-"/>
+                                <input type="button" id="add_power_number" class="submit" style="float: right;" value="+"/>
+                                <script>
+                                    var pn_count = 0;
+                                    $(function(){
+                                        $("#add_power_number").click(function(){
+                                            if (pn_count < 5)
+                                            {
+                                                pn_count++;
+                                                var $a = "<div id='rp" + pn_count + "'>" + $(".rp").html() + "</div>";
+                                                $(".rp_list").append($a);
+                                                $("#pn_error_info").hide();
+                                            }else{
+                                                $("#pn_error_info").text("最多五個").show().delay(5000).fadeOut();
+                                            }
+                                        });
+                                        $("#sub_power_number").click(function(){
+                                            if (pn_count >1){
+                                                $("#rp" + pn_count).remove();
+                                                pn_count--;
+                                                $("#pn_error_info").hide();
+                                            }else{
+                                                $("#pn_error_info").text("至少要有一個").show().delay(5000).fadeOut();
+                                            }
+                                        });
+                                        $("#add_power_number").click();
+                                    });
+                                </script>
+                                <div class="rp_list">
+                                </div>
+                                <div id="pn_error_info" style="color:#f00;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:330px;">
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 屋頂配置物：</strong>
+                            <input id= "h1" type="checkbox" name="roof_objects_1" />
+                            <label for="h1">太陽能熱水器</label>
+                            <input id= "h2" type="checkbox" name="roof_objects_2" />
+                            <label for="h2">水塔</label>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong><img src="/template/0002/images/icon_arrow.gif" width="5" height="7"/> 可裝置面積
+                            (使用執照有效坪數) ： <br/>
+                        </strong>
+                            <small style="line-height: 8px; font-size: 8px;"><br/></small>
+                            一樓
+                            <input name="floor_area_1" type="text" class="contact_text" style="width:50px"/>
+                            坪, 二樓
+                            <input name="floor_area_2" type="text" class="contact_text" style="width:50px"/>
+                            坪, <br/>三樓
+                            <input name="floor_area_3" type="text" class="contact_text" style="width:50px"/>
+                            坪, 四樓
+                            <input name="floor_area_4" type="text" class="contact_text" style="width:50px"/>
+                            坪, <br/>五樓
+                            <input name="floor_area_5" type="text" class="contact_text" style="width:50px"/>
+                            坪, <br/>屋凸
+                            <input name="floor_area_outside" type="text" class="contact_text" style="width:50px"/>
+                            坪, 其他
+                            <input name="floor_area_other" type="text" class="contact_text" style="width:50px"/>
+                            坪
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="right" valign="bottom"><input id="send" type="button" class="submit" value="送出"/></td>
+                        <script>
+                            $(function(){
+                                $("#send").click(function(){
+                                    $(".error").hide();
+                                    json("/send_contact_info.json", $("#form_c").serialize(), function(data){
+                                        for (var key in data) {
+                                            $("#info_" + key).html("<br />&nbsp;*&nbsp;" + data[key]).slideDown();
+                                        }
+                                        if (data.done != undefined) {
+                                            $("#d_form").slideUp();
+                                        }
+                                        setTimeout('$("#info_done").slideUp();', 5000);
+                                    },function(data){
+
+                                    });
+                                });
+                            });
+                        </script>
+                    </tr>
+                </table>
+                </form>
+            </div>
+            <div class="clean"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

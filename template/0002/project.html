@@ -1,0 +1,40 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_project">工程實績</h1>
+</div>
+
+<div class="container">
+    <div class="c_project">
+        <div class="project_l">
+            <div id="map-canvas" style="width:360px; height: 650px;"></div>
+        </div>
+        <div class="project_r">
+            <iframe id="project_detail" src="/project_detail.html?id={{ first_project }}" style="border: 0px; height: 650px; width: 580px;;"></iframe>
+        </div>
+        <div class="clean"></div>
+    </div>
+
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script src="js/jquery.colorbox-min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/colorbox.css?r={{ app_version }}" />
+<script>
+    function initialize() {
+        var mapOptions = {
+            zoom: 8,
+            center: new google.maps.LatLng(23.633088639680092, 121.05010986328125),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+        {% for item in results %}
+        try{ var marker{{ item.row_id }} = new google.maps.Marker({ position: new google.maps.LatLng({{ item.address }}), map: map, title: '{{ item.title }}', case_id: '{{ item.id }}' }); google.maps.event.addListener(marker{{ item.row_id }}, 'click', function () { map.panTo(marker{{ item.row_id }}.getPosition()); $("#project_detail").attr("src", "/project_detail.html?id=" + marker{{ item.row_id }}.case_id); }); }catch(e){ };
+        {% endfor %}
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+{% endblock %}

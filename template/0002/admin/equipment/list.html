@@ -1,0 +1,34 @@
+{% if not cid %}
+{% endif %}
+<div class="list-top-bar span3 ">
+    {% if cid %}
+    <button type="button" class="btn btn-danger" data-lang="新增設備資料" data-page-url="/admin/equipment/create.html?cid={{ cid }}"></button>
+    {% else %}
+    <button type="button" class="btn" data-lang="選擇案場" data-page-url="/admin/caseinfo/list.html"></button><small>　<br />若要新增設備，請先選擇案場</small>
+{% endif %}
+</div>
+
+<div class="pagination pagination-small pagination-right span9 padding15" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}"></div>
+
+<table class="table table-hover data-list" data-manager-dir="Equipment">
+    <thead>
+    <tr>
+        <th style="width:30px">#</th>
+        <th data-lang="title"></th>
+        <th style="width:60px"><br /></th>
+        <th style="width:60px"><br /></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in results %}
+    <tr id="node_{{ item.sort|datetime_timesp }}" data-id="{{ item.id }}" class="data-row {% if item.is_delete == true %} record_already_delete{% endif %}">
+        <td>{{ item.row_id }}</td>
+        <td>{{ item.equipment_name }} <br />
+            <a href="http://{{ host_str }}/data/status?customer_no={{ item.customer_no }}&case_no={{ item.case_no }}&equipment_no={{ item.equipment_no }}&status_code=" target="_blank">http://{{ host_str }}/data/status?customer_no={{ item.customer_no }}&case_no={{ item.case_no }}&equipment_no={{ item.equipment_no }}&status_code=</a>
+        </td>
+        <td><button type="button" class="btn btn-edit-page" data-lang="edit"></button></td>
+        <td><button type="button" class="btn btn-delete" data-lang="delete"></button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

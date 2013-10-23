@@ -1,0 +1,38 @@
+<form class="p18">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="field_title" data-lang="標題"></label>
+                <div class="controls">
+                    <input type="text" id="field_title" placeholder="" name="title" class="span12" value="{{ record.title }}" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="create_date" data-lang="日期"></label>
+                <div class="controls">
+                    <input type="text" id="create_date" placeholder="" name="create_date" class="span12" value="{{ record.create_date }}" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="inputContent" data-lang="field_content"></label>
+                <textarea name="content" id="inputContent" class="span12 editor">{{ record.content }}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <div class="span9"></div>
+        <button type="submit" class="btn btn-danger btn-large span3" data-lang="field_submit"></button>
+    </div>
+</form>
+

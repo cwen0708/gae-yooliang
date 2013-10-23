@@ -1,0 +1,99 @@
+﻿<script type="text/javascript" src="/static/jQuery/jquery-1.10.2.min.js"></script>
+<!--[if IE]><script type="text/javascript" src="/template/0002/js/excanvas.compiled.js"></script><![endif]-->
+<script type="text/javascript" src="/template/0002/js/jquery.flot.min.js"></script>
+<script type="text/javascript" src="/template/0002/js/jquery.flot.axislabels.js?r=1"></script>
+
+<table style="width: 100%;">
+    <tr>
+        <td style="padding: 0; text-align: center;" valign="top">
+            <div id="graph-lines-realtime" style="width: 695px; height: 500px;"></div>
+        </td>
+    </tr>
+</table>
+
+<script>
+$(document).ready(function () {
+	// Graph Data ##############################################
+	var data_realtime = [{
+        data: [
+        {% for item in results %}
+            [{{ item.row_id }},{{ item.kwh }}],{% endfor %}],
+            color: '#71c73e'
+    }];
+	// Lines Graph #############################################
+    var ticks = [
+        {% for item in results %}
+           [{{ item.row_id}},"{{ item.date }}"],{% endfor %}
+    ];
+	$.plot($('#graph-lines-realtime'), data_realtime, {
+        legend: {
+            show: true,
+            position: "ne"
+        },
+		series: {
+			points: {
+				show: false,
+				radius: 5
+			},
+            bars: {
+                show: true
+            },
+			shadowSize: 0
+		},
+        bars: {
+            align: "center",
+            barWidth: 1
+        },
+		grid: {
+			color: '#646464',
+			borderColor: 'transparent',
+			borderWidth: 20,
+			hoverable: true
+		},
+		xaxis: {
+            ticks: ticks
+		},
+		yaxis: {
+            axisLabel: "KWH",
+            color: "black",
+            tickDecimals: 2,
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 5
+		}
+	});
+
+	// Tooltip #################################################
+	function showTooltip(x, y, contents) {
+		$('<div id="tooltip">' + contents + '</div>').css({
+            position: 'absolute',
+			top: y + 30,
+			left: x - 25,
+            border: '2px solid #4572A7',
+            padding: '2px',
+            size: '10',
+            'border-radius': '6px 6px 6px 6px',
+            'background-color': '#fff',
+            opacity: 0.80
+		}).appendTo('body').fadeIn();
+	}
+
+	var previousPoint = null;
+
+	$('#graph-lines-realtime').bind('plothover', function (event, pos, item) {
+		if (item) {
+			if (previousPoint != item.dataIndex) {
+				previousPoint = item.dataIndex;
+				$('#tooltip').remove();
+				var x = item.datapoint[0],
+					y = item.datapoint[1];
+					showTooltip(item.pageX, item.pageY, y + ' KWH');
+			}
+		} else {
+			$('#tooltip').remove();
+			previousPoint = null;
+		}
+	});
+});
+</script>

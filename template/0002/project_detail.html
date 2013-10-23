@@ -1,0 +1,111 @@
+﻿<html>
+    <head>
+        <script type="text/javascript" src="/static/jQuery/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="js/zoom.js"></script><!--限制最大寬或最大高比例-->
+        <link rel="stylesheet" type="text/css" href="css/ad-gallery.css"/><!--輪播元件-->
+        <!--<script type="text/javascript" src="js/ad-gallery-min.js"></script>輪播元件-->
+        <script type="text/javascript" src="js/ad-gallery.js"></script><!--輪播元件-->
+        <!--[if lte IE 6]>
+        <script type="text/javascript" src="js/supersleight-min.js"></script>
+        <![endif]-->
+        <script type="text/javascript">
+            $(function () {
+                var galleries = $('.ad-gallery').adGallery();
+            });
+        </script>
+        <style>
+            .ad-gallery{
+                background: #fff;;
+            }
+            .share_button{
+                background: #d9d9d9;
+                text-shadow: 1px 1px 1px #fff;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+                width: 220px;
+                height: 28px;
+                margin-bottom: 10px;
+                float: left;
+                display: table;
+                cursor: pointer;
+                line-height: 26px;
+            }
+            .share_button img{
+                border: 0;float: left; margin: 4px;
+                height: 20px; width:20px;
+            }
+            .share_button a{
+                text-decoration: none;
+            }
+            .share_button a:hover{
+                text-decoration: none;
+                color: rgb(0, 153, 0);
+            }
+            .share_button span{
+                border-left: solid 2px #fff;
+                float: left;
+                margin-left: 8px;
+                padding-left: 10px;
+            }
+        </style>
+    </head>
+    <body style="overflow: hidden;">
+    
+        
+<!--輪播end-->
+<table width="100%" border="0" cellpadding="0" cellspacing="5" class="project_r_name">
+    <tr>
+        <td style="width:560px;">
+            <div id="gallery" class="ad-gallery">
+                <div class="ad-image-wrapper"></div>
+                <div class="ad-controls"></div>
+                <div class="ad-nav">
+                    <div class="ad-thumbs">
+                        <ul class="ad-thumb-list">
+                            {% for item in images %}
+                            <li><a href="{{ item }}"> <img src="{{ item }}" class="image0" style="height: 100px;"/> </a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td valign="top">
+            <div class="share_button">
+                <a href="javascript: void(window.open('http://www.facebook.com/share.php?u='.concat(encodeURIComponent(location.href)) ));">
+                    <img title="分享到臉書！" src="/template/0002/images/facebook.png" />
+                    <span>分享到 Facebook</span>
+                </a>
+            </div><br>
+            <div class="share_button">
+                <a href="javascript: void(window.open('http://twitter.com/home/?status='.concat(encodeURIComponent(document.title)) .concat(' ') .concat(encodeURIComponent(location.href))));">
+                    <img title="分享到推特！" src="/template/0002/images/twitter.png" />
+                    <span>分享到 Twitter</span>
+                </a>
+            </div><br>
+            <div class="share_button">
+                <a href="javascript: void(window.open('https://plus.google.com/share?url='.concat(encodeURIComponent(location.href)), '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600'));">
+                    <img title="分享到Google+！" src="/template/0002/images/googleplus.png" />
+                    <span>分享到 Google+</span>
+                </a>
+            </div><br>
+            <table width="100%" border="0" cellpadding="0" cellspacing="5" class="project_r_name">
+                <tr>
+                    <td valign="top"><span style="color:#009900">案場名稱：</span>{{ record.case_name }}</td>
+                </tr>
+                <tr valign="top">
+                    <td valign="top"><span style="color:#009900">設置地點：</span>{{ record.place }}</td>
+                </tr>
+                <tr valign="top">
+                    <td valign="top"><span style="color:#009900">系統類別：</span>{{ record.system_type }}</td>
+                </tr>
+                <tr valign="top">
+                    <td valign="top"><span style="color:#009900">竣工日期：</span>{{ record.complete_date }}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+    </body>
+</html>

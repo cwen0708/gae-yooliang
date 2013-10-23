@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table table-bordered">
+    <tr>
+        <th>客戶名稱</th>
+        <th>電壓</th>
+        <th>電流</th>
+        <th>功率</th>
+        <th>日期</th>
+    </tr>
+    {% for item in results %}
+    <tr>
+        <td>{{ item.Customer.name }}</td>
+        <td>{{ item.Voltage }}</td>
+        <td>{{ item.ElectricCurrentIntensity }}</td>
+        <td>{{ item.Power }}</td>
+        <td>{{ item.create_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<div class="pagination" align="center" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}"></div>
+{% endblock %}

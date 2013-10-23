@@ -1,0 +1,35 @@
+<form class="p18">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="field_title" data-lang="標題"></label>
+                <div class="controls">
+                    <input type="text" id="field_title" placeholder="" name="title" class="span12" value="{{ record.category_name }}" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid" style="display: none">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="parent" data-lang="此分類隸屬於．．．"></label>
+                <select class="span12" name="parent" id="parent"><option value="0">根目錄</option>
+                    {% for item in results %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">　- {{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">　- {{ item.category_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <div class="span9"></div>
+        <button type="submit" class="btn btn-danger btn-large span3" data-lang="field_submit"></button>
+    </div>
+</form>
+

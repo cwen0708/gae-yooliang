@@ -1,0 +1,117 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_pro">產品型錄 {%if in_parent_category %} > {{in_parent_category }}{%endif%}{%if in_category %} > {{in_category }}{%endif%}</h1>
+</div>
+
+<div class="container">
+    <div class="leftpage">
+        <div class="leftmenu">
+            <div class="arrowsidemenu">
+                {%for item in product_category_list %}
+                <div class="menuheaders"><a href="{{ item.link }}" title="{{ item.category_name }}">{{ item.category_name }}</a></div>
+                <ul class="menucontents">
+                    {%for sub_item in item.sub_list %}
+                    <li><a href="{{ sub_item.link }}">{{ sub_item.category_name }}</a></li>
+                    {%endfor%}
+                </ul>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+    <div class="rightpage">
+
+<div class="goodsPicBox">
+    <div class="bPic"><img src="{{ image }}" alt="" width="360" height="360" class="scale"/></div>
+
+    <div class="goodsInfoBox">
+        <div class="fb">
+            <div id="fb-root"></div>
+            <script>(function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/zh_TW/all.js#xfbml=1";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+            <div class="fb-like" data-send="false" data-width="450" data-show-faces="true"></div>
+        </div>
+        <!-- 商品名稱 型號 -->
+        <table cellpadding="0" cellspacing="0" border="0" width="357" class="goodsName">
+            <tr>
+                <td>產品型號：{{ record.product_no }}</td>
+            </tr>
+            <tr>
+                <th align="left">{{ record.product_name }}</th>
+            </tr>
+        </table>
+
+        <div class="lineD"></div>
+        <table cellpadding="0" cellspacing="0" border="0" width="250" class="goodsInfo">
+            <tr>
+                <td style="padding: 8px;">
+                    說明文字說明文字說明文字說明文字說明文字
+                    說明文字說明文字說明文字說明文字
+                    說明文字說明文字說明文字說明文字說明文字說明文字
+                </td>
+            </tr>
+        </table>
+        <div class="lineD"></div>
+
+        <table cellpadding="0" cellspacing="0" border="0" width="357" class="carBtn">
+            <tr>
+                <td style="text-align: right;"><a title="加入咨詢" class="add_shopping_cart" data-url="{{ 'add_shopping_cart.json'|url }}" data-pid="{{ record.id }}" data-order="{{ 'step01.html' |url}}" style="cursor: pointer;">
+                    <img src="images/advice_out.gif" alt="" class="img_change"/>
+                </a></td>
+            </tr>
+        </table>
+
+        <div class="sPic">
+            <ul class="jcarousel jcarousel-skin-tango">
+                {% for item in images %}
+                <li><img src="{{ item }}" width="100" alt="" img_src="{{ item }}" class="scale" style="width: 102px; height: 102px;"/></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+</div>
+<div class="clear"></div>
+
+<!-- 詳細說明 -->
+<div><img src="images/infotitle.gif" alt=""/></div>
+<div class="infoText">{{ record.content }}</div>
+<table cellpadding="0" cellspacing="0" border="0" width="737">
+    <tr>
+        <td><a href="javascript:history.back(-1);" title=""><img src="images/back_out.gif" alt="" class="img_change"/></a></td>
+        <td><br /></td>
+        <td align="right"><a href="#top" title=""><img src="images/top_out.gif" alt="" class="img_change"/></a></td>
+    </tr>
+</table>
+<script type="text/javascript">
+    $(function(){
+        $(".add_shopping_cart").click(function(){
+            var _this = $(this);
+            json(_this.data("url"), "product_id="+ $(this).data("pid") + "&quantity=" + $("#quantity").val(), function(data){
+                if (data.done != undefined) {
+                    window.location.href = _this.data("order");
+                }
+            }, function(data){
+                if (data.done != undefined) {
+                    window.location.href = _this.data("order");
+                }
+            });
+        });
+    });
+</script>
+
+    </div>
+    <div class="clean"></div>
+    <!--內容頁end-->
+</div>
+<div class="clean"></div>
+<!--footer start--></div>
+{% endblock %}
+
+
