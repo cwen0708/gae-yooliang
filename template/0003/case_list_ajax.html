@@ -1,0 +1,31 @@
+<div class="con h542">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            <td width="31"><img src="images/icon.png" alt=""/></td>
+            <td class="title">歷屆案例 &nbsp; &nbsp; <span>PAST CASE</span></td>
+        </tr>
+    </table>
+    <!-- list -->
+    {% for item in list %}
+    <div class="caseList">
+        <div class="bPic"><img src="{{ item.first_image }}" alt="" width="190" height="190"/></div>
+        <div class="caseListInfo">
+            <div class="caseTitle"><a href="case_view.html?id={{ item.id }}" title="">{{ item.case_name }}</a></div>
+            <div class="caseText html_2_text">{{ item.content_small }}</div>
+            <div class="caseSPic">{% for img in item.image_list %}
+                <div><img src="{{ img }}" alt="" width="95" height="95"/></div>{% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="lineD"></div>
+    {% endfor %}
+    <table cellpadding="0" cellspacing="0" border="0" width="75%" class="page">
+        <tr>
+            <td width="31"><a href="/case_list.html?page={{ prev_page }}" title=""><img src="images/prev_out.png" alt="" class="img_change"/></a></td>
+            <td class="pager">
+                <div class="pager mT30 pagination" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" data-page-url="/case_list.html" align="center"></div>
+            </td>
+            <td width="31"><a href="/case_list.html?page={{ next_page }}" title=""><img src="images/next_out.png" alt="" class="img_change"/></a></td>
+        </tr>
+    </table>
+</div>
