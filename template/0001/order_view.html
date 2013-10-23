@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- 當前位置 -->
+<div class="side"><img src="images/icon03.gif" align="absmiddle">&nbsp;
+    <a href="{{''|url}}" title="Home">Home</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <a href="{{'info.html'|url}}" title="">會員中心</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <span>訂單查詢</span>
+</div>
+<!-- 當前位置 end -->
+<div class="commBox">
+    <div class="welcomeText">訂單編號 <span>{{ record.order_no }}</span></div>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderTitle">
+        <tr>
+            <th width="321">商品資訊</th>
+            <th width="179">數量</th>
+            <th width="122">價格</th>
+            <th width="115">小計</th>
+        </tr>
+    </table>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderList">
+        {% set row_class = cycler('', 'bgColor') %}
+        {% for item in order_item_list %}
+        <tr class="{{ row_class.next() }}">
+            <td width="321">
+                <table cellpadding="0" cellspacing="0" border="0" align="center">
+                    <tr>
+                        <td><img src="{{ item.product_image }}" alt="" width="80"/></td>
+                        <td height="58" align="left">產品型號：{{ item.product_no }} <br/><span>{{ item.product_name }}</span></td>
+                    </tr>
+                </table>
+            </td>
+            <td width="179">{{ item.item_quantity }}</td>
+            <td width="122">{{ item.product_price }} 元</td>
+            <td width="115">{{ item.item_sum }} 元</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="737">
+        <tr>
+            <td width="452" align="right">
+                <a href="javascript:history.back(-1);" title=""><img src="images/back02_out.gif" alt="" class="img_change"/></a>
+            </td>
+            <td width="110" align="right" class="bgColor02">
+                {% if record.order_status == 0 %}
+                {% else %}
+                {{ record.freight }} 元
+                {% endif %}
+            </td>
+            <td width="175" align="right" class="bgColor02">總金額 {{ record.total_amount }} 元</td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".menu_one").each(function(){
+            if ($("a", this).attr("href").indexOf("order") > 0){
+                $("a", this).addClass("active");
+            }
+        });
+    });
+</script>
+{% endblock %}

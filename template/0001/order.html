@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- 當前位置 -->
+<div class="side"><img src="images/icon03.gif" align="absmiddle">&nbsp;
+    <a href="{{''|url}}" title="Home">Home</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <a href="{{'info.html'|url}}" title="">會員中心</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <span>訂單查詢</span>
+</div>
+<!-- 當前位置 end -->
+<div class="commBox">
+    <div class="welcomeText">親愛的 <span>{{ current_user.user_name }}</span> 會員，您可以在此查詢以往的訂單。</div>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderTitle">
+        <tr>
+            <th width="209">訂單編號</th>
+            <th width="211">出貨狀況</th>
+            <th width="105">金額</th>
+            <th width="212">購買日期</th>
+        </tr>
+    </table>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderList">
+        {% set row_class = cycler('', 'bgColor') %}
+        {% for item in order_list %}
+        <tr class="{{ row_class.next() }}">
+            <td width="209">
+                {% if item.order_status == 0 %}<a href="{{ '/step01.html'|url }}" title="查看購物車">尚未產生編號&nbsp;&nbsp;<img src="images/icon11.png" alt="" align="absmiddle"/></a>{% else %}<a href="{{ item.link|url }}" title="查看訂單內容">{{ item.order_no }}&nbsp;&nbsp;<img src="images/icon11.png" alt="" align="absmiddle"/></a>{% endif %}
+            </td>
+            <td width="211">
+                {% if item.order_status == 0 %}購物中{% endif %}
+                {% if item.order_status == -1 %}訂單失效{% endif %}
+            </td>
+            <td width="105" class="price">{{ item.total_amount }} 元</td>
+            <td width="212">{{ item.create_date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="lineD mB20"></div>
+</div>
+<!-- page -->
+<div class="pager mT30 pagination" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+<!-- page end -->
+<script type="text/javascript">
+    $(function(){
+        $(".menu_one").each(function(){
+            if ($("a", this).attr("href").indexOf("order") > 0){
+                $("a", this).addClass("active");
+            }
+        });
+    });
+</script>
+{% endblock %}

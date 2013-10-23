@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="side"><img src="images/icon03.gif" align="absmiddle">&nbsp;
+    <a href="{{''|url}}" title="Home">Home</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <span>留言板</span>
+</div>
+<div id="info_done" style="padding: 100px; line-height: 300px; display: none;"></div>
+<div id="d_form">
+    <form id="gurestbook" action="{{ 'guestbook.json'|url }}">
+        <div class="commBox">
+            <div class="selectGoods">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td rowspan="3">
+                            <div style="width: 110px; height: 96px;;"><img src="{{ record.image }}" alt="" width="90" class="scale"/></div>
+                            <input type="hidden" name="product_image" value="{{ record.image }}"/></td>
+                        <th align="left">{{ record.product_name }} <input type="hidden" name="product_name" value="{{ record.product_name }}"/></th>
+                    </tr>
+                    <tr>
+                        <td>產品型號：{{ record.product_no }}
+                            <input type="hidden" name="product_no" value="{{ record.product_no }}"/>
+                            <input type="hidden" name="product_id" value="{{ record.id }}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>售&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;價：<span>{{ record.original_price }}</span>&nbsp;&nbsp;元</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="lineD mB20"></div>
+            <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm">
+                {% if current_user %}
+                <tr>
+                    <th width="110" align="left">&nbsp;&nbsp;登入狀態</th>
+                    <td colspan="3">&nbsp;&nbsp;{{ current_user["user_name"] }}，您好，若要查看先前的提問可以到 <a href="{{ 're_question.html'|url}}" style="color: #55023e;">詢問記錄</a> 查看。
+                        <input type="hidden" name="member_id" value="{{ current_user['id'] }}"/>
+                        <input type="hidden" name="member_name" value="{{ current_user['user_name'] }}"/>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <th width="110" align="left">&nbsp;&nbsp;登入狀態</th>
+                    <td colspan="3">&nbsp;&nbsp;尚未登入，登入後可以依會員身份追蹤此問題，若尚未成為會員可按 <a href="{{ 'join.html'|url}}" style="color: #55023e;">加入會員</a> 加入。
+                        <input type="hidden" name="member_id" value="0"/>
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th width="110" align="left">&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字 *</th>
+                    <td>{% if current_user %}
+                        <input type="text" name="contact_name" value="{{ current_user['user_name'] }}" class="input02 w200"/>{%else%}
+                        <input type="text" name="contact_name" value="" class="input02 w200"/>{%endif%}
+                        <span id="info_contact_name" class="error"></span>
+                    </td>
+                    <th width="94" align="left">&nbsp;&nbsp;電&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;話 *</th>
+                    <td>{% if current_user %}
+                        <input type="text" name="contact_telephone" value="{{ current_user['telephone'] }}" class="input02 w200"/>{%else%}
+                        <input type="text" name="contact_telephone" value="" class="input02 w200"/>{%endif%}
+                        <span id="info_contact_telephone" class="error"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th align="left">&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址</th>
+                    <td>{% if current_user %}
+                        <input type="text" name="contact_address" value="{{ current_user['address'] }}" class="input02 w200"/>{%else%}
+                        <input type="text" name="contact_address" value="" class="input02 w200"/>{%endif%}
+                    </td>
+                    <th align="left">&nbsp;&nbsp;購買日期</th>
+                    <td><input type="text" name="buy_date" value="{{ today|datetime_format('%Y-%m-%d') }}" class="input02 w200"/></td>
+                </tr>
+                <tr>
+                    <th align="left">&nbsp;&nbsp;問題簡述</th>
+                    <td colspan="3">
+                        <textarea name="content" class="input03 w575" rows="8"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="lineD mB20"></div>
+            <div class="btn" align="center">
+                <a href="javascript: history(-1);" title=""><img src="images/reset_out.gif" alt="" class="img_change"/></a>
+                <a title="" style="cursor: pointer;" id="but_send_guestbook"><img src="images/submit_out.gif" alt="" class="img_change"/></a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

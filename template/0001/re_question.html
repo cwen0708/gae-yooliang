@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- 當前位置 -->
+<div class="side"><img src="images/icon03.gif" align="absmiddle">&nbsp;
+    <a href="{{''|url}}" title="Home">Home</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <a href="{{'info.html'|url}}" title="">會員中心</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <span>問題回覆</span>
+</div>
+<!-- 當前位置 end -->
+<div class="commBox">
+    <!-- 商品 -->
+    {% for item in question_list %}
+    <div class="selectGoods02">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td rowspan="3"><div style="width: 65px; height: 65px;;"><img src="{{ item.product_image }}" alt="" width="65" class="scale"/></div></td>
+                <th height="33" align="left">{{ item.product_name }}</th>
+
+            </tr>
+            <tr>
+                <td>產品型號：{{ item.product_no }}</td>
+            </tr>
+        </table>
+    </div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="reQues">
+        <tr>
+            <td width="30" valign="top"><img src="images/icon05.gif" alt=""/></td>
+            <td width="709">{{ item.content }}</td>
+        </tr>
+        <tr class="bgColor">
+            <td valign="top"><img src="images/icon06.gif" alt=""/></td>
+            <td class="reply">{{ item.reply }}</td>
+        </tr>
+    </table>
+    <div class="lineD mB20"></div>
+    <!-- 商品 end -->
+    {% endfor %}
+</div>
+<!-- page -->
+<div class="pager mT30 pagination2" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+<!-- page end -->
+        <script type="text/javascript">
+            $(function(){
+                $(".reply").each(function(){
+                    if($(this).text() == ""){
+                        $(this).text("尚未回覆");
+                    }
+                });
+                $(".menu_one").each(function(){
+                    if ($("a", this).attr("href").indexOf("question") > 0){
+                        $("a", this).addClass("active");
+                    }
+                });
+            });
+        </script>
+{% endblock %}

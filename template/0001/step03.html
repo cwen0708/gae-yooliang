@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- 當前位置 -->
+<div class="side"><img src="images/icon03.gif" align="absmiddle">&nbsp;<a href="{{''|url}}" title="Home">Home</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;<a href="{{'step01.html'|url}}" title="購物車">購物車</a>&nbsp;<img
+        src="images/icon04.gif" align="absmiddle">&nbsp;<span>確認資料</span></div>
+<!-- 當前位置 end -->
+<div class="commBox">
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderTitle">
+        <tr>
+            <th width="275">商品資訊</th>
+            <th width="154">數量</th>
+            <th width="106">價格</th>
+            <th width="104">小計</th>
+        </tr>
+    </table>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderList">
+        {% set row_class = cycler('', 'bgColor') %}
+        {% if record %}
+            {% for item in order_item_list %}
+            <tr class="{{ row_class.next() }}">
+                <td width="275">
+                    <table cellpadding="0" cellspacing="0" border="0" align="center">
+                        <tr>
+                            <td>
+                                <div style="width:80px; height: 80px;"><img src="{{ item.product_image }}" class="scale" alt="" /></div></td>
+                            <td height="58" align="left">產品型號：{{ item.product_no }} <br/><span>{{ item.product_name }}</span></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="154">{{ item.item_quantity }}</td>
+                <td width="106">{{ item.product_price|thousands_separator }} 元</td>
+                <td width="104">{{ item.item_sum|thousands_separator }} 元</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr class="{{ row_class.next() }}">
+                <td width="275">
+                    <table cellpadding="0" cellspacing="0" border="0" align="center">
+                        <tr>
+                            <td></td>
+                            <td height="58" align="left">您尚未選購產品</td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="154">--</td>
+                <td width="106">--</td>
+                <td width="104">--</td>
+            </tr>
+        {% endif %}
+    </table>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="737">
+        <tr>
+            <td width="546" align="right"><a href="{{ 'step01.html'|url }}" title=""><img src="images/gostep_out.gif" alt="" class="img_change"/></a></td>
+            <td width="191" align="right" class="bgColor02">
+                運費 {{ record.freight|thousands_separator }} 元+
+                合計 {{ record.total_amount|thousands_separator }} 元<br/>
+                = 應付金額<span> {{ total|thousands_separator }} 元</span><br/>
+                </td>
+        </tr>
+    </table>
+    <div class="mT50"><img src="images/steptitle04.gif" alt=""/></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm02">
+        <tr>
+            <th width="77">收件人</th>
+            <td>{{ record.recipient_name }}</td>
+            <th width="77">電子信箱</th>
+            <td>{{ record.recipient_email }}</td>
+        </tr>
+        <tr>
+            <th>電&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;話</th>
+            <td>{{ record.recipient_telephone }}</td>
+            <th>手機號碼</th>
+            <td>{{ record.recipient_mobile }}</td>
+        </tr>
+        <tr>
+            <th>付款方式</th>
+            <td colspan="3">{{ record.pay_type }}</td>
+        </tr>
+        <tr>
+            <th>聯絡地址</th>
+            <td colspan="3">
+                {{ record.recipient_address_zip }}
+                {{ record.recipient_address_county }}{{ record.recipient_address_area }}{{ record.recipient_address_detail }}</td>
+        </tr>
+        <tr>
+            <th valign="top">備&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;註</th>
+            <td colspan="3">{{ record.remark }}</td>
+        </tr>
+    </table>
+
+    <form id="step03" action="{{ 'step03.json'|url }}" data-step04="{{ 'step04.html'|url }}"></form>
+    <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="737">
+        <tr>
+            <td width="546" align="right"><a href="{{ 'step02.html'|url }}" title=""><img src="images/gostep_out.gif" alt="" class="img_change"/></a></td>
+            <td width="191" align="right" class="bgColor02">
+                運費 {{ record.freight|thousands_separator }} +
+                合計 {{ record.total_amount|thousands_separator }} 元<br/>
+                = 應付金額<span> {{ total|thousands_separator }} 元</span><br/>
+                <a id="go_step04" title="完成訂購" style="cursor: pointer;">完成訂購 ></a>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

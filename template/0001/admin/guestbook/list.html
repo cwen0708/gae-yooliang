@@ -1,0 +1,33 @@
+<div class="list-top-bar span3 ">
+    <br />
+</div>
+
+<div class="pagination pagination-small pagination-right span9 padding15" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}"></div>
+
+<table class="table table-hover data-list" data-manager-dir="Guestbook">
+    <thead>
+    <tr>
+        <th style="width:30px">#</th>
+        <th data-lang="title"></th>
+        <th style="width:60px"><br /></th>
+        <th style="width:130px"><br /></th>
+        <th style="width:60px"><br /></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in results %}
+    <tr id="node_{{ item.sort|datetime_timesp }}" data-id="{{ item.id }}" class="data-row {% if item.is_delete == true %} record_already_delete{% endif %}">
+        <td>{{ item.row_id }}</td>
+        <td>{{ item.contact_name }} 於 {{ item.create_date }}</td>
+        <td><button type="button" class="btn btn-edit-page" data-lang="檢視"></button></td>
+        <td>
+            <div class="btn-group" data-toggle="buttons-radio">
+                <button class="btn btn-set-enable {% if item.is_enable == true %} active{% endif %}" data-lang="回覆"></button>
+                <button class="btn btn-set-disable {% if item.is_enable == false %} active{% endif %}" data-lang="未回覆"></button>
+            </div>
+        </td>
+        <td><button type="button" class="btn btn-delete" data-lang="delete"></button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

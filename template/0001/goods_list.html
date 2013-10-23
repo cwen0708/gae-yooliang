@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="side">
+    <img src="images/icon03.gif" align="absmiddle"> <a href="{{ ''|url }}" title="">Home</a>&nbsp;
+    <img src="images/icon04.gif" align="absmiddle"> <a href="{{ 'goods_list.html'|url }}" title="">商品櫥窗</a>&nbsp;
+    {% if in_parent_category %}<img src="images/icon04.gif" align="absmiddle"> <span>{{ in_parent_category }}</span>{% endif %}
+</div>
+
+    <div class="commBox">
+        {% for item in product_list %}
+        <div class="pGoodsList">
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td><a href="{{ item.link|url }}" title="{{ item.product_name }}">
+                        <div class="pGoodsItem"><img src="{{ item.image }}" class="scale" alt="" style="width: 152px; height: 152px;" /></div></a></td>
+                </tr>
+                <tr>
+                    <th><a href="{{ item.link|url }}" title="{{ item.product_name }}">{{ item.product_name }}</a></th>
+                </tr>
+            </table>
+        </div>
+        {% endfor %}
+        <div class="clear"></div>
+    </div>
+
+    <div class="pager mT30 pagination" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+{% endblock %}

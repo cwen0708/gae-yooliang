@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- 當前位置 -->
+    <div class="side"><img src="images/icon03.gif" align="absmiddle">&nbsp;<a href="{{''|url}}" title="Home">Home</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;<span>最新消息</span></div>
+    <!-- 當前位置 end -->
+    <div class="commBox">
+        <table cellpadding="0" cellspacing="0" border="0" width="737" class="newsList">
+            <tr>
+                <th align="left">{{ record.title }}</th>
+                <td align="right">{{ record.create_date }}</td>
+            </tr>
+        </table>
+        <div class="lineD mB20"></div>
+        <!-- fb -->
+        <div class="fb">
+            <div id="fb-root"></div>
+            <script>(function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/zh_TW/all.js#xfbml=1";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+            <div class="fb-like" data-send="false" data-width="450" data-show-faces="true"></div>
+        </div>
+        <!-- fb end -->
+        <div class="newsCon">{{ record.content }}</div>
+        <div class="lineD"></div>
+    </div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="mT20">
+        <tr>
+            <td><a href="javascript:history.back(-1);" title=""><img src="images/back_out.gif" alt="" class="img_change"/></a></td>
+            <td align="right"><a href="#" title=""><img src="images/top_out.gif" alt="" class="img_change"/></a></td>
+        </tr>
+    </table>
+{% endblock %}

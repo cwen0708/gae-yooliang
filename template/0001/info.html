@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- 當前位置 -->
+<div class="side">
+    <img src="images/icon03.gif" align="absmiddle">&nbsp;
+    <a href="{{''|url}}" title="Home">Home</a>&nbsp;
+    <img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <a href="{{'info.html'|url}}" title="">會員中心</a>&nbsp;
+    <img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <span>會員資料</span>
+</div>
+<!-- 當前位置 end -->
+<script src="js/jquery.jSelectDate.js"></script>
+<script src="js/jquery.twzipcode-1.6.0.min.js"></script>
+
+<form id="info" action="{{ 'info.json'|url }}">
+<div class="commBox">
+    {% if current_user.is_custom_account == 0 %}
+    <div><img src="images/infotitle02.gif" alt=""/></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm">
+        <tr>
+            <th style="width:125px;">會員帳號</th>
+            <td><input type="text" name="user_account" value='{{ current_user.user_account }}' class="input02 w200"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" class="inputBtn" value="檢查帳號"/>
+                <span id="info_user_account" class="error">&nbsp;*&nbsp;初次設定請填寫會員帳號，設定完成後無法更改</span>
+            </td>
+        </tr>
+    </table>
+    {% else %}
+    <div class="welcomeText">親愛的 <span>{{ current_user.user_name }} ({{ current_user.user_account }})</span> 會員，您可以修改以下基本資料。</div>
+    {% endif %}
+    <div id="info_done" style="padding: 10px; display: none;"></div>
+    <div><img src="images/infotitle03.gif" alt=""/></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm">
+        <tr>
+            <th style="width:125px;">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</th>
+            <td><input type="text" name="user_name" value='{{ current_user.user_name }}' class="input02 w200"/></td>
+            <th style="width:125px;">生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</th>
+            <td>
+                <input id="tDate" name="birthday" type="text" value="{{ current_user.birthday }}"/>
+            </td>
+        </tr>
+        <tr>
+            <th>電&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;話</th>
+            <td><input type="text" name="telephone" value='{{ current_user.telephone }}' class="input02 w200"/></td>
+            <th>手機號碼</th>
+            <td><input type="text" name="mobile" value='{{ current_user.mobile }}' class="input02 w200"/></td>
+        </tr>
+        <tr>
+            <th>聯絡地址</th>
+            <td colspan="3">
+                <div id="twzipcode">
+                    <div data-role="zipcode" data-style="zipcode" style="float: left; display: none;"></div>
+                    <div data-role="county" data-style="county" style="float: left;"></div>
+                    <div data-role="district" data-style="district" style="float: left;"></div>
+                </div>&nbsp;&nbsp;
+                <input type="text" name="address_detail" value="{{ current_user.address_detail }}" class="input02 w375" />
+        </tr>
+        <tr>
+            <th>電子信箱</th>
+            <td colspan="3"><input name="email" type="text" value='{{ current_user.email }}' class="input02 w575"/></td>
+        </tr>
+        <tr style="display: none;">
+            <th>備&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;註</th>
+            <td colspan="3"><textarea class="input03 w575" rows="8">{{ current_user.remark }}</textarea></td>
+        </tr>
+    </table>
+
+    <div class="btn mT30" align="center">
+        <a id="but_info_send" title=""><img src="images/submit_out.gif" alt="" class="img_change"/></a>
+    </div>
+</div>
+</form>
+<script type="text/javascript">
+    var zipcode = '{{ current_user.address_zip }}';
+    $(function(){
+        $("#tDate").jSelectDate({
+            yearBeign: 1960,
+            disabled: false
+        });
+        if (zipcode != '' && zipcode != 'None'){
+            zip = parseInt(zipcode);
+            $('#twzipcode').twzipcode({
+                zipcodeSel: zip,
+                countyName: 'address_county',
+                districtName: 'address_area',
+                zipcodeName: 'address_zip'
+            });
+        }else{
+            $('#twzipcode').twzipcode({
+                countyName: 'address_county',
+                districtName: 'address_area',
+                zipcodeName: 'address_zip'
+            });
+        }
+        $(".menu_one").each(function(){
+            if ($("a", this).attr("href").indexOf("info") > 0){
+                $("a", this).addClass("active");
+            }
+        });
+    });
+</script>
+{% endblock %}
