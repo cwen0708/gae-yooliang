@@ -87,6 +87,7 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	background:center center fixed no-repeat;
 	-moz-background-size: cover;
 	background-size: cover;
+    -ms-behavior: url(/static/ieFix/backgroundsize.min.htc);
 	}
 #left{
 	width:196px;
