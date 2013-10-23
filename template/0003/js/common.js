@@ -214,9 +214,7 @@ $(function () {
             // Hides the page during initialization
             document.write('<style type="text/css"> .con { display: none; } </style>');
         }
-    }catch (){
-
-    }
+    } catch (e) {}
 
     $(document).on("click", ".caseSPic div", function(){
         /* 更換 bigPic 的圖片路徑 */
