@@ -1,8 +1,13 @@
 #################
-## Eclipse
+## Yooliang
 #################
 .idea/
 application/__init__.py
+mysql-connector-java-5.1.26-bin.jar
+mysql-connector-license.txt
+#################
+## Eclipse
+#################
 *.pydevproject
 .project
 .metadata
