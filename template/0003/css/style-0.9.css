@@ -1,0 +1,435 @@
+/*
+* CSS文件
+* =============================================================
+* 版權所有 (C) 2012 梵月工作室，並保留所有權利。
+* 網站地址: http://www.vmoon.com.tw/
+* =============================================================
+* $Author: ashine
+* $Date: 2013-08-12 $
+*/
+@charset "utf-8";
+/* CSS Document */
+
+/* 基本 */
+body,html{
+	height:100%;
+	}
+body{
+	margin:0px;
+	padding:0px;
+	color:#666;
+	font:12px "Arial", "新細明體";
+	}
+a{
+	text-decoration:none;
+	color:#666;
+	outline: none; /* for Firefox */
+	hlbr:expression(this.onFocus=this.blur()); /* for IE */
+	}
+a:hover{
+	text-decoration:none;
+	color:#333;
+	}
+a.getFlash { 
+	background:center no-repeat;
+	display: block;	
+	width: 100%;
+	}
+img{
+	border:none;
+	display:inline;
+	}
+input, form{
+	margin:0px;
+	padding:0px;
+	}
+	
+/* 共用 */
+.clear{
+	clear:both;
+	font-size:0px;
+	height:0px;
+	line-height:0px;
+	}
+.lineD{
+	height:1px;
+	line-height:0px;
+	margin:0px;
+	padding:0px;
+	font-size:0px;
+	background:url(../images/line_d.png) repeat-x;
+	clear:both;
+	}
+.line{
+	height:0px;
+	line-height:0px;
+	margin:0px;
+	padding:0px;
+	font-size:0px;
+	border-top:1px solid #ddd;
+	}
+	
+/* png 背景透明 */
+.png {
+azimuth: expression(
+this.pngSet?this.pngSet=true:(this.nodeName == "IMG" && this.src.toLowerCase().indexOf('.png')>-1?(this.runtimeStyle.backgroundImage = "none",
+this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "', sizingMethod='image')",
+this.src = "images/FixPng.gif"):(this.origBg = this.origBg? this.origBg :this.currentStyle.backgroundImage.toString().replace('url("','').replace('")',''),
+this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.origBg + "', sizingMethod='crop')",
+this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
+}
+
+/* 外框 */
+#wrapper{
+	width:100%;
+	overflow:hidden;
+	height:100%;
+	background:center center fixed no-repeat;
+	-moz-background-size: cover;
+	background-size: cover;
+	}
+#left{
+	width:196px;
+	overflow:hidden;
+	height:100%;
+	background:url(../images/menubg.png) repeat-y right top;
+	position:fixed;
+	z-index:99;
+	}
+#iMain{
+	width:100%;
+	overflow:hidden;
+	height:100%;
+	position:absolute;
+	bottom:0;
+	left:0;
+	z-index:97;
+	background:url(../images/pbg.png) repeat;
+	}
+#main{
+	width:100%;
+	overflow:hidden;
+	height:100%;
+	position:absolute;
+	bottom:0;
+	left:0;
+	z-index:97;
+	background:url(../images/pbg.png) repeat;
+	}
+#pFooter{
+	width:100%;
+	overflow:hidden;
+	position:absolute;
+	bottom:0;
+	left:0;
+	z-index:98;
+	text-align:right;
+	padding:5px 0;
+	}
+.slogan{
+	height:104px;
+	overflow:hidden;
+	position:absolute;
+	top:50%;
+	left:-5%;
+	margin-top:-52px;
+	z-index:1000;
+	}
+	
+/* goods */
+#goodsBox{
+	width:520px;
+	height:520px;
+	position:absolute;
+	top:50%;
+	margin-top:-260px;
+	right:10%;
+	z-index:1500;
+	}
+.goodsList{
+	width:171px;
+	height:171px;
+	float:left;
+	margin:1px;
+	display:inline;
+	}
+.bgColorLogo{
+	background:url(../images/logo.png) no-repeat center center #fff;
+	width:165px;
+	height:165px;
+	border:3px solid #000;
+	}
+.goodsList .bgColor{
+	background-color:#fff;
+	width:165px;
+	height:105px;
+	border:3px solid #fff;
+	color:#765c30;
+	text-align:center;
+	font-size:15px;
+	font-family:"Century Gothic", "微軟正黑體";
+	font-weight:bold;
+	letter-spacing:2px;
+	padding-top:60px;
+	}
+.goodsList .bgColor span{
+	font-size:12px;
+	font-weight:normal;
+	}
+.goodsList a{
+	width:165px;
+	height:165px;
+	display:block;
+	border:3px solid #fff;
+	}
+.goodsList a:hover{
+	border:3px solid #fcc800;
+	}
+
+/* menu */
+.menuBtn{
+	float:right;
+	height:40px;
+	width:19px;
+	background-image:url(../images/menubtnOut.png);
+	background-repeat:no-repeat;
+	}
+.menuBox{
+	width:143px;
+	overflow:hidden;
+	margin-left:16px;
+	float:left;
+	}
+.menu{
+	font-size:15px;
+	font-family:"Century Gothic", "微軟正黑體";
+	font-weight:bold;
+	letter-spacing:1px;
+	margin-top:80px;
+	}
+.menu a span, .title span, .common .en{
+	font-size:10px;
+	font-weight:normal;
+	-webkit-transform : scale(0.8); 
+	-o-transform : scale(1); 
+	display : inline-block;
+	width:0;
+	white-space: nowrap;
+	}
+.menu a{
+	color:#765c30;
+	display:block;
+	padding:15px 25px;
+	margin:0 auto;
+	border-bottom:1px solid #765c30;
+	}
+.menu a:hover{
+	background-color:#765c30;
+	color:#fff;
+	}
+	
+/* main */
+#verticalBox{
+	float:right;
+	position:relative;
+	}
+.con{
+	width:80%;
+	right:-5%;
+	position:absolute;
+	top:50%;
+	text-shadow: 1px 0 #fff, 0 1px #fff, 
+    0 -1px #fff, -1px 0 #fff;
+	}
+.h542{
+	height:542px;
+	margin-top:-271px;
+	}
+.h604{
+	height:604px;
+	margin-top:-302px;
+	}
+.title{
+	font-size:16px;
+	font-family:"Century Gothic", "微軟正黑體";
+	font-weight:bold;
+	letter-spacing:1px;
+	color:#765c30;
+	border-bottom:1px solid #765c30;
+	padding-left:10px;
+	}
+.caseList, .caseView{
+	overflow:hidden;
+	margin:20px 0;
+	}
+.bPic{
+	width:190px;
+	height:190px;
+	float:left;
+	border:5px solid #fff;
+	overflow:hidden;
+    background: #fff;
+	}
+.caseListInfo, .caseViewInfo{
+	float:right;
+	overflow:hidden;
+	margin-left:20px;
+	}
+.caseTitle{
+	color:#765c30;
+	font-weight:bold;
+	font-size:15px;
+	padding-bottom:10px;
+	
+	}
+.caseTitle a{
+	color:#765c30;
+	
+	}
+.caseTitle a:hover{
+	text-decoration:underline;
+	}
+.caseText{
+	color:#9b7d4b;
+	line-height:20px;
+	max-height: 350px;
+    overflow-y: auto;
+    padding-right: 6px;
+	}
+.caseList .caseSPic{
+	overflow:hidden;
+	margin-top:7px;
+	}
+.caseSPic div{
+	float:left;
+	margin:0 30px 0 0;
+	width:95px;
+	height:95px;
+	border:5px solid #fff;
+    background: #fff;
+	}
+.bPicView{
+	width:490px;
+	height:490px;
+	float:left;
+	border:5px solid #fff;
+	overflow:hidden;
+    background: #fff;
+	}
+.caseView .caseSPic {
+	margin-top:5px;
+	}
+.caseView .caseSPic div{
+	margin:10px 30px 10px 0;
+	}
+.btn{
+	text-align:center;
+	margin:10px 0;
+	}
+.common .ch{
+	font-size:15px;
+	font-weight:bold;
+	}
+.common{
+	line-height:30px;
+	padding:0 20px;
+	margin:20px 0;
+	font-size:13px;
+	letter-spacing:1px;
+	}
+.map{
+	margin:20px 0;
+	}
+.map iframe{
+	margin-bottom:10px;
+	border:5px solid #fff;
+	}
+	
+/* footer */
+.footerLogo{
+	display:none;
+	width:184px;
+	overflow:hidden;
+	float:left;
+	}
+.footerRight{
+	overflow:hidden;
+	float:right;
+	margin:0 10px;
+	}
+.copyright{
+	text-align:right;
+	padding:5px 0;
+	}
+.copyright, .copyright a, #pFooter, #pFooter a, .common, .common a{
+	color:#765c30;
+	text-shadow: 1px 0 #fff, 0 1px #fff, 
+    0 -1px #fff, -1px 0 #fff;
+	}
+.copyright a:hover, #pFooter a:hover, .common a:hover{
+	text-decoration:underline;
+	}
+	
+/* 分頁 */
+.page{
+	margin:10px auto;
+	text-shadow:none;
+	}
+.pager{
+	text-align:center;
+	}
+.pager a{
+	margin:0px 10px;
+	color:#765c30;
+	padding:2px 5px;
+	}
+.pager a:hover, .pager .current{
+	margin:0px 10px;
+	padding:2px 5px;
+	color:#fff;
+	background-color:#765c30;
+	}
+	.nano { background: #bba; width: 500px; height: 500px; font-size:12px;border-radius:8px; }
+
+.nano .content {
+	padding: 20px;
+}
+
+.nano .pane {
+	background: #555;
+	width: 8px;
+	right: 1px;
+  margin: 5px;
+}
+
+.nano .slider {
+	background: #111;
+}
+.caseText::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 5px;
+
+}
+
+.caseText::-webkit-scrollbar
+{
+	background-color: #F5F5F5;
+	border-radius: 5px;
+	width: 6px;
+}
+
+.caseText::-webkit-scrollbar-thumb
+{
+	background-color: #765C30;
+	background-image: -webkit-linear-gradient(45deg,
+	                                          rgba(255, 255, 255, .2) 25%,
+											  transparent 25%,
+											  transparent 50%,
+											  rgba(255, 255, 255, .2) 50%,
+											  rgba(255, 255, 255, .2) 75%,
+											  transparent 75%,
+											  transparent)
+}
+/* 防木馬
