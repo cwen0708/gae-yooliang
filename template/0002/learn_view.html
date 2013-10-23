@@ -1,0 +1,16 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_learn">最新消息 > {{record.title}}</h1>
+</div>
+<div class="container">
+    <div class="c_main">
+        <div class="news_view">
+            <div class="news_title"><span class="news_date">{{record.create_date}}</span></div>
+            {{record.content}}
+            <div class="back"><input name="submit" type="submit" class="submit" onclick="history.back();" value="回上一頁"/></div>
+        </div>
+    </div>
+    <div class="clean"></div>
+</div>
+{% endblock %}

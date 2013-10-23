@@ -1,0 +1,30 @@
+
+    <div class="gbGoods">
+        {% for item in product_list %}
+        <div class="pGoodsList">
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td><a href="{{ item.link|url }}" title="{{ item.product_name }}">
+                        <div class="pGoodsItem"><img src="{{ item.image }}" class="scale" alt="" /></div></a></td>
+                </tr>
+                <tr>
+                    <th><a href="{{ item.link|url }}" title="{{ item.product_name }}">{{ item.product_name }}</a></th>
+                </tr>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="lineD mB20"></div>
+    <!-- page -->
+    <div class="pager mT30 pagination2" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+    <!-- page end -->
+    <script>
+        //圖片依外框縮放
+        $("img").one('load',function () {
+            if ($(this).hasClass("scale")) {
+                $(this).ScaleImg();
+            };
+        }).each(function () {
+            if (this.complete) $(this).load();
+        });
+    </script>

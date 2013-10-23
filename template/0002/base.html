@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="zh-tw">
+    <title>牧陽能控有限公司Green Shepherd Co.,Ltd.</title>
+    <meta name="google-site-verification" content="YMeh3Eq-3ZN25QHeLPUNNWHgDlisLF0YA_ZiwKjC5Po" />
+    <meta name="msvalidate.01" content="87E567F75870CE444D10B2C11767BE10" />
+    <meta name="description" content="{{ 'description'|websetting }}" />
+    <meta name="keywords" content="{{ 'keywords'|websetting }}" />
+    <link rel="stylesheet" type="text/css" href="/template/0002/css/client.css?r={{ app_version }}" />
+    <script type="text/javascript" src="/static/jQuery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.jcarousel.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <div class="top_index">
+            <div class="top_box">
+                <div class="logo"><img src="{{ 'site_logo'|webimage }}" style="height: 84px;;"></div>
+                <a href="http://www.greenshepherd.com.tw/contact.html"><div class="top_tel" title="服務專線06-2003195" style="background-image: url({{ 'top_tel'|webimage }});"></div></a>
+                <div class="clean"></div>
+            </div>
+            <div id="topmenu">
+                <ul id="menu">
+                    <li><a class="f" title="首頁" href="index.html">牧陽首頁</a></li>
+                    <li><a class="f" href="about.html" title="公司簡介">公司簡介</a></li>
+                    <li><a class="f" href="solution.html" title="系統套案">系統套案</a><ul>{% for item in solution_results %}<li><a href="solution_view.html?id={{ item.id }}">{{ item.title }}</a></li>{% endfor %}</ul></li>
+                    {% if first_service %}
+                    <li><a class="f" href="service.html?id={{ first_service.id }}" title="{{ first_service.title }}">專業服務</a><ul>{% for item in service_results %}<li><a href="service.html?id={{ item.id }}">{{ item.title }}</a></li>{% endfor %}</ul></li>
+                    {% else %}
+                    <li><a class="f" href="#" title="專業服務">專業服務</a></li>
+                    {% endif %}
+                    <li><a class="f" href="project_flickr.html" title="工程實績">工程實績</a></li>
+                    <li><a class="f" href="product.html" title="產品型錄">產品型錄</a><ul>{% for item in product_category_list %}<li><a href="product.html?parent={{ item.id }}">{{ item.category_name }}</a></li>{% endfor %}</ul></li>
+                    <li><a class="f" href="learn.html" title="最新消息">最新消息</a></li>
+                    <li><a class="f" href="contact.html" title="綠色接觸">綠色接觸</a></li>
+                    {% if user_login %}
+                    <li><a class="f" href="monitor.html" title="客戶專區">客戶專區</a></li>
+                    {% else %}
+                    <li><a class="f" href="login.html" title="客戶專區">客戶專區</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!--topmenu區end-->
+        </div>
+        <!--top_index區end-->
+            {% block content %}{% endblock %}
+        <!--footer start-->
+
+        <div class="clean"></div>
+    </div>
+    <div class="footer">
+        <div class="footer_menu">
+            <div style="border:solid 1px #fff;float:right;">
+                <a style="float:right; margin-top: 5px;" href="{{ 'facebook-24'|websetting }}"><img src="/template/0002/images/facebook.png" width="32" height="32" /></a><span class="hr"></span>
+                <a style="float:right; margin-top: 5px;" href="{{ 'google-24'|websetting }}"><img src="/template/0002/images/googleplus.png" width="32" height="32" /></a><span class="hr"></span>
+                <a style="float:right; margin-top: 5px;" href="{{ 'twitter-24'|websetting }}"><img src="/template/0002/images/twitter.png" width="32" height="32" /></a><span class="hr"></span>
+                <a style="float:right; margin-top: 5px;" href="{{ 'youtube-24'|websetting }}"><img src="/template/0002/images/youtube.png" width="32" height="32" /></a><span class="hr"></span>
+                <a style="float:right; margin-top: 5px;" href="skype:{{ 'skype-24'|websetting }}"><img src="/template/0002/images/skype.png" width="32" height="32" /></a><br /><br />
+            </div>
+            <a title="首頁" href="index.html">牧陽首頁</a><span class="hr"></span>
+            <a href="about.html" title="公司簡介">公司簡介</a><span class="hr"></span>
+            <a href="solution.html" title="系統套案">系統套案</a><span class="hr"></span>
+            {% if first_service %}
+            <a href="service.html?id={{ first_service.id }}" title="{{ first_service.title }}">專業服務</a><span class="hr"></span>
+            {% else %}
+            <a href="#" title="專業服務">專業服務</a><span class="hr"></span>
+            {% endif %}
+            <a href="project_flickr.html" title="工程實績">工程實績</a><span class="hr"></span>
+            <a href="product.html" title="產品型錄">產品型錄</a><span class="hr"></span>
+            <a href="learn.html" title="最新消息">最新消息</a><span class="hr"></span>
+            <a href="contact.html" title="綠色接觸">綠色接觸</a><span class="hr"></span>
+            {% if user_login %}
+            <a href="monitor.html" title="客戶專區">客戶專區</a><span class="hr"></span>
+            {% else %}
+            <a href="login.html" title="客戶專區">客戶專區</a><span class="hr"></span>
+            {% endif %}
+            <br />
+            <br />
+            <div style="line-height: 30px;">
+                <img src="/template/0002/images/Streamline-58-20.png" style="line-height: 22px; float: left; margin: 1px 10px 0 0;" />
+                <span style="line-height: 22px; float: left;">
+                gs@greenshepherd.com.tw
+                </span>
+                <img src="/template/0002/images/Streamline-09-20.png" style="line-height: 22px; float: left; margin: 0px 10px 0 10px;" />　
+                <span style="line-height: 22px; float: left;">
+                06-200-3195
+                </span>
+                <span style="line-height: 22px; float: left; margin-left: 60px;">
+                Copyright © 2013 牧陽能控 All Rights Reserved.
+                </span>
+            </div>
+        </div>
+        <div class="clean"></div>
+    </div>
+    <script type="text/javascript" src="/template/0002/js/swfobject.js"></script>
+    <script type="text/javascript" src="/template/0002/js/common.js?r={{ app_version }}"></script>
+    <script type="text/javascript" src="/template/0002/js/pager.js?r={{ app_version }}"></script>
+
+    <div id="corporate_contributions_info">
+        <div class="index_img02_icon">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td height="45" valign="middle">
+                        <div class="index_img02_txt1" id="seb" data-price='{{ "price"|websetting }}'>Loading...</div>
+                        <div class="index_img02_txt2">節省電費(NT$)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="68" valign="middle">
+                        <div class="index_img02_txt1" id="co2" data-co2kg='{{ "co2kg"|websetting }}' >Loading...</div>
+                        <div class="index_img02_txt2">減少CO2排碳量(Kg)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="45" valign="middle">
+                        <div class="index_img02_txt1" id="kws" data-yesterday-kwh="{{ yesterday_kwh }}" data-yesterday-total-kwh="{{ yesterday_total_kwh }}">Loading...</div>
+                        <div class="index_img02_txt2">節省度數(KWH)</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

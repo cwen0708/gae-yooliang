@@ -1,0 +1,94 @@
+﻿{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="index_ad">
+            <div id="abgne_fade_pic">
+                {% for item in banner_list %}
+                <a href="#" class="ad"><img src="{{ item.image }}" /></a>
+                {% endfor %}
+            </div>
+        </div>
+        <!--廣告end-->
+        <div class="marquee">
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="left" scrolldelay="4" scrollamount="2">{% for item in marquee_list %}{{ item.content }}{% endfor %}</marquee>
+        </div>
+        <!--跑馬燈end-->
+        <div class="index_img">
+            <div class="index_img01">
+                <div class="index_img_txt"><div class="news_marquee"><ul>{% for item in news_list %}<li>{{ item.content }}</li>{% endfor %}</ul></div>
+                    <div class="index_img03_more"><a href="javascript:void(0);" id="prev">&lt; 上一則</a> &nbsp; &nbsp; <a href="javascript:void(0);" id="next">下一則 &gt;</a></div>
+                </div>
+            </div>
+            <div class="index_img02">
+                <div class="index_img02_icon">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td height="45" valign="middle">
+                                <div class="index_img02_txt1" id="seb" data-price='{{ "price"|websetting }}'>Loading...</div>
+                                <div class="index_img02_txt2">節省電費(NT$)</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="68" valign="middle">
+                                <div class="index_img02_txt1" id="co2" data-co2kg='{{ "co2kg"|websetting }}' >Loading...</div>
+                                <div class="index_img02_txt2">減少CO2排碳量(Kg)</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="45" valign="middle">
+                                <div class="index_img02_txt1" id="kws" data-yesterday-kwh="{{ yesterday_kwh }}" data-yesterday-total-kwh="{{ yesterday_total_kwh }}">Loading...</div>
+                                <div class="index_img02_txt2">節省度數(KWH)</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="index_img03">
+                <div class="index_img_txt">
+                    <div class="index_img03_list">
+                        {% for item in faq_list %}
+                        <li><a href="/learn_view.html?id={{item.id}}">{{item.title}}</a></li>
+                        {% endfor %}
+                    </div>
+                    <div class="index_img03_more"><a href="/learn.html">> more</a></div>
+                </div>
+            </div>
+            <div class="clean"></div>
+        </div>
+        <!--首頁焦點區end-->
+    </div>
+    <script>
+    function rf_data(){
+        var yesterday_kwh = parseFloat($("#kws").data("yesterday-kwh"));
+        var yesterday_kwh_total = parseFloat($("#kws").data("yesterday-total-kwh"));
+        var co2kg = parseFloat($("#co2").data("co2kg"));
+        var price = parseFloat($("#seb").data("price"));
+
+        var d = new Date();
+        var total_second = (d.getHours() * 3600) + (d.getMinutes() * 60) + d.getSeconds();
+        var pre_second_kwh = (yesterday_kwh/12/60/60);
+        var now_kwh = Math.ceil((yesterday_kwh_total + (total_second * pre_second_kwh))*100)/100;
+        if (d.getHours() < 6 || d.getHours() > 19){
+            now_kwh = yesterday_kwh_total;
+        }
+        if (d.getHours() > 19){
+            now_kwh = yesterday_kwh + yesterday_kwh_total;
+        }
+        $("#kws").text(number_1000(now_kwh));
+        var now_co2 = Math.ceil((now_kwh * co2kg)*100)/100;
+        $("#co2").text(number_1000(now_co2));
+        var now_price = Math.ceil((now_kwh * price)*100)/100;
+        $("#seb").text(number_1000(now_price));
+    }
+    function number_1000(n) {
+        n += "";
+        var arr = n.split(".");
+        var re = /(\d{1,3})(?=(\d{3})+$)/g;
+        return arr[0].replace(re,"$1,") + (arr.length == 2 ? "" : "");
+    }
+    $(function(){
+        setInterval(rf_data, 1000);
+    });
+
+    </script>
+{% endblock %}

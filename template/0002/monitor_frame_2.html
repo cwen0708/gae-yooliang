@@ -1,0 +1,63 @@
+﻿<script>
+    function go_page(){
+        var tp = $("input[name='dtype']:checked").val();
+        var date = $("#datepicker").datepicker('getDate');
+        var url = "/monitor_detail_" + tp + ".html?case_id={{ case_id }}&year=" + date.getFullYear() + "&month=" + (date.getMonth() +1) + "&day=" + date.getDate();
+        $("#iframe").attr("src", url);
+    }
+    $(function () {
+        $.datepicker.regional['zh-TW'] = {
+            closeText: '關閉',
+            prevText: '<上月',
+            nextText: '下月>',
+            currentText: '今天',
+            monthNames: ['一月','二月','三月','四月','五月','六月',
+            '七月','八月','九月','十月','十一月','十二月'],
+            monthNamesShort: ['一','二','三','四','五','六',
+            '七','八','九','十','十一','十二'],
+            dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+            dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+            dayNamesMin: ['日','一','二','三','四','五','六'],
+            dateFormat: 'yy-mm-dd', firstDay: 1,
+            showMonthAfterYear: false,
+            changeMonth: true,
+            changeYear: true,
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-TW']);
+        $("#datepicker").datepicker({
+            dateFormat: 'yy/mm/dd',
+            changeMonth: true,
+            changeYear: true,
+            onSelect: function(dateText) {
+                go_page();
+            }
+        });
+        $("#datepicker").datepicker('setDate', new Date());
+        $("input[name='dtype']").click(function(){
+            go_page();
+        });
+        $("#send").click(function(){
+            go_page();
+        });
+        go_page();
+    });
+</script>
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width:70px;"><h3 style="margin:0px;">日期: </h3></td>
+        <td><input type="text" id="datepicker" /></td>
+        <td style="width:70px;"><h3 style="margin:0px;">格式: </h3></td>
+        <td>
+            <input id="week" type="radio" name="dtype" value="week" checked="checked" />
+            <label for="week">週</label>
+            <input id="month" type="radio" name="dtype" value="month" />
+            <label for="month">月</label>
+            <input id="year" type="radio" name="dtype" value="year" />
+            <label for="year">年</label>
+        </td>
+        <td style="width:70px;"><button id="send">送出</button></td>
+</table>
+
+<iframe id="iframe" style="width:710px; height:600px; border: solid 0 #fff;" frameborder="0" border="0" cellspacing="0"></iframe>

@@ -179,39 +179,43 @@ $(function () {
         }
     }).css('cursor', 'pointer');
 
-    var init = true,
-        state = window.history.pushState !== undefined;
+    try{
+        var init = true,
+            state = window.history.pushState !== undefined;
 
-    $.address.state('/').init(function(event) {
-        // Initializes the plugin
-        $('.menu a').address();
-        $('#verticalBox a').address();
-    }).change(function(event) {
-        var value = $.address.state().replace(/^\/$/, '') + event.value;
+        $.address.state('/').init(function(event) {
+            // Initializes the plugin
+            $('.menu a').address();
+            $('#verticalBox a').address();
+        }).change(function(event) {
+            var value = $.address.state().replace(/^\/$/, '') + event.value;
 
-        if (state && init) {
-            init = false;
-        } else {
-            if (first_load){
-                first_load = false;
-            }else{
-                $(".con").fadeOut(function(){
-                    ajax(value, "isAjax=true", function(data){
-                        $(".con").remove();
-                        $("#verticalBox").html(data);
-                        after_page_load();
-                        $(".con").css('right', "50%").fadeIn();
-                    }, function(data){
+            if (state && init) {
+                init = false;
+            } else {
+                if (first_load){
+                    first_load = false;
+                }else{
+                    $(".con").fadeOut(function(){
+                        ajax(value, "isAjax=true", function(data){
+                            $(".con").remove();
+                            $("#verticalBox").html(data);
+                            after_page_load();
+                            $(".con").css('right', "50%").fadeIn();
+                        }, function(data){
 
+                        });
                     });
-                });
+                }
+                return false;
             }
-            return false;
+        });
+        if (!state) {
+            // Hides the page during initialization
+            document.write('<style type="text/css"> .con { display: none; } </style>');
         }
-    });
-    if (!state) {
-        // Hides the page during initialization
-        document.write('<style type="text/css"> .con { display: none; } </style>');
+    }catch (){
+
     }
 
     $(document).on("click", ".caseSPic div", function(){

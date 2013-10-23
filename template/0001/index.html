@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="{{ 'description'| websetting }}" />
+    <meta name="keywords" content="{{ 'keywords'| websetting }}" />
+    <meta name="msvalidate.01" content="87E567F75870CE444D10B2C11767BE10" />
+    <title>一品夫人官方網站</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css?r={{ app_version }}" />
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-42982731-1', '063318866.com');
+        ga('send', 'pageview');
+    </script>
+</head>
+
+<body>
+	<div id="wrapper">
+        <div class="topBox">
+            <div class="logo"><a href="{{ ''|url }}" title="一品夫人"><img src="images/logo.png" alt="一品夫人" /></a></div>
+            <div class="menuMarquee">
+            	<table cellpadding="0" cellspacing="0" border="0" width="819" align="center">
+                	<tr>
+                    	<td width="609" class="menuBox">
+                            <a href="{{ 'about.html'|url }}" title="關於我們"><img src="images/menu01_out.png" alt="關於我們" class="img_change" /></a>
+                            <a href="{{ 'news_list.html'|url }}" title="最新消息"><img src="images/menu02_out.png" alt="最新消息" class="img_change" /></a>
+                            <a href="{{ 'goods_list.html'|url }}" title="商品櫥窗"><img src="images/menu03_out.png" alt="商品櫥窗" class="img_change" /></a>
+                            <a href="{{ 'faq.html?category=1'|url }}" title="問與答"><img src="images/menu04_out.png" alt="問與答" class="img_change" /></a>
+                            <a href="{{ 'guestbook.html'|url }}" title="留言板"><img src="images/menu05_out.png" alt="留言板" class="img_change" /></a>
+                            <a href="{{ 'contact.html'|url }} " title="聯絡我們"><img src="images/menu06_out.png" alt="聯絡我們" class="img_change" /></a>
+                        </td>
+                        <td width="73"><a href="{{ ''|url }}" title="回首頁">回首頁</a></td>
+                        <td width="24"><img src="images/icon.gif" alt="" /></td>
+                        <td width="113">購物車 <a href="{{ 'step01.html'|url }}" title="{{ cart_title }}"><span>{{ cart_count }}</span></a></td>
+                    </tr>
+                </table>
+                <div class="marquee"><marquee scrolldelay="120" class="marquee_content">{% for item in marquee_list %}{{ item.content }}{% endfor %}</marquee></div>
+            </div>
+
+            <div id="user_area">
+                {% if current_user %}
+                <div class="logoutBox">
+                    您好，<span>{{ current_user.user_name }}</span><br />歡  迎  您  的  登  入
+                    <div align="center" class="logoutBtn">
+                        <a id="but_logout" title="登出" data-action="{{ 'logout.json'|url }}"><img src="images/logout_out.gif" alt="" class="img_change" /></a>
+                    </div>
+                    <div align="center" class="loginLink">
+                        <a href="{{ 'order.html'|url }}" title="訂單查詢">訂單查詢</a>&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;
+                        <a href="{{ 'info.html'|url }}" title="會員中心">會員中心</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="loginBox">
+                    <div align="center"><img src="images/logintitle.png" alt="會員登入" /></div>
+                    <form id="login" action="{{ 'login.json'|url }}">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tr><th>會員<span>帳號</span></th><td><input type="text" name="account" value="" class="input w100" /></td></tr>
+                        <tr><th>會員<span>密碼</span></th><td><input type="password" name="password" value="" class="input w100" /></td></tr>
+                        <tr><td colspan="2" align="center"><a title="登入" id="but_login"><img src="images/login_out.gif" alt="" class="img_change" /></a></td></tr>
+                    </table>
+                    </form>
+                    <div align="center" class="loginLink">
+                        <a href="{{ 'join.html'|url }}" title="加入會員">加入會員</a>&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;
+                        <a href="{{ 'password.html'|url }}" title="忘記密碼">忘記密碼</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div id="abgne_fade_num" class="abgne_fade_num"></div>
+            <!-- banner -->
+            <div class="bannerBox">
+            	<img src="images/ibanner_mask.png" alt="" class="bannerMask" />
+                <div id="abgne_fade_pic">
+                    {% for item in banner_list %}
+                	<a href="#" title="" class="ad"><img src="{{ item.image }}" alt="" /></a>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- banner end -->
+        </div>
+        <!-- logo menu marquee login banner end  -->
+        <!-- main -->
+        <div id="mainBox">
+        	<!-- video -->
+            <div class="videoBox">
+            	<div class="videoTop">
+                	<div class="videoImg"><img src="images/videoimg.png" alt="" /></div>
+                    <div class="videoTitle">
+                    	<div><img src="images/videotitle.gif" alt="" /></div>
+                        <table cellpadding="0" cellspacing="0" border="0" width="325" class="videoList">
+                        	<tr>
+                            	<td width="15"><img src="images/icon02.gif" alt="" /></td>
+                                <th align="left">{{ 'tvprogram'| websetting }}</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <table cellpadding="0" cellspacing="0" border="0" width="490" class="videoList">
+                    {% for item in tvprogram_list %}
+                	<tr>
+                    	<td width="15"><img src="images/icon02.gif" alt="" /></td>
+                        <th align="left">{{ item.title }}</th>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <table cellpadding="0" cellspacing="0" border="0" class="otherLink">
+                	<tr>
+                    	<td><img src="images/contactimg.gif" alt="" /></td>
+                        <td><a href="#" title=""><img src="images/mainicon.gif" alt="" /></a></td>
+                        <td><img src="images/line.gif" alt="" /></td>
+                        <td><a href="#" title=""><img src="images/caricon.gif" alt="" /></a></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- video end -->
+            <!-- goods -->
+            <div class="goodsBox">
+            	<table cellpadding="0" cellspacing="0" border="0" width="470">
+                	<tr>
+                    	<td width="419"><img src="images/goodstitle.gif" alt="" /></td>
+                        <td width="51"><a href="{{ 'goods_list.html'|url }}" title=""><img src="images/more_out.gif" alt="" class="img_change" /></a></td>
+                    </tr>
+                </table>
+                <div class="iGoodsListBox">
+                    {% for item in product_list %}
+                	<div class="goodsList">
+                    	<table cellpadding="0" cellspacing="0" border="0">
+                        	<tr>
+                            	<td><a href="{{ item.link|url }}" title="{{ item.product_name }}">
+                                    <div class="iGoodsItem"><img src="{{ item.image }}" class="scale" alt="" /></div>
+                                </a></td>
+                            </tr>
+                            <tr>
+                            	<th><a href="{{ item.link|url }}" title="{{ item.product_name }}">{{ item.product_name }}</a></th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="gLine"><img src="images/line02.gif" alt="" /></div>
+                    {% endfor %}
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <!-- goods end -->
+            <div class="clear"></div>
+
+            <!-- 合作廠商 -->
+            <div class="linksBox"><ul id="mycarousel" class="jcarousel-skin-tango">{% for item in partners_list %}<li><a href="{{ item.link }}" title="{{ item.title }}" target="_blank"><img src="{{ item.image }}" alt="" /></a></li>{% endfor %}</ul></div>
+        </div>
+	</div>
+    <div id="footer">
+        <div class="botMenu">
+            <a href="{{ 'about.html'|url }}" title="關於我們">關於我們</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ 'news_list.html'|url }}" title="最新消息">最新消息</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ 'goods_list.html'|url }}" title="商品櫥窗">商品櫥窗</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ 'faq.html?category=1'|url }}" title="問與答">問與答</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ 'guestbook.html'|url }}" title="留言板">留言板</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ 'contact.html'|url }}" title="聯絡我們">聯絡我們</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ 'know.html'|url }}" title="購物須知">購物須知</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ 'privacy.html'|url }}" title="隱私權聲明">隱私權聲明</a>
+        </div>
+        <div class="footerInfo">© All Rights Reserved.
+            {{ 'com_title'| websetting }}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            聯絡電話：{{ 'com_telephone'| websetting }}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            傳真號碼：{{ 'com_fax'| websetting }}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            公司地址：{{ 'com_address'| websetting }}</div>
+    </div>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.jcarousel.js"></script>
+    <script type="text/javascript" src="js/common.js?r={{ app_version }}"></script>
+</body>
+</html>

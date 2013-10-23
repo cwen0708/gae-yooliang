@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+	<header class="page-header">
+		<h1 class="page-title">精選案例</h1>
+		<ul id="portfolio-items-filter" style="overflow: hidden;">
+			<li>目前顯示</li>
+			<li><a data-categories="*">全部</a></li>
+			<li><a data-categories="形象網站">形象網站</a></li>
+			<li><a data-categories="購物網站">購物網站</a></li>
+			<li><a data-categories="型錄網站">型錄網站</a></li>
+			<li><a data-categories="特殊功能">特殊功能</a></li>
+		</ul>
+	</header>
+
+	<section id="portfolio-items" class="clearfix">
+		<article class="one-fourth" data-categories="購物網站 形象網站">
+			<a href="img/case/0001.png" class="single-image" title="一品夫人">
+				<img src="img/case/0001.png" alt="" style="width: 220px; height: 140px;">
+			</a>
+			<a href="http://www.063318866.com/" class="project-meta">
+				<h5 class="title">一品夫人</h5>
+				<span class="categories">購物網站 / 形象網站</span>
+			</a>
+		</article>
+
+		<article class="one-fourth" data-categories="購物網站 形象網站 特殊功能">
+			<a href="img/case/0002.png" class="single-image" title="牧陽能控">
+				<img src="img/case/0002.png" alt="" style="width: 220px; height: 140px;">
+			</a>
+			<a href="http://www.greenshepherd.com.tw/" class="project-meta">
+				<h5 class="title">牧陽能控</h5>
+				<span class="categories">形象網站 / 特殊功能</span>
+			</a>
+		</article>
+
+		<article class="one-fourth" data-categories="形象網站">
+			<a href="img/case/0003.png" class="single-image" title="全日昇建設">
+				<img src="img/case/0003.png" alt="" style="width: 220px; height: 140px;">
+			</a>
+			<a href="http://demo.yooliang.com/0003/html/index.html" class="project-meta">
+				<h5 class="title">全日昇建設</h5>
+				<span class="categories">形象網站</span>
+			</a>
+		</article>
+
+		<article class="one-fourth" data-categories="購物網站 形象網站">
+			<a href="img/case/0004.png" class="single-image" title="頂好客製化團體服">
+				<img src="img/case/0004.png" alt="" style="width: 220px; height: 140px;">
+			</a>
+			<a href="http://www.uno-clothing.com.tw/" class="project-meta">
+				<h5 class="title">頂好客製化團體服</h5>
+				<span class="categories">購物網站 形象網站</span>
+			</a>
+		</article>
+	</section>
+{% endblock %}

@@ -1,0 +1,109 @@
+﻿<script type="text/javascript" src="/static/jQuery/jquery-1.10.2.min.js"></script>
+<!--[if IE]><script type="text/javascript" src="/template/0002/js/excanvas.compiled.js"></script><![endif]-->
+<script type="text/javascript" src="/template/0002/js/jquery.flot.min.js"></script>
+<script type="text/javascript" src="/template/0002/js/jquery.flot.axislabels.js?r=1"></script>
+<table style="width: 100%;">
+    <tr>
+        <td style="width:100px;"><h3 style="margin:0px;">發電功率</h3></td>
+        <td>{{ case.kw }} KW</td>
+        <td style="width:100px;"><h3 style="margin:0px;">今日發電數</h3></td>
+        <td>{{ case.today_kwh }} KWH(度)</td>
+        <td style="width:100px;"><h3 style="margin:0px;">今日躉售</h3></td>
+        <td>{{ case.today_price }} 元</td>
+    </tr>
+</table>
+
+<table style="width: 100%;">
+    <tr>
+        <td style="padding: 0; text-align: center;" valign="top">
+            <div id="graph-lines-realtime" style="width: 695px; height: 500px;"></div>
+        </td>
+    </tr>
+</table>
+
+<script>
+$(document).ready(function () {
+	// Graph Data ##############################################
+	var data_realtime = [{
+        data: [
+        {% for item in results %}
+            [{{ item.timestamp }}000,{{ item.kw }}],{% endfor %}],
+        color: '#71c73e'
+    }];
+	// Lines Graph #############################################
+	$.plot($('#graph-lines-realtime'), data_realtime, {
+        legend: {
+            show: true,
+            position: "ne"
+        },
+		series: {
+			points: {
+				show: false,
+				radius: 5
+			},
+			lines: {
+				show: true,
+                fill: true
+			},
+			shadowSize: 0
+		},
+		grid: {
+			color: '#646464',
+			borderColor: 'transparent',
+			borderWidth: 20,
+			hoverable: true
+		},
+		xaxis: {
+			tickColor: 'transparent',
+            mode: "time",
+            timeformat: "%H",
+            tickSize: [1, "hour"],
+			tickDecimals: 2,
+            min: {{ min_time }}000,
+            max: {{ max_time }}000
+		},
+		yaxis: {
+            axisLabel: "KW",
+            color: "black",
+            tickDecimals: 2,
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 5,
+            max: {{ case.max_kw }}
+		}
+	});
+
+	// Tooltip #################################################
+	function showTooltip(x, y, contents) {
+		$('<div id="tooltip">' + contents + '</div>').css({
+            position: 'absolute',
+			top: y + 30,
+			left: x - 25,
+            border: '2px solid #4572A7',
+            padding: '2px',
+            size: '10',
+            'border-radius': '6px 6px 6px 6px',
+            'background-color': '#fff',
+            opacity: 0.80
+		}).appendTo('body').fadeIn();
+	}
+
+	var previousPoint = null;
+
+	$('#graph-lines-realtime').bind('plothover', function (event, pos, item) {
+		if (item) {
+			if (previousPoint != item.dataIndex) {
+				previousPoint = item.dataIndex;
+				$('#tooltip').remove();
+				var x = item.datapoint[0],
+					y = item.datapoint[1];
+					showTooltip(item.pageX, item.pageY, y + ' KW');
+			}
+		} else {
+			$('#tooltip').remove();
+			previousPoint = null;
+		}
+	});
+});
+</script>

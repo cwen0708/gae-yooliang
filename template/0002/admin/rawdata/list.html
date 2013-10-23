@@ -1,0 +1,34 @@
+<div class="list-top-bar span3 ">
+    <br />
+</div>
+
+<div class="pagination pagination-small pagination-right span9 padding15" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}"></div>
+
+<table class="table table-hover data-list" data-manager-dir="RawData">
+    <thead>
+    <tr>
+        <th style="width:30px">#</th>
+        <th data-lang="客戶"></th>
+        <th data-lang="案場"><br /></th>
+        <th data-lang="kwh"><br /></th>
+        <th data-lang="kw"><br /></th>
+        <th data-lang="日期" style="width:150px"></th>
+        <th data-lang="日期" style="width:100px"></th>
+        <th style="width:60px"><br /></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in results %}
+    <tr id="node_{{ item.sort|datetime_timesp }}" data-id="{{ item.id }}" class="data-row {% if item.is_delete == true %} record_already_delete{% endif %}">
+        <td>{{ item.row_id }}</td>
+        <td>{{ item.customer_name }}</td>
+        <td>{{ item.case_name }}</td>
+        <td>{{ item.kwh }}</td>
+        <td>{{ item.kw }}</td>
+        <td>{{ item.create_date}}</td>
+        <td>{{ item.date}}</td>
+        <td><button type="button" class="btn btn-delete" data-lang="delete"></button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

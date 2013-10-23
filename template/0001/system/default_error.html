@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container clearfix">
+    <header class="page-header">
+        <h1 class="page-title">{{ response.status }}, 伺服器發生錯誤了</h1>
+    </header>
+</div>
+<img src="/application/backend/template___/img/codemonkey.jpg" />
+<h3>別擔心我們的攻城濕會儘快處理它</h3>
+<pre>{{ error_msg }}</pre>
+{% endblock %}

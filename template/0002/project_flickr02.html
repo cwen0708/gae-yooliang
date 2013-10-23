@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_about">工程實績</h1>
+</div><!--top_抬頭區end-->
+<!-- TODO http://www.benbenkong.net/ -->
+<!-- TODO http://www.sokoos.com/ -->
+
+<table style="width:100%">
+    <tr>
+        <td>
+            
+        </td>
+        <td>
+            <div id="map-canvas" style="width:720px; height: 450px;"></div>
+        </td>
+    </tr>
+</table>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script>
+    function initialize() {
+        var mapOptions = {
+            zoom: 8,
+            center: new google.maps.LatLng(23.633088639680092, 121.05010986328125),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+        {% for item in list %}
+        try{ var marker{{ item.row_id }} = new google.maps.Marker({ position: new google.maps.LatLng({{ item.address }}), map: map, title: '{{ item.title }}', case_id: '{{ item.id }}' }); google.maps.event.addListener(marker{{ item.row_id }}, 'click', function () { map.panTo(marker{{ item.row_id }}.getPosition()); $("#project_detail").attr("src", "/project_detail.html?id=" + marker{{ item.row_id }}.case_id); }); }catch(e){ };
+        {% endfor %}
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+<div class="container">
+    {% for item in list %}
+        <a href="{{ item.link }}">
+            <div class="project_box_line" style="background-image: url({{ item.image2 }});">
+                <div class="pro_title">{{ item.case_name }}</div>
+                <div class="pro_more"> 詳細內容</div>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+<script type="text/javascript" src="/static/jQuery/jquery-1.10.2.min.js"></script>
+<style>
+    body {
+        margin: 0;
+    }
+
+    .item {
+        height: 250px;
+        margin: 5px;
+        float: left;
+        display: inline;
+        overflow: hidden;
+    }
+
+    .item img {
+        height: 300px;
+    }
+
+    #container {
+        margin: 3px auto;
+        text-align: center;
+        font-family: "微軟正黑體", "Microsoft JhengHei", "新細明體", "PMingLiU", "細明體", "MingLiU", "標楷體", "DFKai-sb", Helvetica, Arial, FreeSans, sans-serif;
+        font-size: 18px;
+        line-height: 1.7em;
+    }
+
+
+    .link a, .link a:link, .link a:visited {
+        font: normal 15px Arial, Helvetica, sans-serif;
+        color: white;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .link {
+        margin: 0;
+        padding: 0;
+    }
+
+    .link li {
+        float: left;
+        list-style: none;
+        margin: 15px;
+
+    }
+    .hideitem {
+        display: none;;
+    }
+</style>
+<script>
+    $(window).resize(function () {
+        $("#container").html("");
+        var s = 0;
+        //while (s < $(".hideitem").length) {
+            //s = resize_image(s);
+        //}
+    });
+
+    function resize_image(start) {
+        var mlist = [];
+        var w = $("html").width();
+        console.log("目前畫面為 " + w);
+        for (var i = 2; i < 8; i++) {
+            if (w / i > 225 && w / i < 400) {
+                console.log("  - 可用 " + i + " 張");
+                mlist.push(i);
+            }
+        }
+        var n = undefined;
+        while (n == undefined) {
+            var r = Math.floor(Math.random() * mlist.length);
+            n = mlist[r];
+        }
+        console.log("這次用 " + n + " 張");
+        var alrealy_used = 20;
+        var rlist = [];
+        for (var i = 1; i < n; i++) {
+            var maxNum = 50;
+            var minNum = -50;
+            var rw = Math.floor(w / n) + (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+            alrealy_used += rw + 6 + 7;
+            console.log("第 " + i + "張用 " + rw + " 的寬度");
+            rlist.push(rw);
+        }
+        console.log("最後一張用 " + (w - alrealy_used) + " 的寬度");
+        rlist.push(w - alrealy_used);
+        for (var i = 0; i < n; i++) {
+            if ($(".hideitem").eq(start + i) != undefined) {
+                var old_url = $(".hideitem").eq(start + i).find("img").attr("src").toString();
+                var new_url = "";
+                if (rlist[i] < 300) {
+                    new_url = old_url.replace("/w10/", "/w300/");
+                } else {
+                    new_url = old_url.replace("/w10/", "/w" + rlist[i] + "/");
+                }
+                $("#container").append('<div class="item" style="width:' + rlist[i] + 'px;"><img src="' + new_url + '" /></div>')
+            }
+        }
+        return start + n;
+    }
+    $(window).resize();
+</script>
+
+
+{% endblock %}
+
+                                           
+                                           
+                                           

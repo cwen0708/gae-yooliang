@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_about">工程實績</h1>
+</div><!--top_抬頭區end-->
+<!-- TODO http://www.benbenkong.net/ -->
+<!-- TODO http://www.sokoos.com/ -->
+
+
+<script src="js/jquery.colorbox-min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/colorbox.css?r={{ app_version }}" />
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script>
+    function initialize() {
+        var mapOptions = {
+            zoom: 8,
+            center: new google.maps.LatLng(23.633088639680092, 121.05010986328125),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+        {% for item in list %}
+        try{
+            var marker{{ item.row_id }} = new google.maps.Marker({
+                position: new google.maps.LatLng({{ item.address }}),
+                map: map,
+                title: '{{ item.title }}',
+                case_id: '{{ item.id }}' });
+                google.maps.event.addListener(marker{{ item.row_id }}, 'click', function () {
+                    map.panTo(marker{{ item.row_id }}.getPosition());
+                    $("#project_{{ item.row_id }}").click();
+                }); }catch(e){ };
+        {% endfor %}
+    }
+
+    $(document).ready(function(){
+        google.maps.event.addDomListener(window, 'load', initialize);
+        $(".iframe").colorbox({iframe:true, width:"900", height:"550"});
+    });
+</script>
+
+<div class="container">
+    <table style="width:100%; height: 450px; border: 0;">
+        <tr>
+            <td style="width:248px;" valign="top">
+                {{ 'project_text'|webpage }}
+            </td>
+            <td>
+                <div id="map-canvas" style="width:720px; height: 450px;box-shadow: 2px 4px 4px -1px RGB(200,200,200,.7);-webkit-box-shadow: 2px 4px 4px -1px rgba(200,200,200,.7);border-radius: 4px;border: solid 1px #aaa;"></div>
+            </td>
+        </tr>
+    </table>
+    {% for item in list %}
+        <a href="/project_detail.html?id={{ item.id }}" class="iframe" id="project_{{ item.id }}">
+            <div class="project_box_line" style="background-image: url({{ item.image2 }});">
+                <div class="pro_title">{{ item.case_name }}</div>
+                <div class="pro_more"> 詳細內容</div>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+{% endblock %}
+
+                                           
+                                           
+                                           

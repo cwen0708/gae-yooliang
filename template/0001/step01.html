@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- 當前位置 -->
+<div class="side"><img src="images/icon03.gif" align="absmiddle">&nbsp;<a href="{{''|url}}" title="Home">Home</a>&nbsp;<img src="images/icon04.gif" align="absmiddle">&nbsp;<a href="{{'step01.html'|url}}" title="購物車">購物車</a>&nbsp;<img src="images/icon04.gif"
+                                                                                                                                                                                                                             align="absmiddle">&nbsp;<span>購物清單</span>
+</div>
+<!-- 當前位置 end -->
+<div class="commBox">
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderTitle">
+        <tr>
+            <th width="275">商品資訊</th>
+            <th width="154">數量</th>
+            <th width="106">價格</th>
+            <th width="104">小計</th>
+            <th width="98">刪除</th>
+        </tr>
+    </table>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderList">
+        {% set row_class = cycler('', 'bgColor') %}
+        {% if record %}
+            {% for item in order_item_list %}
+            <tr class="{{ row_class.next() }}">
+                <td width="275">
+                    <table cellpadding="0" cellspacing="0" border="0" align="center">
+                        <tr>
+                            <td>
+                                <div style="width:80px; height: 80px;"><img src="{{ item.product_image }}" class="scale" alt="" /></div></td>
+                            <td height="58" align="left">產品型號：{{ item.product_no }} <br/><span>{{ item.product_name }}</span></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="154">{{ item.item_quantity }}</td>
+                <td width="106">{{ item.product_price|thousands_separator }} 元</td>
+                <td width="104">{{ item.item_sum|thousands_separator }} 元</td>
+                <td width="98" align="center"><a href="#" title=""><img src="images/icon12.gif" alt=""/></a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr class="{{ row_class.next() }}">
+                <td width="275">
+                    <table cellpadding="0" cellspacing="0" border="0" align="center">
+                        <tr>
+                            <td></td>
+                            <td height="58" align="left">您尚未選購產品</td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="154">--</td>
+                <td width="106">--</td>
+                <td width="104">--</td>
+                <td width="98" align="center">--</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    {% if record %}
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="737">
+        <tr>
+            <td width="546">
+                {% if current_user %}
+                <div><span>小叮嚀</span>│您也可以從右上方的 "訂單查詢" 進入會員中心裡查看所有的訂單資料。</div>
+                {% else %}
+                <div><span>快速結帳</span>│您只要在購物的時候填寫訂單資料，系統將自動為您升級成為會員。</div>
+                {% endif %}
+                <div class="btn" align="center">
+                    <a href="{{ 'goods_list.html'|url }}" title=""><img src="images/goshop_out.gif" alt="" class="img_change"/></a>
+                    <a href="#" title=""><img src="images/recar_out.gif" alt="" class="img_change"/></a>
+                </div>
+            </td>
+            <td width="191" align="right" class="bgColor02">總金額 {{ record.total_amount|thousands_separator }} 元<br/>
+                <a href="{{ 'step02.html'|url }}" title="">前往結帳 ></a>
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

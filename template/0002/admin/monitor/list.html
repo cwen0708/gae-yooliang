@@ -1,0 +1,47 @@
+<div class="list-top-bar span3 ">
+    <div class="span12">
+        <div class="control-group">
+            <select class="span12" id="customer"><option value="">請選擇客戶</option>
+                {% for item in customer_list %}
+                    {% if item.is_select %}
+                    <option value="{{ item.id }}" selected="selected">　　{{ item.customer_name }}</option>
+                    {%else%}
+                    <option value="{{ item.id }}">　　{{ item.customer_name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("#customer").change(function(){
+            gs.interact.load("/admin/monitor/list.html?id=" + $(this).val());
+        });
+    </script>
+</div>
+
+<div class="pagination pagination-small pagination-right span9 padding15" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}"></div>
+
+<table class="table table-hover data-list" data-manager-dir="Aboutus">
+    <thead>
+    <tr>
+        <th style="width:30px">#</th>
+        <th data-lang="title"></th>
+        <th style="width:180px">最後更新</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in results %}
+    <tr id="node_{{ item.sort|datetime_timesp }}" data-id="{{ item.id }}" class="data-row {% if item.is_delete == true %} record_already_delete{% endif %}">
+        {% if item.is_not_root %}
+            <td style="background: #ddd;"><br /></td>
+            <td>{{ item.title }}</td>
+        {% else %}
+            <td colspan="2">{{ item.title }}</td>
+        {% endif %}
+        <td>
+            {{ item.last_update }}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

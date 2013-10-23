@@ -1,0 +1,169 @@
+<form class="p18">
+    <div class="list-top-bar row-fluid">
+        <div class="span10">
+            {% if member %}
+            <button type="button" class="btn" data-lang="查看會員資料" data-page-url="/admin/member/edit.html?id={{ member.id }}"></button>
+            {% endif %}
+        </div>
+        <div class="span2"><button type="submit" class="btn btn-danger span12" data-lang="field_submit"></button></div>
+    </div>
+    <style>
+        .newspaper-a {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 12px;
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+            border: 1px solid #69c;
+            margin-bottom: 12px;
+        }
+
+        .newspaper-a th {
+            font-weight: normal;
+            font-size: 14px;
+            color: #039;
+            border-bottom: 1px dashed #69c;
+            padding: 12px 17px;
+        }
+
+        .newspaper-a td {
+            color: #669;
+            padding: 7px 17px;
+        }
+
+        .newspaper-a tbody tr:hover td {
+            color: #339;
+            background: #d0dafd;
+        }
+        .newspaper-a .radio_list label{
+            display: inline-block;
+            margin: 0;
+            float: left;
+        }
+        .newspaper-a .radio_list input{
+            display: inline-block;
+            margin: 4px 5px 0 0;
+            float: left;
+        }
+        .newspaper-a .radio_list div{
+            display: inline-block; width: 100px;
+        }
+    </style>
+    <div class="row-fluid">
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col">訂單狀態</th>
+            <th scope="col">{{ record.order_no }}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td style="width: 100px;">付款方式</td><td>{{ record.pay_type }}</td></tr>
+            <tr>
+                <td>付款情況</td>
+                <td class="radio_list">
+                    <div><input type="radio" value="0" name="pay_status" id="pay_status_0"><label for="pay_status_0">未確認</label></div>
+                    <div><input type="radio" value="1" name="pay_status" id="pay_status_1"><label for="pay_status_1">待付款</label></div>
+                    <div><input type="radio" value="2" name="pay_status" id="pay_status_2"><label for="pay_status_2">對帳中</label></div>
+                    <div><input type="radio" value="3" name="pay_status" id="pay_status_3"><label for="pay_status_3">已收款</label></div>
+                </td>
+            </tr>
+                <td>寄送情況</td>
+                <td class="radio_list">
+                    <div><input type="radio" value="0" name="send_status" id="send_status_0"><label for="send_status_0">未確認</label></div>
+                    <div><input type="radio" value="1" name="send_status" id="send_status_1"><label for="send_status_1">備貨中</label></div>
+                    <div><input type="radio" value="2" name="send_status" id="send_status_2"><label for="send_status_2">補貨中</label></div>
+                    <div><input type="radio" value="3" name="send_status" id="send_status_3"><label for="send_status_3">已發貨</label></div>
+                    <div><input type="radio" value="4" name="send_status" id="send_status_4"><label for="send_status_4">已到貨</label></div>
+                </td>
+            </tr>
+            <tr style="display: none;"><td>折扣</td><td>{{ record.discount|thousands_separator }}</td></tr>
+            <tr><td>合計</td><td>{{ record.total_amount|thousands_separator }}</td></tr>
+            <tr><td>運費</td><td>{{ record.freight|thousands_separator }}</td></tr>
+            <tr><td>總計</td><td>{{ total|thousands_separator }}</td></tr>
+        </tbody>
+    </table>
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col" colspan="2">購買人</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td style="width: 100px;">姓名</td><td>{{ record.purchaser_name }}</td></tr>
+            <tr><td>E-Mail</td><td>{{ record.purchaser_email }}</td></tr>
+            <tr><td>聯絡電話</td><td>{{ record.purchaser_telephone }}</td></tr>
+            <tr><td>行動電話</td><td>{{ record.purchaser_mobile }}</td></tr>
+            <tr><td>地址</td><td>{{ record.purchaser_address_zip }} - {{ record.purchaser_address_county }}{{ record.purchaser_address_area }}{{ record.purchaser_address_detail }}</td></tr>
+        </tbody>
+    </table>
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col" colspan="2">收件人</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td style="width: 100px;">姓名</td><td>{{ record.recipient_name }}</td></tr>
+            <tr><td>E-Mail</td><td>{{ record.recipient_email }}</td></tr>
+            <tr><td>聯絡電話</td><td>{{ record.recipient_telephone }}</td></tr>
+            <tr><td>行動電話</td><td>{{ record.recipient_mobile }}</td></tr>
+            <tr><td>地址</td><td>{{ record.recipient_address_zip }} - {{ record.recipient_address_county }}{{ record.recipient_address_area }}{{ record.recipient_address_detail }}</td></tr>
+        </tbody>
+    </table>
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col">備註</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td>{{ record.remark }}</td></tr>
+        </tbody>
+    </table>
+    {% if member %}
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col" colspan="2">關聯的會員</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td style="width: 100px;">帳號</td><td>{{ member.user_account }}</td></tr>
+            <tr><td>電話</td><td>{{ member.telephone }}</td></tr>
+            <tr><td>手機</td><td>{{ member.mobile }}</td></tr>
+            <tr><td>信箱</td><td>{{ member.email }}</td></tr>
+            <tr><td>地址</td><td>{{ member.address }}</td></tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col">訂購的項目</th>
+            <th scope="col">單價</th>
+            <th scope="col">數量</th>
+            <th scope="col">小計</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in item_list %}
+            <tr>
+                <td style="width: 180px;">{{ item.product_name }}
+                    <br /><a href="#/admin/product/edit.html?id={{ item.product_id }}">{{ item.product_no }}</a>
+                </td>
+                <td>{{ item.product_price|thousands_separator }}</td>
+                <td>{{ item.item_quantity }}</td>
+                <td>{{ item.item_sum|thousands_separator }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+    <script type="text/javascript">
+        $('input[name=pay_status]').eq({{ record.pay_status }}).attr("checked",true);
+        $('input[name=send_status]').eq({{ record.send_status }}).attr("checked",true);
+    </script>
+</form>
+

@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_solution">系統套案</h1>
+</div><!--top_抬頭區end-->
+<div class="container">
+    <div class="c_solution">
+        {% for item in results %}
+            <a href="solution_view.html?id={{ item.id }}">
+            <div class="pro_box">
+                {% if item.image_pos_left %}
+                    <table width="100%" border="0" cellspacing="20" cellpadding="0">
+                        <tr>
+                            <td width="56%">
+                                {{ item.content }}
+                            </td>
+                            <td width="44%" align="center"><img src="{{ item.image }}" width="400" /></td>
+                        </tr>
+                    </table>
+                {% else %}
+                    <table width="100%" border="0" cellspacing="20" cellpadding="0">
+                        <tr>
+                            <td width="44%"><img src="{{ item.image }}" width="400" /></td>
+                            <td width="56%">
+                                {{ item.content }}
+                            </td>
+                        </tr>
+                    </table>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    <div class="clean"></div>
+</div>
+<script>
+    $(function(){
+        $("hr").last().hide();
+    });
+
+</script>
+{% endblock %}

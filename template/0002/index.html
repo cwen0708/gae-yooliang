@@ -1,0 +1,26 @@
+﻿{% extends "base.html" %}
+{% block content %}
+    <script src="/template/0002/sliderengine/amazingslider.js"></script>
+    <script src="/template/0002/sliderengine/initslider-1.js"></script>
+    <div class="container">
+            <!-- Insert to your webpage where you want to display the slider -->
+            <div id="amazingslider-1" style="display:block;position:relative;margin:16px auto 56px;">
+                <ul class="amazingslider-slides" style="display:none;">
+                    {% for item in banner_list %}<li><a href="{{ item.link }}"><img src="{{ item.image }}" alt="{{ item.title }}" /></a></li>{% endfor %}
+                </ul>
+                <ul class="amazingslider-thumbnails" style="display:none;">
+                    {% for item in banner_list %}<li><img src="{{ item.image }}" /></li>{% endfor %}
+                </ul>
+                <div class="amazingslider-engine" style="display:none;"><a href="http://amazingslider.com">JavaScript Image Slideshow</a></div>
+            </div>
+            <!-- End of body section HTML codes -->
+        <br />
+        <br />
+        <br />
+        <!--廣告end-->
+        <div class="marquee">
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="left" scrolldelay="4" scrollamount="2">{% for item in marquee_list %}{{ item.content }}{% endfor %}</marquee>
+        </div>
+        <!--跑馬燈end-->
+    </div>
+{% endblock %}

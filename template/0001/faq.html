@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- 當前位置 -->
+<div class="side">
+    <img src="images/icon03.gif" align="absmiddle">&nbsp;
+    <a href="{{''|url}}" title="">Home</a>&nbsp;
+    <img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <span>問與答</span>
+</div>
+<!-- 當前位置 end -->
+<div class="commBox" id="slideDownUp">
+    {% for item in faq_list %}
+    <div title="" class="pQuestion"><img src="images/icon05.gif" alt="" align="absmiddle"/>{{ item.title }}</div>
+    <div class="pAnswer">
+        {{ item.content }}
+    </div>
+    <div class="lineD mTB10"></div>
+    {%endfor %}
+</div>
+
+<div class="pager mT30 pagination" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+{% endblock %}

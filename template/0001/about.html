@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="side">
+    <img src="images/icon03.gif" align="absmiddle">&nbsp;
+    <a href="{{''|url}}" title="Home">Home</a>&nbsp;
+    <img src="images/icon04.gif" align="absmiddle">&nbsp;
+    <span>{{ record.setting_name }}</span>
+</div>
+<!-- 當前位置 end -->
+<div class="commBox aboutBg">{{ record.value }}</div>
+{% endblock %}

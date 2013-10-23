@@ -1,0 +1,35 @@
+<form class="p18">
+    <div class="row-fluid">
+        <div class="span12">
+            <table style="width: 100%;" class="table data-list">
+                <thead>
+                    <tr><th colspan="2">{{ record.title }}</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th style="width: 160px; text-align: left;">聯絡人</th><td>{{ record.contact_name }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">聯絡電話</th><td>{{ record.contact_tel }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">聯絡地址</th><td>{{ record.contact_address }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">聯絡信箱</th><td>{{ record.contact_mail }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">聯絡方式</th><td>{% if record.contact_want_1 == "on" %}電話{% endif %}  {% if record.contact_want_2 == "on" %}Email{% endif %}</td></tr>
+                </tbody>
+            </table>
+            <table style="margin-top: 10px; width: 100%;" class="table data-list">
+                <thead>
+                    <tr><th colspan="2">用電情形</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th style="width: 160px; text-align: left;">屋頂材質</th><td>{{ record.roof_materials }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">屋頂配置物</th><td>{% if record.roof_objects_1 == "on" %}太陽能熱水器{% endif %}  {% if record.roof_objects_1 == "on" %}水塔{% endif %}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可裝置面積(一樓)</th><td>{{ record.floor_area_1 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可裝置面積(二樓)</th><td>{{ record.floor_area_2 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可裝置面積(三樓)</th><td>{{ record.floor_area_3 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可裝置面積(四樓)</th><td>{{ record.floor_area_4 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可裝置面積(五樓)</th><td>{{ record.floor_area_5 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可裝置面積(屋凸)</th><td>{{ record.floor_area_outside }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可裝置面積(其他)</th><td>{{ record.floor_area_other }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">電表號碼</th><td>{{ record.power_number }}</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>

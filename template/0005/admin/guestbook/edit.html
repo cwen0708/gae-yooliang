@@ -1,0 +1,99 @@
+<form class="p18">
+    <div class="list-top-bar row-fluid">
+        <div class="span10">
+            <button type="button" class="btn" data-lang="查看商品內容" data-page-url="/admin/product/edit.html?id={{ record.product_id }}"></button>
+            {% if member %}
+            <button type="button" class="btn" data-lang="查看會員資料" data-page-url="/admin/member/edit.html?id={{ member.id }}"></button>
+            {% endif %}
+        </div>
+        <div class="span2"><button type="submit" class="btn btn-danger span12" data-lang="field_submit"></button></div>
+    </div>
+    <style>
+        .newspaper-a {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 12px;
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+            border: 1px solid #69c;
+            margin-bottom: 42px;
+        }
+
+        .newspaper-a th {
+            font-weight: normal;
+            font-size: 14px;
+            color: #039;
+            border-bottom: 1px dashed #69c;
+            padding: 12px 17px;
+        }
+
+        .newspaper-a td {
+            color: #669;
+            padding: 7px 17px;
+        }
+
+        .newspaper-a tbody tr:hover td {
+            color: #339;
+            background: #d0dafd;
+        }
+
+    </style>
+    <div class="row-fluid">
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col" colspan="3">商品內容</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 100px;">產品名稱</td>
+                <td>{{ record.product_name }}</td>
+                <td rowspan="2" style="width: 100px;"><img src="{{ record.product_image }}" style="width:98px; border: solid 1px #ddd; padding: 4px;" /></td>
+            </tr>
+            <tr><td>產品編號</td><td>{{ record.product_no }}</td></tr>
+        </tbody>
+    </table>
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col">留言內容</th>
+            <th scope="col"><br /></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td style="width: 100px;">姓名</td><td>{{ record.contact_name }}</td></tr>
+            <tr><td>電話</td><td>{{ record.contact_telephone }}</td></tr>
+            <tr><td>地址</td><td>{{ record.contact_address }}</td></tr>
+            <tr><td>購買日期</td><td>{{ record.buy_date }}</td></tr>
+            <tr><td>內容描述</td><td>{{ record.content }}</td></tr>
+        </tbody>
+    </table>
+    {% if member %}
+    <table class="newspaper-a">
+        <thead>
+        <tr>
+            <th scope="col" colspan="2">關聯的會員</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td style="width: 100px;">帳號</td><td>{{ member.user_account }}</td></tr>
+            <tr><td>電話</td><td>{{ member.telephone }}</td></tr>
+            <tr><td>手機</td><td>{{ member.mobile }}</td></tr>
+            <tr><td>信箱</td><td>{{ member.email }}</td></tr>
+            <tr><td>地址</td><td>{{ member.address }}</td></tr>
+        </tbody>
+    </table>
+    {% endif %}
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="inputContent" data-lang="回覆內容"></label>
+                <textarea name="reply" id="inputContent" class="span12 editor">{{ record.reply }}</textarea>
+            </div>
+        </div>
+    </div>
+</form>
+

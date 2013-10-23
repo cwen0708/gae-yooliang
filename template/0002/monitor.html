@@ -1,0 +1,83 @@
+﻿{% extends "base.html" %}
+{% block content %}
+    <div class="title">
+        <h1 class="title_monitor">監控中心 > {{ customer_name }} > {{ case.case_name }} <a href="/user_logout" style="float: right;">【登出】</a></h1>
+    </div><!--top_抬頭區end-->
+
+    <script src="/template/0002/js/weather.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#tabs").tabs({
+                beforeLoad: function (event, ui) {
+                    ui.jqXHR.error(function () {
+                        ui.panel.html("Couldn't load this tab. We'll try to fix this as soon as possible.");
+                    });
+                }
+            });
+        });
+    </script>
+
+    <div class="container">
+        <div class="c_monitor">
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 180px; border-right: solid 1px #ddd;" valign="top">
+                        <div class="weather" data-woeid="{{ case.woeid }}" style="border: 1px solid #549949; border-radius: 4px;background: #E6F4E3; padding: 5px; color: #333; margin-bottom: 0px;"></div><br />
+                        {% for item in case_list %}
+                            <a href="/monitor.html?case_id={{ item.id }}"><h4 style="margin:0;">{{ item.case_name }}</h4></a>
+                            <ul class="equipment_info_list">
+                                {% for e_item in item.equipment_list %}
+                                    <li class="equipment_info_box" data-last-update="{{ e_item.last_update }}" data-status="{{ e_item.status_code }}" data-status-time="{{ e_item.status_code_time }}">{{ e_item.equipment_name }}</li>
+                                {% endfor %}
+                            </ul>
+                            <br/>
+                        {% endfor %}
+                    </td>
+                    <td valign="top">
+                        <div id="tabs">
+                            <ul>
+                                <li><a href="/monitor_info.html?case_id={{ case_id }}">案場摘要</a></li>
+                                <li><a href="/monitor_frame_1.html?case_id={{ case_id }}">即時資訊</a></li>
+                                <li><a href="/monitor_frame_2.html?case_id={{ case_id }}">統計資料</a></li>
+                            </ul>
+                        </div>
+                    </td>
+            </table>
+        </div>
+    </div>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css" />
+    <script type="text/javascript">
+        $(function () {
+            var ONE_HOUR = 1000 * 60 * 60;  // 1小時的毫秒數
+            var ONE_MIN = 1000 * 60; // 1分鐘的毫秒數
+            var ONE_SEC = 1000;   // 1秒的毫秒數
+            var Date_Now = new Date();
+
+            $(".equipment_info_box").each(function () {
+                var Date_Last_Update = new Date($(this).data("last-update"));
+                var diff = Date_Now - Date_Last_Update;
+
+                var leftHours = Math.floor(diff / ONE_HOUR);
+                if (leftHours > 0) diff = diff - (leftHours * ONE_HOUR);
+
+                var leftMins = Math.floor(diff / ONE_MIN);
+                if (leftMins > 0) diff = diff - (leftMins * ONE_MIN);
+
+                var leftSecs = Math.floor(diff / ONE_SEC);
+                var s = $(this).data("status");
+
+                if (s != ""){
+                    var st = $(this).data("status-time");
+                    $(this).addClass("error").attr("title", s + " ( " + st + " 次 )");
+                }else{
+                    if ((leftHours * 60 + leftMins) > 15) {
+                        $(this).addClass("error").attr("title", "資料更新逾時");
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

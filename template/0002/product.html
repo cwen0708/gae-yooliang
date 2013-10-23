@@ -1,0 +1,41 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_pro">產品型錄 {%if in_parent_category %} > {{in_parent_category }}{%endif%}{%if in_category %} > {{in_category }}{%endif%}</h1>
+</div>
+
+<div class="container">
+    <div class="leftpage">
+        <div class="leftmenu">
+            <div class="arrowsidemenu">
+                {%for item in product_category_list %}
+                <div class="menuheaders"><a href="{{ item.link }}" title="{{ item.category_name }}">{{ item.category_name }}</a></div>
+                <ul class="menucontents">
+                    {%for sub_item in item.sub_list %}
+                    <li><a href="{{ sub_item.link }}">{{ sub_item.category_name }}</a></li>
+                    {%endfor%}
+                </ul>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+    <div class="rightpage">
+        {%for item in product_list %}
+        <a href="{{ item.link }}">
+            <div class="pro_box_line" style="background-image: url({{ item.image }});">
+                <div class="pro_title">{{ item.product_name }}</div>
+                <div class="pro_more"> 詳細內容</div>
+            </div>
+        </a>
+        {%endfor%}
+        <div class="clean"></div>
+        <div class="pager pagination" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+    </div>
+    <div class="clean"></div>
+    <!--內容頁end-->
+</div>
+<div class="clean"></div>
+<!--footer start--></div>
+{% endblock %}
+
+
