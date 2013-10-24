@@ -153,6 +153,7 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	float:left;
 	margin:1px;
 	display:inline;
+    background: #fff;
 	}
 .bgColorLogo{
 	background:url(../images/logo.png) no-repeat center center #fff;
@@ -263,6 +264,9 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	overflow:hidden;
 	margin:20px 0;
 	}
+a:hover .caseList{
+    opacity: 0.7;
+}
 .bPic{
 	width:190px;
 	height:190px;
