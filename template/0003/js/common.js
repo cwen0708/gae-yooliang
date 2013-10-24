@@ -113,15 +113,15 @@ $(function () {
     $(".slogan").css('opacity', 0).delay(2000).animate({opacity: 1, left: "4%"}, 2500);
 
     $(".goodsList a").hide();
-    $(".goodsList .delay5").delay(500).fadeIn(2500);
-    $(".goodsList .delay10").delay(1000).fadeIn(2500);
-    $(".goodsList .delay15").delay(1500).fadeIn(2500);
-    $(".goodsList .delay20").delay(2000).fadeIn(2500);
-    $(".goodsList .delay25").delay(2500).fadeIn(2500);
-    $(".goodsList .delay30").delay(3000).fadeIn(2500);
-    $(".goodsList .delay35").delay(3500).fadeIn(2500);
-    $(".goodsList .delay40").delay(4000).fadeIn(2500);
-    $(".goodsList .delay45").delay(4500).fadeIn(2500);
+    $(".goodsList .delay5").delay(500).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay10").delay(1000).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay15").delay(1500).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay20").delay(2000).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay25").delay(2500).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay30").delay(3000).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay35").delay(3500).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay40").delay(4000).fadeIn(2500).css("background-color","#fff");
+    $(".goodsList .delay45").delay(4500).fadeIn(2500).css("background-color","#fff");
     $(".goodsList").css('opacity', .8);
     $(".goodsList").mouseover(function () {
         $(this).css('opacity', 1);
