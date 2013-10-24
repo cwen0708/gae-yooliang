@@ -109,9 +109,9 @@ routes = [
     webapp2.Route('/admin/banner/create.html', handler=banner.Create),
     webapp2.Route('/admin/banner/edit.html', handler=banner.Edit),
 
-    webapp2.Route('/admin/solution/list.html', handler=solution.list),
-    webapp2.Route('/admin/solution/create.html', handler=solution.create),
-    webapp2.Route('/admin/solution/edit.html', handler=solution.edit),
+    webapp2.Route('/admin/solution/list.html', handler=solution.List),
+    webapp2.Route('/admin/solution/create.html', handler=solution.Create),
+    webapp2.Route('/admin/solution/edit.html', handler=solution.Edit),
 
     webapp2.Route('/admin/webpage/list.html', handler=webpage.list),
     webapp2.Route('/admin/webpage/create.html', handler=webpage.create),
