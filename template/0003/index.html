@@ -9,7 +9,8 @@
     <script type="text/javascript" src="../../static/SWFObject/swfobject.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
-    <!--[if IE]><script type="text/javascript" src="js/common_ie8.js?r={{ app_version }}"></script><![endif]-->
+    <!--[if lte IE 8]><script type="text/javascript" src="js/common_ie8.js?r={{ app_version }}"></script><![endif]-->
+    <!--[if gt IE 8]><script type="text/javascript" src="js/common.js?r={{ app_version }}"></script><![endif]-->
     <![if !IE]><script type="text/javascript" src="js/common.js?r={{ app_version }}"></script><![endif]>
 </head>
 
@@ -22,17 +23,17 @@
         <div id="main">
         	<div class="slogan"><img src="images/text.png" alt="" /></div>
         	<div id="goodsBox">
-        		<div class="goodsList"><a href="{{ link_01 }}" title="" class="delay15"><img src="{{ image_01 }}" alt="" width="165" height="165" /></a></div>
+        		<div class="goodsList"><a href="{{ link_01 }}" title="" class="delay15"><img src="{{ image_01 }}" alt="" class="resize" /></a></div>
             	<div class="goodsList"><a href="about.html" title="" class="bgColor delay5">關於我們<br /><span>ABOUT</span></a></div>
-        		<div class="goodsList"><a href="{{ link_02 }}" title="" class="delay15"><img src="{{ image_02 }}" alt="" width="165" height="165" /></a></div>
+        		<div class="goodsList"><a href="{{ link_02 }}" title="" class="delay15"><img src="{{ image_02 }}" alt="" class="resize" /></a></div>
             	<div class="clear"></div>
             	<div class="goodsList"><a href="case_list.html" title="" class="bgColor delay30">歷屆案例<br /><span>PAST CASE</span></a></div>
             	<div class="goodsList"><a href="#" title="" class="bgColorLogo delay40"></a></div>
             	<div class="goodsList"><a href="hot_list.html" title="" class="bgColor delay20">熱銷專案<br /><span>HOT CASE</span></a></div>
             	<div class="clear"></div>
-            	<div class="goodsList"><a href="contact.html" title="" class="bgColor delay35">聯絡我們<br /><span>CONTACT</a></div>
-        		<div class="goodsList"><a href="{{ link_03 }}" title="" class="delay15"><img src="{{ image_03 }}" alt="" width="165" height="165" /></a></div>
-        		<div class="goodsList"><a href="{{ link_04 }}" title="" class="delay15"><img src="{{ image_04 }}" alt="" width="165" height="165" /></a></div>
+            	<div class="goodsList"><a href="contact.html" title="" class="bgColor delay35">聯絡我們<br /><span>CONTACT</span></a></div>
+        		<div class="goodsList"><a href="{{ link_03 }}" title="" class="delay15"><img src="{{ image_03 }}" alt="" class="resize" /></a></div>
+        		<div class="goodsList"><a href="{{ link_04 }}" title="" class="delay15"><img src="{{ image_04 }}" alt="" class="resize" /></a></div>
             	<div class="clear"></div>
         	</div>
         </div>
