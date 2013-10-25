@@ -8,6 +8,7 @@
     <meta name="msvalidate.01" content="87E567F75870CE444D10B2C11767BE10" />
     <meta name="description" content="{{ 'description'|websetting }}" />
     <meta name="keywords" content="{{ 'keywords'|websetting }}" />
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     <link rel="stylesheet" type="text/css" href="/template/0002/css/client.css?r={{ app_version }}" />
     <script type="text/javascript" src="/static/jQuery/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="js/jquery.jcarousel.js"></script>
@@ -35,7 +36,7 @@
                     <li><a class="f" href="project_flickr.html" title="工程實績">工程實績</a></li>
                     <li><a class="f" href="product.html" title="產品型錄">產品型錄</a><ul>{% for item in product_category_list %}<li><a href="product.html?parent={{ item.id }}">{{ item.category_name }}</a></li>{% endfor %}</ul></li>
                     <li><a class="f" href="learn.html" title="最新消息">最新消息</a></li>
-                    <li><a class="f" href="contact.html" title="綠色接觸">綠色接觸</a></li>
+                    <li><a class="f" href="contact_step_1.html" title="綠色接觸">綠色接觸</a></li>
                     {% if user_login %}
                     <li><a class="f" href="monitor.html" title="客戶專區">客戶專區</a></li>
                     {% else %}
@@ -71,7 +72,7 @@
             <a href="project_flickr.html" title="工程實績">工程實績</a><span class="hr"></span>
             <a href="product.html" title="產品型錄">產品型錄</a><span class="hr"></span>
             <a href="learn.html" title="最新消息">最新消息</a><span class="hr"></span>
-            <a href="contact.html" title="綠色接觸">綠色接觸</a><span class="hr"></span>
+            <a href="contact_step_1.html" title="綠色接觸">綠色接觸</a><span class="hr"></span>
             {% if user_login %}
             <a href="monitor.html" title="客戶專區">客戶專區</a><span class="hr"></span>
             {% else %}

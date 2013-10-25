@@ -8,7 +8,7 @@
 from libs.yooframework import record, image, page
 from application.backend import backend, administrator, websetting, webimage, webpage
 import marquee, banner, home, productcategory, news, faq, product, contact, statuscode, aboutus
-import solution, service, rawdata, customer, caseinfo, equipment, monitor
+import solution, service, rawdata, customer, caseinfo, equipment, monitor, contact2
 import webapp2
 
 CUSTOMER_NAME = u"牧陽能控有限公司"
@@ -83,6 +83,9 @@ routes = [
     webapp2.Route('/admin/faq/create.html', handler=faq.create),
     webapp2.Route('/admin/faq/edit.html', handler=faq.edit),
 
+    webapp2.Route('/admin/contact2/init', handler=contact2.Init),
+    webapp2.Route('/admin/contact2/list.html', handler=contact2.List),
+    webapp2.Route('/admin/contact2/edit.html', handler=contact2.Edit),
     webapp2.Route('/admin/contact/list.html', handler=contact.list),
     webapp2.Route('/admin/contact/edit.html', handler=contact.edit),
 
@@ -109,9 +112,9 @@ routes = [
     webapp2.Route('/admin/banner/create.html', handler=banner.Create),
     webapp2.Route('/admin/banner/edit.html', handler=banner.Edit),
 
-    webapp2.Route('/admin/solution/list.html', handler=solution.list),
-    webapp2.Route('/admin/solution/create.html', handler=solution.create),
-    webapp2.Route('/admin/solution/edit.html', handler=solution.edit),
+    webapp2.Route('/admin/solution/list.html', handler=solution.List),
+    webapp2.Route('/admin/solution/create.html', handler=solution.Create),
+    webapp2.Route('/admin/solution/edit.html', handler=solution.Edit),
 
     webapp2.Route('/admin/webpage/list.html', handler=webpage.list),
     webapp2.Route('/admin/webpage/create.html', handler=webpage.create),
