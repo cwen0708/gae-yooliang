@@ -1,0 +1,51 @@
+<form class="p18">
+    <div class="row-fluid">
+        <div class="span12">
+            <table style="width: 100%;" class="table data-list">
+                <thead>
+                    <tr><th colspan="2">{{ record.title }}</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th style="width: 160px; text-align: left;">聯絡人</th><td>{{ record.f4_1 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">聯絡電話</th><td>{{ record.f4_2 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">聯絡地址</th><td>{{ record.f4_3 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">聯絡信箱</th><td>{{ record.f4_4 }}</td></tr>
+                </tbody>
+            </table>
+            <table style="margin-top: 10px; width: 100%;" class="table data-list">
+                <thead>
+                    <tr><th colspan="2">內容</th></tr>
+                </thead>
+                <tbody>
+                    {% if record.f1 == "1" %}
+                    <tr><th style="width: 160px; text-align: left;">系統</th><td>Green Money-投資型PV系統</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">屋頂高度</th><td>{{ record.f2_1_1 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">用電情形</th><td>{{ record.f2_1_2 }}</td></tr>
+                    {% endif %}
+                    {% if record.f1 == "2" %}
+                    <tr><th style="width: 160px; text-align: left;">系統</th><td>Green Space-幸福PV綠色空間套案</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">陽台面積</th><td>{{ record.f2_2_1 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">自用 or 售</th><td>{{ record.f2_2_2 }}</td></tr>
+                    {% endif %}
+                    {% if record.f1 == "3" %}
+                    <tr><th style="width: 160px; text-align: left;">系統</th><td>Green Power(Energy)-獨立型PV系統</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">可用面積</th><td>{{ record.f2_3_1 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">使用電器</th><td>{{ record.f2_3_2 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">消耗功率</th><td>{{ record.f2_3_3 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">預計使用時間</th><td>{{ record.f2_3_4 }}</td></tr>
+                    {% endif %}
+                    {% if record.f1 == "4" %}
+                    <tr><th style="width: 160px; text-align: left;">系統</th><td>Green Money-投資型PV系統</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">屋頂高度</th><td>{{ record.f2_1_1 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">用電情形</th><td>{{ record.f2_1_2 }}</td></tr>
+                    {% endif %}
+                    {% if record.f1 == "5" %}
+                    <tr><th style="width: 160px; text-align: left;">系統</th><td>Green Money-投資型PV系統</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">屋頂高度</th><td>{{ record.f2_1_1 }}</td></tr>
+                    <tr><th style="width: 160px; text-align: left;">用電情形</th><td>{{ record.f2_1_2 }}</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
