@@ -35,6 +35,7 @@ create table Contact(
 
 class list(AdministratorHandler):
     def get(self, *args):
+
         size = self.params.get_integer("size", 10)
         page = self.params.get_integer("page", 1)
         self.page_now = page

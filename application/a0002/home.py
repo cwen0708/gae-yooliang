@@ -621,30 +621,152 @@ class monitor(GreenShepherdHandler):
                 self.case_id = item[0]
                 self.case = item_temp
 
+
 class contact_step_1(GreenShepherdHandler):
     def get(self, *args):
         pass
+
+
 class contact_step_2_1(GreenShepherdHandler):
     def get(self, *args):
         pass
+
+    def post(self, *args):
+        self.session["f1"] = u"1"
+        f2_1_1 = self.params.get_string("f2_1_1")
+        f2_1_2 = self.params.get_string("f2_1_2")
+
+        json_data = {}
+        if f2_1_1 is u"":
+            json_data["f2_1_1"] = u"請輸入屋頂高度"
+        if f2_1_2 is u"":
+            json_data["f2_1_2"] = u"請輸入用電情形"
+        if len(json_data) > 0:
+            return self.json(json_data)
+        self.session["f2_1_1"] = f2_1_1
+        self.session["f2_1_2"] = f2_1_2
+        self.json({"done": u'done', "next": u"contact_step_3.html"})
+
+
 class contact_step_2_2(GreenShepherdHandler):
     def get(self, *args):
         pass
+
+    def post(self, *args):
+        self.session["f1"] = u"2"
+        f2_2_1 = self.params.get_string("f2_2_1")
+        f2_2_2 = self.params.get_string("f2_2_2")
+        json_data = {}
+        if f2_2_1 is u"":
+            json_data["f2_2_1"] = u"請輸入陽台面積"
+        if f2_2_2 is u"":
+            json_data["f2_2_2"] = u"請輸入自用 or 售"
+        if len(json_data) > 0:
+            return self.json(json_data)
+        self.session["f2_2_1"] = f2_2_1
+        self.session["f2_2_2"] = f2_2_2
+        self.json({"done": u'done', "next": u"contact_step_3.html"})
+
 class contact_step_2_3(GreenShepherdHandler):
     def get(self, *args):
         pass
+
+    def post(self, *args):
+        self.session["f1"] = u"3"
+        f2_3_1 = self.params.get_string("f2_3_1")
+        f2_3_2 = self.params.get_string("f2_3_2")
+        f2_3_3 = self.params.get_string("f2_3_3")
+        f2_3_4 = self.params.get_string("f2_3_4")
+
+        json_data = {}
+        if f2_3_1 is u"":
+            json_data["f2_3_1"] = u"請輸入可用面積"
+        if f2_3_2 is u"":
+            json_data["f2_3_2"] = u"請輸入使用電器"
+        if f2_3_3 is u"":
+            json_data["f2_3_3"] = u"請輸入消耗功率"
+        if f2_3_4 is u"":
+            json_data["f2_3_4"] = u"請輸入預計使用時間"
+        if len(json_data) > 0:
+            return self.json(json_data)
+        self.session["f2_3_1"] = f2_3_1
+        self.session["f2_3_2"] = f2_3_2
+        self.session["f2_3_3"] = f2_3_3
+        self.session["f2_3_4"] = f2_3_4
+        self.json({"done": u'done', "next": u"contact_step_3.html"})
+
 class contact_step_2_4(GreenShepherdHandler):
     def get(self, *args):
         pass
+    def post(self, *args):
+        self.json({"done": u'done', "next": u"contact_step_3.html"})
+
 class contact_step_2_5(GreenShepherdHandler):
     def get(self, *args):
         pass
+    def post(self, *args):
+        self.json({"done": u'done', "next": u"contact_step_3.html"})
+
 class contact_step_3(GreenShepherdHandler):
     def get(self, *args):
         pass
+
+    def post(self, *args):
+        self.session["f3"] = self.params.get_string("f3")
+        self.json({"done": u'done', "next": u"contact_step_4.html"})
+    
 class contact_step_4(GreenShepherdHandler):
     def get(self, *args):
         pass
+    def post(self, *args):
+        f4_1 = self.params.get_string("f4_1")
+        f4_2 = self.params.get_string("f4_2")
+        f4_3 = self.params.get_string("f4_3")
+        f4_4 = self.params.get_string("f4_4")
+        title = f4_1 + u"留言於 " + self.today.strftime("%Y-%m-%d")
+
+        json_data = {}
+        if f4_1 is u"":
+            json_data["contact_name"] = u"請輸入聯絡人名稱"
+        if f4_2 is u"":
+            json_data["contact_tel"] = u"請輸入聯絡電話"
+        if f4_3 is u"":
+            json_data["contact_address"] = u"請輸入聯絡地址"
+        if f4_4 is u"":
+            json_data["contact_mail"] = u"請輸入聯絡信箱"
+        if len(json_data) > 0:
+            return self.json(json_data)
+
+        self.sql.insert("Contact2", {
+            "title": title,
+            "f1": self.session["f1"],
+            "f2_1_1": self.session["f2_1_1"],
+            "f2_1_2": self.session["f2_1_2"],
+            "f2_2_1": self.session["f2_2_1"],
+            "f2_2_2": self.session["f2_2_2"],
+            "f2_3_1": self.session["f2_3_1"],
+            "f2_3_2": self.session["f2_3_2"],
+            "f2_3_3": self.session["f2_3_3"],
+            "f2_3_4": self.session["f2_3_4"],
+            "f3": self.session["f3"],
+            "f4_1": f4_1,
+            "f4_2": f4_2,
+            "f4_3": f4_3,
+            "f4_4": f4_4,
+        })
+        from google.appengine.api import mail
+        self.sql.cursor.execute('SELECT value FROM WebSetting where setting_no = %s', "website_mail_sender")
+        r = self.sql.cursor.fetchone()
+        self.sql.cursor.execute('SELECT value FROM WebSetting where setting_no like "%report_email_%"')
+        for item in self.sql.cursor.fetchall():
+            if item[0] is not "" and item is not None:
+                try:
+                    mail_body = u"訪客 " + f4_1 + u" 於 " + self.today.strftime("%Y-%m-%d") + u" 留言 <a href='http://www.greenshepherd.com.tw/admin#/admin/contact/list.html'>查看</a>"
+                    mail.send_mail(sender=r[0], to=item[0], subject=u"牧陽能控訊息通知", body=mail_body)
+                except:
+                    pass
+        self.json({"done": u'done', "next": u"contact_step_5.html"})
+    
 class contact_step_5(GreenShepherdHandler):
     def get(self, *args):
         pass

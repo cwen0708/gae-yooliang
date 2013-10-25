@@ -75,8 +75,8 @@ gs.menu.list["/admin/aboutus/list.html"] = [
 ];
 gs.menu.list["/admin/customer/list.html"] = [
     '<li class="nav-header"><span data-lang="線上評估"></span></li>',
-    '<li class="menu"><a href="/admin/contact/list.html"><span data-lang="線上評估"></span></a></li>',
-    '<li class="menu hide" data-menu-for="/admin/contact/list.html"><a href="/admin/contact/edit.html"><span data-lang="檢視線上評估細節"></span></a></li>',
+    '<li class="menu"><a href="/admin/contact2/list.html"><span data-lang="線上評估"></span></a></li>',
+    '<li class="menu hide" data-menu-for="/admin/contact2/list.html"><a href="/admin/contact2/edit.html"><span data-lang="檢視線上評估細節"></span></a></li>',
     '<li class="divider"></li>',
     '<li class="nav-header"><span data-lang="客戶資料"></span></li>',
     '<li class="menu"><a href="/admin/customer/list.html"><span data-lang="客戶資料"></span></a></li>',
