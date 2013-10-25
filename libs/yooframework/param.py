@@ -29,7 +29,9 @@ class ParamInfo():
         try:
             if self.request.get(key) is None:
                 return default_value
-            _a = self.request.get(key) if int(self.request.get(key)) is not None else u''
+            _a = self.request.get(key) if float(self.request.get(key)) is not None else u''
+            if _a == '' or _a == u'':
+                _a = default_value
             return default_value if _a == '' else float(_a)
         except:
             return default_value
