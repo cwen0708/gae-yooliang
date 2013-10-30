@@ -43,6 +43,9 @@ class List(AdministratorHandler):
             self.page_all = self.sql.pager('SELECT count(1) FROM CaseInfo', (), size)
             self.results = self.sql.query_all('SELECT id, case_name as title, case_no, is_enable, is_delete, sort, customer_id FROM CaseInfo ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
 
+        for item in self.results:
+            customer_record = self.sql.query_one('SELECT customer_no FROM Customer where id = %s', item["customer_id"])
+            item["customer_no"] = customer_record["customer_no"]
 
 class create(AdministratorHandler):
     def get(self, *args):
