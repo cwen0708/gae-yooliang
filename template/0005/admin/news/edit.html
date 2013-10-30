@@ -13,6 +13,23 @@
     <div class="row-fluid">
         <div class="span12">
             <div class="control-group">
+                <label class="control-label" for="parent" data-lang="所屬分類"></label>
+                <select class="span12" name="category" id="parent">
+                    {% for item in results %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">{{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">{{ item.category_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
                 <label class="control-label" for="create_date" data-lang="日期"></label>
                 <div class="controls">
                     <input type="text" id="create_date" placeholder="" name="create_date" class="span12" value="{{ record.create_date }}" />

@@ -11,10 +11,13 @@ from webapp2_extras import sessions
 
 class HomeHandler(BaseHandler):
     def app_init(self):
+        #self.config.template_render_from_cloud_storage = True
+        self.banner_style = "pBanner"
+        self.banner_height = "300"
         self.size = self.params.get_integer("size", 10)
         self.page = self.params.get_integer("page", 1)
         self.page_now = self.page
-        self.banner_list = self.sql.query_all('SELECT * FROM Banner WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', (0, 5))
+        self.banner_list = self.sql.query_all('SELECT * FROM Banner2 WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', (0, 25))
         self.marquee_list = self.sql.query_all('SELECT * FROM Marquee WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', (0, 25))
 
         self.current_user = None

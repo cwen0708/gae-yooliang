@@ -7,89 +7,113 @@ from libs.yooframework.api import random_string, validate_email
 from google.appengine.api import mail
 
 
-class FAQMenuHandler(HomeHandler):
-    def page_init(self):
-        category = self.params.get_integer("category", 0)
-        self.menu_title_image = "images/faqtitle.gif"
-        self.menu_list = self.sql.query_all('SELECT * FROM FaqCategory Where parent = 0 and is_enable = 1 and is_delete = 0 ORDER BY sort DESC')
-        for item in self.menu_list:
-            item["link"] = "faq.html?category=" + str(item["id"])
-            item["is_selected"] = (item["id"] == category)
-            if item["id"] == category:
-                self.page_title = item["category_name"] + u" - 問與答"
-
-
 class ProductMenuHandler(HomeHandler):
     def page_init(self):
-        category = self.params.get_integer("category", 0)
-        parent = self.params.get_integer("parent", 0)
-        self.menu_title_image = "images/leftmenutitle.gif"
+        tc = self.params.get_integer("tc", 0)
+        self.tc = tc
+        if tc is 0:
+            self.redirect("error.html")
         self.menu_list = []
-        temp_menu_list = self.sql.query_all('SELECT * FROM ProductCategory Where parent = 0 and is_enable = 1 and is_delete = 0 ORDER BY sort DESC')
+        pc = self.sql.query_all('SELECT * FROM ProductCategory WHERE is_enable = 1 and is_delete = 0 ORDER BY sort DESC')
+        for item in pc:
+            if item["parent"] == 0 and item["id"] == tc:
+                item["level"] = 0
+                item["in_list"] = True
+                self.menu_list.append(item)
+            else:
+                item["in_list"] = False
+        # 最大３層
+        for i in xrange(0, 3):
+            for item in pc:
+                if item["in_list"] is not True:
+                    for parent_item in self.menu_list:
+                        if item["parent"] == parent_item["id"] and parent_item["level"] == i:
+                            parent_item["is_parent"] = True
+                            item["level"] = (i + 1)
+                            item["in_list"] = True
+                            item["is_select"] = False
+                            index = self.menu_list.index(parent_item) + 1
+                            self.menu_list.insert(index, item)
 
-        self.in_parent_category = None
-        for item in temp_menu_list:
-            if item["id"] == parent:
-                self.in_parent_category = item["category_name"]
-            item["is_not_root"] = False
-            item["is_selected"] = (item["id"] == parent)
-            item["link"] = "goods_list.html?parent=" + str(item["id"])
-            self.menu_list.append(item)
-            sub_list = self.sql.query_all('SELECT * FROM ProductCategory Where parent = %s and is_enable = 1 and is_delete = 0 ORDER BY sort DESC', item["id"])
-            for item_sub in sub_list:
-                item_sub["is_not_root"] = True,
-                item_sub["is_selected"] = (item_sub["id"] == category)
-                item_sub["link"] = "goods_list.html?parent=" + str(item["id"]) + "&category=" + str(item_sub["id"])
-                self.menu_list.append(item_sub)
-
-class ShopCartMenuHandler(HomeHandler):
-    def page_init(self):
-        self.menu_title_image = "images/shoptitle.gif"
-        self.menu_list = []
-        self.is_shop_cart_menu = True
 
 class MemberMenuHandler(HomeHandler):
     def page_init(self):
-        self.menu_title_image = "images/leftmenutitle02.gif"
         self.menu_list = []
         if self.current_user is None:
-            self.menu_list.append({"link": u"join.html", "category_name": u"加入會員"})
-            self.menu_list.append({"link": u"password.html", "category_name": u"忘記密碼"})
+            self.menu_list.append({"link": u"login.html", "menu_name": u"會員登入", "is_select": self.environ.path.find(u"login.html") > 0})
+            self.menu_list.append({"link": u"join.html", "menu_name": u"加入會員", "is_select": self.environ.path.find(u"join.html") > 0})
+            self.menu_list.append({"link": u"password.html", "menu_name": u"忘記密碼", "is_select": self.environ.path.find(u"password.html") > 0})
+            self.menu_list.append({"link": u"step01.html", "menu_name": u"購物車", "is_select": self.environ.path.find(u"step") > 0})
         else:
-            self.menu_list.append({"link": u"info.html", "category_name": u"會員資料"})
-            self.menu_list.append({"link": u"password_ch.html", "category_name": u"修改密碼"})
-            self.menu_list.append({"link": u"order.html", "category_name": u"訂單查詢"})
-            self.menu_list.append({"link": u"re_question.html", "category_name": u"問題回覆"})
+            self.menu_list.append({"link": u"info.html", "menu_name": u"會員資料", "is_select": self.environ.path.find(u"info.html") > 0})
+            self.menu_list.append({"link": u"password_ch.html", "menu_name": u"修改密碼", "is_select": self.environ.path.find(u"password_ch.html") > 0})
+            self.menu_list.append({"link": u"step01.html", "menu_name": u"購物車", "is_select": self.environ.path.find(u"step01.html") > 0})
+            self.menu_list.append({"link": u"order.html", "menu_name": u"訂單查詢", "is_select": self.environ.path.find(u"order.html") > 0})
+            self.menu_list.append({"link": u"re_question.html", "menu_name": u"問題回覆", "is_select": self.environ.path.find(u"re_question.html") > 0})
 
 
-class index(ProductMenuHandler):
+class ContactMenuHandler(HomeHandler):
+    def page_init(self):
+        self.menu_list = []
+        self.menu_list.append({"link": u"contact.html", "menu_name": u"地理位置", "is_select": self.environ.path.find(u"contact.html") > 0})
+        self.menu_list.append({"link": u"contact_form.html", "menu_name": u"商品諮詢", "is_select": self.environ.path.find(u"contact_form.html") > 0})
+        self.menu_list.append({"link": u"sellform.html", "menu_name": u"經銷表單", "is_select": self.environ.path.find(u"sellform.html") > 0})
+        self.menu_list.append({"link": u"foreign_form.html", "menu_name": u"韓國市集代購", "is_select": self.environ.path.find(u"foreign_form") > 0})
+
+
+class Index(HomeHandler):
     def get(self, *args):
-        self.partners_list = self.sql.query_all('SELECT * FROM Partners WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', (0, 5))
-        self.product_list = self.sql.query_all('SELECT * FROM Product WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', (0, 3))
+        self.banner_style = "iBanner"
+        self.banner_height = "450"
+        self.banner_list = self.sql.query_all('SELECT * FROM Banner WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', (0, 25))
 
-        for item in self.product_list:
-            images = item["images"].split(",")
-            if len(images) > 0:
-                item["image"] = images[0]
-            else:
-                item["image"] = "image/no_pic.png"
-            item["link"] = "/goods_view.html?parent=" + str(item["parent_category"]) + "&category=" + str(item["category"]) + "&id=" + str(item["id"])
-        now = datetime.datetime.today() + datetime.timedelta(hours=+8)
+class Contact(HomeHandler):
+    def get(self, *args):
+        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'contact')
+        if self.record is not None:
+            self.page_title = self.record["setting_name"]
 
-class faq(FAQMenuHandler):
+
+class Process(HomeHandler):
+    def get(self, *args):
+        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'process')
+        if self.record is not None:
+            self.page_title = self.record["setting_name"]
+
+
+class Process02(HomeHandler):
+    def get(self, *args):
+        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'process02')
+        if self.record is not None:
+            self.page_title = self.record["setting_name"]
+
+
+class Declare(HomeHandler):
+    def get(self, *args):
+        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'declare')
+        if self.record is not None:
+            self.page_title = self.record["setting_name"]
+
+class Faq(HomeHandler):
     def get(self, *args):
         size = self.params.get_integer("size", 10)
         page = self.params.get_integer("page", 1)
         self.page_now = page
-        str_category = self.request.get("category") if self.request.get("category") is not None and self.request.get("category") is not "" else u""
+        self.category_id = self.params.get_integer("category", 0)
+        self.category_list = self.sql.query_all('SELECT * FROM FaqCategory Where parent = 0 and is_enable = 1 and is_delete = 0 ORDER BY sort DESC')
 
-        if str_category is u"":
+        if self.category_id is 0:
+            self.page_title = u"問與答"
+            self.nav_title = u"全部"
             self.page_all = self.sql.pager('SELECT count(1) FROM Faq Where is_enable = 1 and is_delete = 0', (), size)
             self.faq_list = self.sql.query_all('SELECT * FROM Faq Where is_enable = 1 and is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
         else:
-            category = int(str_category)
-            self.page_all = self.sql.pager('SELECT count(1) FROM Faq Where is_enable = 1 and is_delete = 0 and category = %s', category, size)
-            self.faq_list = self.sql.query_all('SELECT * FROM Faq Where is_enable = 1 and is_delete = 0 and category = %s ORDER BY sort DESC LIMIT %s, %s', (category, (page - 1) * size, size))
+            for item in self.category_list:
+                if item["id"] == self.category_id:
+                    self.page_title = item["category_name"] + u" - 問與答"
+                    self.nav_title = item["category_name"]
+            self.page_all = self.sql.pager('SELECT count(1) FROM Faq Where is_enable = 1 and is_delete = 0 and category = %s', self.category_id, size)
+            self.faq_list = self.sql.query_all('SELECT * FROM Faq Where is_enable = 1 and is_delete = 0 and category = %s ORDER BY sort DESC LIMIT %s, %s', (self.category_id, (page - 1) * size, size))
 
 
 class guestbook(ProductMenuHandler):
@@ -221,10 +245,14 @@ class guestbook_json(ProductMenuHandler):
 
 class goods_list(ProductMenuHandler):
     def get(self, *args):
+        tc = self.params.get_integer("tc", 0)
         size = self.params.get_integer("size", 12)
         page = self.params.get_integer("page", 1)
         category = self.params.get_integer("category", 0)
         parent = self.params.get_integer("parent", 0)
+
+        if tc is 0:
+            self.redirect("error.html")
 
         self.page_now = page
         if category is 0 and parent is 0:
@@ -258,35 +286,54 @@ class goods_view(ProductMenuHandler):
                 self.record["image"] = self.images[0]
             else:
                 self.record["image"] = "image/no_pic.png"
+        if (self.record["is_enable"] is False or self.record["is_delete"] is True):
+            self.redirect("/error.html")
         self.quantity = 50
         if self.quantity > 50:
             self.quantity = 50
 
 
-class test(ProductMenuHandler):
+class NewsList(ProductMenuHandler):
     def get(self, *args):
-        filename = self.request.get('filename') if self.request.get('filename') is not None else ''
-        file = self.storage.read_file(filename)
-        self.fffff = str(file.readline())
-
-
-class news_list(ProductMenuHandler):
-    def get(self, *args):
-        size = self.params.get_integer("size", 5)
+        size = self.params.get_integer("size", 10)
         page = self.params.get_integer("page", 1)
-        self.page_all = self.sql.pager('SELECT count(1) FROM News WHERE is_enable = 1 and is_delete = 0', (), size)
-        self.results = self.sql.query_all('SELECT * FROM News WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size), (page - 1) * size)
-        self.page_title = u"最新消息 (%s / %s)" % (page, self.page_all)
-        for item in self.results:
-            item["url"] = "news_view.html?id=" + str(item["id"])
+        self.page_now = page
+        self.category_id = self.params.get_integer("category", 0)
+        self.category_list = self.sql.query_all('SELECT * FROM NewsCategory Where parent = 0 and is_enable = 1 and is_delete = 0 ORDER BY sort DESC')
+
+        if self.category_id is 0:
+            self.page_title = u"最新消息"
+            self.nav_title = u"全部"
+            self.page_all = self.sql.pager('SELECT count(1) FROM News Where is_enable = 1 and is_delete = 0', (), size)
+            self.faq_list = self.sql.query_all('SELECT * FROM News Where is_enable = 1 and is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
+        else:
+            for item in self.category_list:
+                if item["id"] == self.category_id:
+                    self.page_title = item["category_name"] + u" - 最新消息"
+                    self.nav_title = item["category_name"]
+            self.page_all = self.sql.pager('SELECT count(1) FROM News Where is_enable = 1 and is_delete = 0 and category = %s', self.category_id, size)
+            self.faq_list = self.sql.query_all('SELECT * FROM News Where is_enable = 1 and is_delete = 0 and category = %s ORDER BY sort DESC LIMIT %s, %s', (self.category_id, (page - 1) * size, size))
 
 
-class news_view(ProductMenuHandler):
+class NewsView(ProductMenuHandler):
     def get(self, *args):
         id = self.params.get_string("id")
         if id != '':
             self.record = self.sql.query_one('SELECT * FROM News where id = %s', id)
             self.page_title = self.record["title"] + u" - 最新消息"
+        self.category_id = self.record["category"]
+        self.category_list = self.sql.query_all('SELECT * FROM NewsCategory Where parent = 0 and is_enable = 1 and is_delete = 0 ORDER BY sort DESC')
+        if self.category_id is 0:
+            self.nav_title = u"全部"
+        else:
+            for item in self.category_list:
+                if item["id"] == self.category_id:
+                    self.nav_title = item["category_name"]
+
+
+class Login(MemberMenuHandler):
+    def get(self, *args):
+        pass
 
 
 class login_json(MemberMenuHandler):
@@ -440,6 +487,7 @@ class info_json(MemberMenuHandler):
             "address_area": address_area,
             "address_zip": address_zip,
             "address_detail": address_detail,
+            "is_dealer": 0,
             "is_custom_account": 1,
         }, {
             "id": self.current_user["id"]
@@ -520,7 +568,7 @@ class password_sw_json(MemberMenuHandler):
             return self.json({"done": u"您的密碼已經成功變更了。"})
 
 
-class forget_password(FAQMenuHandler):
+class forget_password(HomeHandler):
     def post(self, *args):
         email = self.params.get_string("email")
         json_data = {}
@@ -572,7 +620,7 @@ class order(MemberMenuHandler):
         self.page_now = page
         self.page_title = u"訂單查詢"
         if self.current_user is None:
-            return self.redirect("/")
+            return self.redirect("/login.html")
         else:
             self.page_all = self.sql.pager('SELECT count(1) FROM OrderInfo Where member_id = %s', self.current_user["id"], size)
             self.order_list = self.sql.query_all('SELECT * FROM OrderInfo Where member_id = %s ORDER BY sort DESC LIMIT %s, %s', (self.current_user["id"], (page - 1) * size, size), (page - 1) * size)
@@ -587,6 +635,7 @@ class order_view(MemberMenuHandler):
             self.page_title = self.record["order_no"] + u" - 訂單詳細資訊"
             self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)
 
+
 class re_question(MemberMenuHandler):
     def get(self, *args):
         if self.current_user is None:
@@ -600,65 +649,17 @@ class re_question(MemberMenuHandler):
         self.question_list = self.sql.query_all('SELECT * FROM Guestbook Where member_id = %s ORDER BY sort DESC LIMIT %s, %s', (self.current_user["id"], (page - 1) * size, size), (page - 1) * size)
 
 
-class about(ProductMenuHandler):
+class About(HomeHandler):
     def get(self, *args):
-        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'about')
-        if self.record is not None:
-            self.page_title = self.record["setting_name"]
+        self.about_list = self.sql.query_all('SELECT * FROM Aboutus where is_enable = 1 and is_delete = 0')
+        self.record_id = self.params.get_string("id")
+        if self.record_id is u"" or self.record_id is '':
+            self.record = self.sql.query_one('SELECT * FROM Aboutus where is_enable = 1 and is_delete = 0')
+        else:
+            self.record = self.sql.query_one('SELECT * FROM Aboutus where is_enable = 1 and is_delete = 0 and id = %s', self.record_id)
 
 
-class privacy(ProductMenuHandler):
-    def get(self, *args):
-        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'privacy')
-        if self.record is not None:
-            self.page_title = self.record["setting_name"]
-        self.render("webpage.html")
-
-
-class know(ProductMenuHandler):
-    def get(self, *args):
-        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'know')
-        if self.record is not None:
-            self.page_title = self.record["setting_name"]
-        self.render("webpage.html")
-
-
-class insert_program(HomeHandler):
-    def get(self, *args):
-        str_start_time = self.params.get_string("date") + " " + self.params.get_string("start_time")
-        str_end_time = self.params.get_string("date") + " " + self.params.get_string("end_time")
-        name = self.params.get_string("name")
-
-        if str_start_time.find("AM") > 0:
-            new_str_start_time = str_start_time.replace("AM ", "") + "AM"
-        if str_start_time.find("PM") > 0:
-            new_str_start_time = str_start_time.replace("PM ", "") + "PM"
-        if str_end_time.find("AM") > 0:
-            new_str_end_time = str_end_time.replace("AM ", "") + "AM"
-        if str_end_time.find("PM") > 0:
-            new_str_end_time = str_end_time.replace("PM ", "") + "PM"
-
-        start_time = parser.parse(new_str_start_time)
-        end_time = parser.parse(new_str_end_time)
-
-        title = u"Vivi 美好購物台 " + str_start_time + u" " + name
-        r = self.sql.query_one("select * from TVProgram where title = %s and start_time = %s and end_time = %s", (title, start_time, end_time))
-        if r is None:
-            self.sql.insert("TVProgram", {
-                "title": title,
-                "start_time": start_time,
-                "end_time": end_time,
-                "is_enable": 1,
-            })
-
-class contact(ProductMenuHandler):
-    def get(self, *args):
-        self.record = self.sql.query_one('SELECT * FROM WebPage where setting_no = %s', 'contact')
-        if self.record is not None:
-            self.page_title = self.record["setting_name"]
-
-
-class step01(ShopCartMenuHandler):
+class step01(MemberMenuHandler):
     def get(self, *args):
         self.step_image = "images/step01.gif"
         self.page_title = u"購物清單"
@@ -668,7 +669,7 @@ class step01(ShopCartMenuHandler):
                 self.record = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', id)
                 self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)
 
-class step02(ShopCartMenuHandler):
+class step02(MemberMenuHandler):
     def get(self, *args):
         self.step_image = "images/step02.gif"
         self.page_title = u"填寫付款資料"
@@ -768,7 +769,7 @@ class step02_json(MemberMenuHandler):
         })
         return self.json({"done": u"完成"})
 
-class step03(ShopCartMenuHandler):
+class step03(MemberMenuHandler):
     def get(self, *args):
         self.step_image = "images/step03.gif"
         self.page_title = u"確認資料"
@@ -841,7 +842,7 @@ class step03_json(MemberMenuHandler):
         return self.json({"done": u"完成"})
 
 
-class step04(ShopCartMenuHandler):
+class step04(MemberMenuHandler):
     def get(self, *args):
         self.step_image = "images/step04.gif"
         self.page_title = u"訂單完成"
@@ -864,11 +865,9 @@ class step04(ShopCartMenuHandler):
     """ % (self.current_user["user_name"],(datetime.datetime.today() + datetime.timedelta(hours=+8)),url)
         mail.send_mail(sender="service@063318866.com", to="service@063318866.com", subject=u"一品夫人官網訂單通知", body=mail_body)
 
-class error(ProductMenuHandler):
+class Error(ProductMenuHandler):
     def get(self, *args):
-        Here = self
-        some = None
-        Here.are = some.problems
+        pass
 
 
 class clean_shopping_cart_json(MemberMenuHandler):

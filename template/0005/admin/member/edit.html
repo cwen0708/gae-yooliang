@@ -32,6 +32,22 @@
         </div>
     </div>
 
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="is_dealer" data-lang="會員身份"></label>
+                <select class="span12" name="is_dealer" id="is_dealer">
+                    {% if record.is_dealer == 0 %}
+                    <option value="0" selected="selected">一般會員</option>
+                    <option value="1">經銷商</option>
+                    {% else %}
+                    <option value="0">一般會員</option>
+                    <option value="1" selected="selected">經銷商</option>
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+    </div>
 
     <div class="row-fluid">
         <div class="span12">

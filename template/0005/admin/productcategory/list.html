@@ -8,7 +8,11 @@
     <thead>
     <tr>
         <th style="width:30px">#</th>
+        <th style="width:30px"><br /></th>
+        <th style="width:30px"><br /></th>
         <th data-lang="title"></th>
+        <th>會員折扣</th>
+        <th>經銷折扣</th>
         <th style="width:60px"><br /></th>
         <th style="width:100px"><br /></th>
         <th style="width:60px"><br /></th>
@@ -17,12 +21,25 @@
     <tbody>
     {% for item in results %}
     <tr id="node_{{ item.sort|datetime_timesp }}" data-id="{{ item.id }}" class="data-row {% if item.is_delete == true %} record_already_delete{% endif %}">
-        {% if item.is_not_root %}
+        {% if item.level == 0 %}
+            <td colspan="4">{{ item.category_name }}</td>
+        {% endif %}
+        {% if item.level == 1 %}
             <td style="background: #ddd;"><br /></td>
-            <td>{{ item.category_name }}</td>
-        {% else %}
+            <td colspan="3">{{ item.category_name }}</td>
+        {% endif %}
+        {% if item.level == 2 %}
+            <td style="background: #ddd;"><br /></td>
+            <td style="background: #ddd;"><br /></td>
             <td colspan="2">{{ item.category_name }}</td>
         {% endif %}
+        {% if item.level == 3 %}
+            <td style="background: #ddd;"><br /></td>
+            <td style="background: #ddd;"><br /></td>
+            <td style="background: #ddd;"><br /></td>
+            <td>{{ item.category_name }}</td>
+        {% endif %}
+        {% if item.level > 0 %}
         <td><button type="button" class="btn btn-edit-page" data-lang="edit"></button></td>
         <td>
             <div class="btn-group" data-toggle="buttons-radio">
@@ -30,7 +47,16 @@
                 <button class="btn btn-set-disable {% if item.is_enable == false %} active{% endif %}" data-lang="disable"></button>
             </div>
         </td>
+        <td><br /></td>
+        <td><br /></td>
         <td><button type="button" class="btn btn-delete" data-lang="delete"></button></td>
+        {% else %}
+        <td><br /></td>
+        <td><br /></td>
+        <td><button type="button" class="btn btn-edit-page" data-lang="edit"></button></td>
+        <td><br /></td>
+        <td><br /></td>
+        {% endif %}
     </tr>
     {% endfor %}
     </tbody>
