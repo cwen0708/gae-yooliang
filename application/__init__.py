@@ -8,6 +8,7 @@
 
 RELATIONSHIP = [
     {"app": u"a0003", "name": u"開發環境", "host": u"localhost"},
+    {"app": u"a0003", "name": u"測試環境", "host": u"test.yooliang.com"},
 ]
 
 DEBUG = True

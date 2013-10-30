@@ -14,7 +14,7 @@
             <div class="caseListInfo">
                 <div class="caseTitle">{{ item.case_name }}</div>
                 <div class="caseText html_2_text">{{ item.content_small }}</div>
-                <div class="caseSPic">{% for img in item.images %}
+                <div class="caseSPic">{% for img in item.image_list %}
                     <div><img src="{{ img }}" alt="" class="resize" /></div>{% endfor %}
                 </div>
             </div>

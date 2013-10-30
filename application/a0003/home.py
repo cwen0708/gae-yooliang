@@ -59,6 +59,9 @@ class CaseList(HomeHandler):
         self.page_now = page
         self.page_all = self.sql.pager('SELECT count(1) FROM PastCase WHERE is_enable = 1 AND is_delete = 0', (), size)
         self.list = self.sql.query_all('SELECT * FROM PastCase WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
+        for item in self.list:
+            if item["images"] is not None and item["images"] is not u"" and item["images"] is not "":
+                item["image_list"] = item["images"].split(",")
 
         self.prev_page = page - 1 if page > 1 else 1
         self.next_page = page + 1 if page < self.page_all else self.page_all
@@ -68,6 +71,9 @@ class CaseList(HomeHandler):
 class CaseView(HomeHandler):
     def get(self, *args):
         self.record = self.sql.query_by_id("PastCase", self.params.get_integer("id"))
+        if self.record["images"] is not None and self.record["images"] is not u"" and self.record["images"] is not "":
+            self.record["image_list"] = self.record["images"].split(",")
+
         if self.is_ajax:
             self.render("/case_view_ajax.html")
 
@@ -79,6 +85,9 @@ class HotList(HomeHandler):
         self.page_now = page
         self.page_all = self.sql.pager('SELECT count(1) FROM HotCase WHERE is_enable = 1 AND is_delete = 0', (), size)
         self.list = self.sql.query_all('SELECT * FROM HotCase WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
+        for item in self.list:
+            if item["images"] is not None and item["images"] is not u"" and item["images"] is not "":
+                item["image_list"] = item["images"].split(",")
 
         self.prev_page = page - 1 if page > 1 else 1
         self.next_page = page + 1 if page < self.page_all else self.page_all
@@ -88,5 +97,8 @@ class HotList(HomeHandler):
 class HotView(HomeHandler):
     def get(self, *args):
         self.record = self.sql.query_by_id("HotCase", self.params.get_integer("id"))
+        if self.record["images"] is not None and self.record["images"] is not u"" and self.record["images"] is not "":
+            self.record["image_list"] = self.record["images"].split(",")
+
         if self.is_ajax:
             self.render("/hot_view_ajax.html")
