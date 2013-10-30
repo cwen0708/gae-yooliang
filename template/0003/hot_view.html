@@ -10,11 +10,11 @@
     </table>
     <!-- view -->
     <div class="caseView">
-        <div class="bPicView"><img src="{{ record.first_image }}" alt="" class="resize" /></div>
+        <div class="bPicView"><img src="{{ record.image }}" alt="" class="resize" /></div>
         <div class="caseViewInfo">
             <div class="caseTitle">{{ record.case_name }}</div>
             <div class="caseText">{{ record.content }}</div>
-            <div class="caseSPic">{% for img in record.image_list %}
+            <div class="caseSPic">{% for img in record.images %}
                 <div><img src="{{ img }}" alt="" class="resize" /></div>
                 {% endfor %}
             </div>

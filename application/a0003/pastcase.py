@@ -38,6 +38,7 @@ class Create(AdministratorHandler):
             "case_name": self.params.get_string("case_name"),
             "content": self.params.get_string("content"),
             "content_small": self.params.get_string("content_small"),
+            "image": self.params.get_string("image"),
             "images": ",".join(self.params.get_list("images")),
             "is_enable": '1',
         })
@@ -57,6 +58,7 @@ class Edit(AdministratorHandler):
             "case_name": self.params.get_string("case_name"),
             "content": self.params.get_string("content"),
             "content_small": self.params.get_string("content_small"),
+            "image": self.params.get_string("image"),
             "images": ",".join(self.params.get_list("images")),
         }, {
             "id": self.params.get_string("id")
