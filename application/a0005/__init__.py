@@ -7,7 +7,7 @@
 # Date: 2013/9/26
 from libs.yooframework import record, image, page
 from application.backend import backend, administrator, websetting, webimage, webpage
-import marquee, banner, member, partners, home, productcategory, news, faq, product, guestbook, freight, tvprogram, orderinfo
+import marquee, banner, member, partners, home, productcategory, news, faq, product, guestbook, freight, orderinfo, banner2, aboutus
 import webapp2
 
 CUSTOMER_NAME = u"YamiYami"
@@ -21,13 +21,18 @@ routes = [
     #==================================================================================================================#
     #前台頁面#
     #==================================================================================================================#
-    webapp2.Route('/', handler=home.index),
-    webapp2.Route('/index.html', handler=home.index),
-    webapp2.Route('/about.html', handler=home.about),
-    webapp2.Route('/test.html', handler=home.test),
-    webapp2.Route('/faq.html', handler=home.faq),
-    webapp2.Route('/news_list.html', handler=home.news_list),
-    webapp2.Route('/news_view.html', handler=home.news_view),
+    webapp2.Route('/', handler=home.Index),
+    webapp2.Route('/index.html', handler=home.Index),
+    webapp2.Route('/about.html', handler=home.About),
+    webapp2.Route('/faq.html', handler=home.Faq),
+    webapp2.Route('/declare.html', handler=home.Declare),
+    webapp2.Route('/process.html', handler=home.Process),
+    webapp2.Route('/process02.html', handler=home.Process02),
+    webapp2.Route('/contact.html', handler=home.Contact),
+    webapp2.Route('/news_list.html', handler=home.NewsList),
+    webapp2.Route('/news_view.html', handler=home.NewsView),
+    webapp2.Route('/login.html', handler=home.Login),
+
     webapp2.Route('/goods_list.html', handler=home.goods_list),
     webapp2.Route('/goods_view.html', handler=home.goods_view),
     webapp2.Route('/guestbook.html', handler=home.guestbook),
@@ -35,51 +40,81 @@ routes = [
     webapp2.Route('/guestbook_form.html', handler=home.guestbook_form),
     webapp2.Route('/guestbook.json', handler=home.guestbook_json),
 
-    webapp2.Route('/insert_program', handler=home.insert_program),
-
-    webapp2.Route('/login.json', handler=home.login_json),
-    webapp2.Route('/logout.json', handler=home.logout_json),
-
     webapp2.Route('/join.html', handler=home.join),
-    webapp2.Route('/join.json', handler=home.join_json),
     webapp2.Route('/password.html', handler=home.password),
     webapp2.Route('/password_ch.html', handler=home.password_ch),
-    webapp2.Route('/password_ch.json', handler=home.password_ch_json),
     webapp2.Route('/password_sw.html', handler=home.password_sw),
-    webapp2.Route('/password_sw.json', handler=home.password_sw_json),
     webapp2.Route('/forget_password.json', handler=home.forget_password),
 
-    webapp2.Route('/add_shopping_cart.json', handler=home.add_shopping_cart_json),
-    webapp2.Route('/clean_shopping_cart.json', handler=home.add_shopping_cart_json),
-
     webapp2.Route('/info.html', handler=home.info),
-    webapp2.Route('/info.json', handler=home.info_json),
-    webapp2.Route('/know.html', handler=home.know),
-    webapp2.Route('/privacy.html', handler=home.privacy),
     webapp2.Route('/password_ch.html', handler=home.password_ch),
     webapp2.Route('/order.html', handler=home.order),
     webapp2.Route('/order_view.html', handler=home.order_view),
     webapp2.Route('/re_question.html', handler=home.re_question),
 
-    webapp2.Route('/error.html', handler=home.error),
-    webapp2.Route('/contact.html', handler=home.contact),
     webapp2.Route('/step01.html', handler=home.step01),
     webapp2.Route('/step02.html', handler=home.step02),
-    webapp2.Route('/step02.json', handler=home.step02_json),
     webapp2.Route('/step03.html', handler=home.step03),
-    webapp2.Route('/step03.json', handler=home.step03_json),
     webapp2.Route('/step04.html', handler=home.step04),
+
+    webapp2.Route('/info.json', handler=home.info_json),
+    webapp2.Route('/join.json', handler=home.join_json),
+    webapp2.Route('/login.json', handler=home.login_json),
+    webapp2.Route('/logout.json', handler=home.logout_json),
+    webapp2.Route('/step02.json', handler=home.step02_json),
+    webapp2.Route('/step03.json', handler=home.step03_json),
+    webapp2.Route('/password_ch.json', handler=home.password_ch_json),
+    webapp2.Route('/password_sw.json', handler=home.password_sw_json),
+    webapp2.Route('/add_shopping_cart.json', handler=home.add_shopping_cart_json),
+    webapp2.Route('/clean_shopping_cart.json', handler=home.add_shopping_cart_json),
+
+    webapp2.Route('/error.html', handler=home.Error),
 
     #==================================================================================================================#
     #後台頁面#
     #==================================================================================================================#
+    webapp2.Route('/admin/member/Init.html', handler=member.Init),
+    webapp2.Route('/admin/member/list.html', handler=member.List),
+    webapp2.Route('/admin/member/create.html', handler=member.Create),
+    webapp2.Route('/admin/member/edit.html', handler=member.edit),
+
+    webapp2.Route('/admin/news/init.html', handler=news.Init),
+    webapp2.Route('/admin/newscategory/list.html', handler=news.CategoryList),
+    webapp2.Route('/admin/newscategory/create.html', handler=news.CategoryCreate),
+    webapp2.Route('/admin/newscategory/edit.html', handler=news.CategoryEdit),
+    webapp2.Route('/admin/news/list.html', handler=news.List),
+    webapp2.Route('/admin/news/create.html', handler=news.Create),
+    webapp2.Route('/admin/news/edit.html', handler=news.Edit),
+
+    webapp2.Route('/admin/faq/init.html', handler=faq.Init),
+    webapp2.Route('/admin/faqcategory/list.html', handler=faq.CategoryList),
+    webapp2.Route('/admin/faqcategory/create.html', handler=faq.CategoryCreate),
+    webapp2.Route('/admin/faqcategory/edit.html', handler=faq.CategoryEdit),
+    webapp2.Route('/admin/faq/list.html', handler=faq.List),
+    webapp2.Route('/admin/faq/create.html', handler=faq.Create),
+    webapp2.Route('/admin/faq/edit.html', handler=faq.Edit),
+
+    webapp2.Route('/admin/aboutus/Init.html', handler=aboutus.Init),
+    webapp2.Route('/admin/aboutus/list.html', handler=aboutus.List),
+    webapp2.Route('/admin/aboutus/create.html', handler=aboutus.Create),
+    webapp2.Route('/admin/aboutus/edit.html', handler=aboutus.Edit),
+
+    webapp2.Route('/admin/banner/Init.html', handler=banner.Init),
+    webapp2.Route('/admin/banner/list.html', handler=banner.List),
+    webapp2.Route('/admin/banner/create.html', handler=banner.Create),
+    webapp2.Route('/admin/banner/edit.html', handler=banner.Edit),
+
+    webapp2.Route('/admin/banner2/Buit.html', handler=banner2.Init),
+    webapp2.Route('/admin/banner2/list.html', handler=banner2.List),
+    webapp2.Route('/admin/banner2/create.html', handler=banner2.Create),
+    webapp2.Route('/admin/banner2/edit.html', handler=banner2.Edit),
+
+
+
+
     webapp2.Route('/admin/guestbook/list.html', handler=guestbook.list),
     webapp2.Route('/admin/guestbook/create.html', handler=guestbook.create),
     webapp2.Route('/admin/guestbook/edit.html', handler=guestbook.edit),
-
-    webapp2.Route('/admin/tvprogram/list.html', handler=tvprogram.list),
-    webapp2.Route('/admin/tvprogram/create.html', handler=tvprogram.create),
-    webapp2.Route('/admin/tvprogram/edit.html', handler=tvprogram.edit),
 
     webapp2.Route('/admin/orderinfo/list.html', handler=orderinfo.list),
     webapp2.Route('/admin/orderinfo/edit.html', handler=orderinfo.edit),
@@ -92,24 +127,6 @@ routes = [
     webapp2.Route('/admin/product/create.html', handler=product.create),
     webapp2.Route('/admin/product/edit.html', handler=product.edit),
 
-    webapp2.Route('/admin/member/list.html', handler=member.list),
-    webapp2.Route('/admin/member/create.html', handler=member.create),
-    webapp2.Route('/admin/member/edit.html', handler=member.edit),
-
-    webapp2.Route('/admin/faqcategory/list.html', handler=faq.category_list),
-    webapp2.Route('/admin/faqcategory/create.html', handler=faq.category_create),
-    webapp2.Route('/admin/faqcategory/edit.html', handler=faq.category_edit),
-    webapp2.Route('/admin/faq/list.html', handler=faq.list),
-    webapp2.Route('/admin/faq/create.html', handler=faq.create),
-    webapp2.Route('/admin/faq/edit.html', handler=faq.edit),
-
-    webapp2.Route('/admin/news/list.html', handler=news.list),
-    webapp2.Route('/admin/news/create.html', handler=news.create),
-    webapp2.Route('/admin/news/edit.html', handler=news.edit),
-
-    webapp2.Route('/admin/banner/list.html', handler=banner.list),
-    webapp2.Route('/admin/banner/create.html', handler=banner.create),
-    webapp2.Route('/admin/banner/edit.html', handler=banner.edit),
 
     webapp2.Route('/admin/partners/list.html', handler=partners.list),
     webapp2.Route('/admin/partners/create.html', handler=partners.create),

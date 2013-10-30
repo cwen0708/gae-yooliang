@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="left">
+    <div><img src="images/lefttitle06.gif" alt=""/></div>
+    <div class="leftMenu">
+        <div class="menu_1"><a href="process.html" title="流程須知">流程須知</a></div><div  class="lineD"></div>
+        <div class="menu_1"><span>退換貨說明</span></div><div class="lineD"></div>
+    </div>
+    <div class="leftLink">
+        <a href="foreign_form.html" title="韓國市集代購"><img src="images/leftlink02_out.gif" alt="" class="img_change"/></a>
+        <a href="login.html" title="會員專區"><img src="images/leftlink01_out.gif" alt="" class="img_change"/></a>
+        <a href="sellform.html" title="誠徵經銷"><img src="images/leftlink03_out.gif" alt="" class="img_change"/></a>
+    </div>
+    <div><img src="images/service.gif" alt=""/></div>
+    <div class="serviceInfo">
+        E-Mail：<br/>
+        <a href="mailto:service@yamiyami.com.tw" title="E-Mail">service@yamiyami.com.tw</a><br/><br/>
+        營業時間：<br/>(一) ~ (六) AM 10:30 - PM 8:00
+    </div>
+    <div><img src="images/qr.gif" alt=""/></div>
+</div>
+
+
+<div id="right">
+    <div class="side">
+        <img src="images/icon03.gif" align="absmiddle">&nbsp;&nbsp;<a href="/" title="">Home</a>&nbsp;&nbsp;
+        <img src="images/icon04.gif" align="absmiddle">&nbsp;&nbsp;<a href="process.html" title="">購物流程</a>&nbsp;&nbsp;
+        <img src="images/icon04.gif" align="absmiddle">&nbsp;&nbsp;<span>退換貨說明</span>
+    </div>
+
+    <div class="rightCommon privacy">
+{{ record.value }}
+    </div>
+</div>
+{% endblock %}
