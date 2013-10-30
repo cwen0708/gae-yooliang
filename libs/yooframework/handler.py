@@ -67,15 +67,6 @@ class BaseHandler(webapp2.RequestHandler):
         # Returns a session using the default cookie key.
         return self.session_store.get_session()
 
-    def get_int_param(self, key="size", default_value=0):
-        try:
-            if self.request.get(key) is None:
-                return default_value
-            _a = self.request.get(key) if int(self.request.get(key)) is not None else u''
-            return default_value if _a == '' else int(_a)
-        except:
-            return default_value
-
     def json_message(self, info):
         if self.environ.template_already_render is False:
             self.json({"info": info})
