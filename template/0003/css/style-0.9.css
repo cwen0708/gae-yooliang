@@ -304,6 +304,7 @@ a:hover .caseList{
 .caseList .caseSPic{
 	overflow:hidden;
 	margin-top:7px;
+    height: 110px;
 	}
 .caseSPic div{
 	float:left;

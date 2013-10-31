@@ -12,11 +12,12 @@
     {% for item in list %}
     <a href="hot_view.html?id={{ item.id }}" title="{{ item.case_name }}">
         <div class="caseList">
-            <div class="bPic"><img src="{{ item.first_image }}" alt="" class="resize" /></div>
+            <div class="bPic"><img src="{{ item.image }}" alt="" class="resize" /></div>
             <div class="caseListInfo">
                 <div class="caseTitle">{{ item.case_name }}</div>
                 <div class="caseText html_2_text">{{ item.content_small }}</div>
-                <div class="caseSPic">{% for img in item.image_list %}
+                <div class="caseSPic">
+                    <div><img src="{{ item.image }}" alt="" class="resize" /></div>{% for img in item.image_list %}
                     <div><img src="{{ img }}" alt="" class="resize" /></div>{% endfor %}
                 </div>
             </div>
