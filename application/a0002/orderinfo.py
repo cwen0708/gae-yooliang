@@ -44,7 +44,8 @@ class Init(AdministratorHandler):
               sort        timestamp default current_timestamp,
               id          int not null auto_increment,
               primary key (id)
-            ) engine=myisam default charset=utf8;""")
+            ) engine=myisam default charset=utf8;
+            """)
 
         self.sql.query_one("""
             create table OrderItem(
@@ -53,6 +54,7 @@ class Init(AdministratorHandler):
               product_name   varchar(500),
               product_price  float,
               product_image  text,
+              product_spec   text,
               product_url    varchar(500),
               item_quantity  int not null,
               item_status    int not null,

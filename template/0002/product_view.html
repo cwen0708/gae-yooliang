@@ -46,15 +46,56 @@
                 <th align="left">{{ record.product_name }}</th>
             </tr>
         </table>
-
         <div class="lineD"></div>
-        <table cellpadding="0" cellspacing="0" border="0" width="250" class="goodsInfo">
+        <table cellpadding="0" cellspacing="0" border="0" width="250" class="goodsInfo" style="margin:8px;">
             <tr>
-                <td style="padding: 8px;">
-                    說明文字說明文字說明文字說明文字說明文字
-                    說明文字說明文字說明文字說明文字
-                    說明文字說明文字說明文字說明文字說明文字說明文字
+                <td> 規格 :  </td>
+                <td id="p_spec">
+                    <input type="hidden" id="spec" />
+                    <select id="spec_list" style="width:auto;">
+                        {% for item in spec_list %}
+                            <option value="{{ item.text }}||{{ item.price }}">{{ item.text }}</option>
+                        {% endfor %}
+                    </select>
+                    <script type="text/javascript">
+                        $(function(){
+                            $("#spec_list").change(function () {
+                                var spec = "";
+                                var price = 0.0;
+                                try {
+                                    spec = $(this).val().split("||")[0];
+                                    price = parseFloat($(this).val().split("||")[1]);
+                                } catch (e) {
+                                    price = "格式有誤";
+                                    $("a.add_shopping_cart").hide();
+                                }
+                                if (isNaN(price)){
+                                    $("#p_price").text("格式有誤");
+                                    $("a.add_shopping_cart").hide();
+                                }else{
+                                    $("#p_price").text(price + " 元");
+                                    $("a.add_shopping_cart").show();
+                                    $("#spec").val(spec);
+                                }
+                            });
+                            $("#spec_list").change();
+                        });
+                    </script>
                 </td>
+            </tr>
+            <tr>
+                <th> 數量 :  </th>
+                <td>
+                    <select id="quantity">
+                    {% for i in range(0, quantity+1) %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td> 單價 :  </td>
+                <td id="p_price"></td>
             </tr>
         </table>
         <div class="lineD"></div>
@@ -93,7 +134,7 @@
     $(function(){
         $(".add_shopping_cart").click(function(){
             var _this = $(this);
-            json(_this.data("url"), "product_id="+ $(this).data("pid") + "&quantity=" + $("#quantity").val(), function(data){
+            json(_this.data("url"), "product_id="+ $(this).data("pid") + "&quantity=" + $("#quantity").val() + "&spec=" + $("#spec_list").val() , function(data){
                 if (data.done != undefined) {
                     window.location.href = _this.data("order");
                 }

@@ -51,24 +51,14 @@
     <div class="row-fluid">
         <div class="span12">
             <div class="control-group">
-                <label class="control-label" for="original_price" data-lang="售價"></label>
+                <label class="control-label" for="price" data-lang="售價"></label>
                 <div class="controls">
-                    <input type="text" id="original_price" placeholder="" name="original_price" class="span12" value="{{ record.original_price }}" />
+                    <textarea id="price" placeholder="" name="price" class="span12">{{ record.price }}</textarea>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="control-group">
-                <label class="control-label" for="selling_price" data-lang="特價"></label>
-                <div class="controls">
-                    <input type="text" id="selling_price" placeholder="" name="selling_price" class="span12" value="{{ record.selling_price }}" />
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row-fluid">
         <div class="input-append editor_image_upload">

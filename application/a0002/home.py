@@ -57,7 +57,7 @@ class GreenShepherdHandler(HomeHandler):
             order = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', self.session["order_id"])
             if order is not None:
                 self.cart_count = "%04d" % order["items_count"]
-                self.cart_title = u"購買 %d 種產品，共計 %d 個，金額為 %6.2f 元" % (order["items_count"], order["items_total"], order["total_amount"])
+                #self.cart_title = u"購買 %d 種產品，共計 %d 個，金額為 %6.2f 元" % (order["items_count"], order["items_total"], order["total_amount"])
 
 
     def gen_product_category_list(self):
@@ -476,7 +476,7 @@ class monitor_info(GreenShepherdHandler):
         }
 
 
-class product(GreenShepherdHandler):
+class Product(GreenShepherdHandler):
     def get(self, *args):
         self.gen_product_category_list()
         category = self.params.get_integer("category", 0)
@@ -504,7 +504,7 @@ class product(GreenShepherdHandler):
                     item["link"] = "/product_view.html?parent=" + str(item["parent_category"]) + "&category=" + str(item["category"]) + "&id=" + str(item["id"])
 
 
-class product_view(GreenShepherdHandler):
+class ProductView(GreenShepherdHandler):
     def get(self, *args):
         self.gen_product_category_list()
         id = self.params.get_integer("id", 1)
@@ -514,6 +514,20 @@ class product_view(GreenShepherdHandler):
             self.record["image"] = self.images[0]
         else:
             self.record["image"] = "image/no_pic.png"
+
+        self.spec_list = []
+        if self.record["price"] is not None:
+            spec_list = self.record["price"].split("\n")
+            for item in spec_list:
+                try:
+                    s = item.split("||")
+                    self.spec_list.append({
+                        "text": s[0],
+                        "price": s[1],
+                    })
+                except:
+                    pass
+        self.quantity = 50
 
 
 class project(GreenShepherdHandler):
@@ -1042,7 +1056,9 @@ class step01(GreenShepherdHandler):
             if id != '':
                 self.record = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', id)
                 self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)
-
+                for item in self.order_item_list:
+                    s = item["product_spec"].split("||")
+                    item["spec"] = s[0]
 
 class step02(GreenShepherdHandler):
     def get(self, *args):
@@ -1244,16 +1260,54 @@ class step04(GreenShepherdHandler):
         mail.send_mail(sender="gs@greenshepherd.com", to="gs@greenshepherd.com", subject=u"訂單通知", body=mail_body)
 
 
-
 class clean_shopping_cart_json(GreenShepherdHandler):
     def post(self, *args):
-        pass
+        if "order_id" in self.session:
+            order_id = self.session["order_id"]
+            self.json({"done": "完成"})
+            self.sql.delete("OrderItem", {
+                "order_id": order_id
+            })
+
+            temp = self.sql.query_one('SELECT count(1) as items_count, sum(item_quantity) as items_total, sum(item_sum) as total_amount FROM OrderItem where order_id = %s', order_id)
+            if temp["items_count"] is None:
+                items_count = 0
+            else:
+                items_count = temp["items_count"]
+            if temp["items_total"] is None:
+                items_total = 0
+            else:
+                items_total = temp["items_total"]
+            if temp["total_amount"] is None:
+                total_amount = 0
+            else:
+                total_amount = temp["total_amount"]
+
+            if self.current_user is not None:
+                member_id = self.current_user["id"]
+                self.sql.update("OrderInfo", {
+                    "member_id": member_id,
+                    "items_count": items_count,
+                    "items_total": items_total,
+                    "total_amount": total_amount,
+                }, {
+                    "id": order_id
+                })
+            else:
+                self.sql.update("OrderInfo", {
+                    "items_count": items_count,
+                    "items_total": items_total,
+                    "total_amount": total_amount,
+                }, {
+                    "id": order_id
+                })
 
 class add_shopping_cart_json(GreenShepherdHandler):
     def post(self, *args):
         today = datetime.today() + timedelta(hours=+8)
         product_id = self.params.get_string("product_id")
         quantity = self.params.get_integer("quantity", 0)
+        spec = self.params.get_string("spec")
 
         order = None
         if product_id != '':
@@ -1261,6 +1315,18 @@ class add_shopping_cart_json(GreenShepherdHandler):
         else:
             self.json_message(u"產品不存在")
             return
+
+        spec_can_used = u""
+        spec_list = product["price"].split("\n")
+        for ss in spec_list:
+            if spec.replace("\n", "") == ss.replace("\r", ""):
+                spec_can_used = ss
+
+        if spec_can_used is u'':
+            self.json_message(u"產品不存在")
+            return
+        price = float(spec_can_used.split("||")[1].replace("\r", ""))
+
         if "order_id" in self.session:
             order = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', self.session["order_id"])
             if order is not None:
@@ -1326,30 +1392,33 @@ class add_shopping_cart_json(GreenShepherdHandler):
             product_image = "image/no_pic.png"
 
         if quantity < 0:
-            self.json_message(u"remove")
+            self.json({"done": "完成"})
             self.sql.delete("OrderItem", {
                 "order_id": order_id,
-                "product_id": product_id
+                "product_id": product_id,
+                "product_spec": spec,
             })
+            return
         else:
-            order_item = self.sql.query_one('SELECT * FROM OrderItem where order_id = %s and product_id = %s', (order_id, product_id))
+            order_item = self.sql.query_one('SELECT * FROM OrderItem where order_id = %s and product_id = %s and product_spec = %s', (order_id, product_id, spec))
             if order_item is None:
                 self.sql.insert("OrderItem", {
                     "product_id": product_id,
                     "product_no": product["product_no"],
                     "product_name": product["product_name"],
-                    "product_price": product["selling_price"],
+                    "product_price": price,
+                    "product_spec": spec_can_used,
                     "product_image": product_image,
                     "product_url": "/goods_view.html?parent=1&category=5&id=1",
                     "item_quantity": quantity,
                     "item_status": 0,
-                    "item_sum": product["selling_price"] * quantity,
+                    "item_sum": price * quantity,
                     "order_id": order_id,
                 })
             else:
                 self.sql.update("OrderItem", {
                     "item_quantity": quantity,
-                    "item_sum": product["selling_price"] * quantity,
+                    "item_sum": price * quantity,
                 }, {
                     "id": order_item["id"]
                 })

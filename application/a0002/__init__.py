@@ -35,8 +35,8 @@ routes = [
 
     webapp2.Route('/learn.html', home.learn),
     webapp2.Route('/learn_view.html', home.learn_view),
-    webapp2.Route('/product.html', home.product),
-    webapp2.Route('/product_view.html', home.product_view),
+    webapp2.Route('/product.html', home.Product),
+    webapp2.Route('/product_view.html', home.ProductView),
     webapp2.Route('/project.html', home.project),
     webapp2.Route('/contact_step_1.html', home.contact_step_1),
     webapp2.Route('/contact_step_1.html', home.contact_step_1),
@@ -81,7 +81,7 @@ routes = [
     webapp2.Route('/step03.json', handler=home.step03_json),
     webapp2.Route('/step04.html', handler=home.step04),
     webapp2.Route('/add_shopping_cart.json', handler=home.add_shopping_cart_json),
-    webapp2.Route('/clean_shopping_cart.json', handler=home.add_shopping_cart_json),
+    webapp2.Route('/clean_shopping_cart.json', handler=home.clean_shopping_cart_json),
 
 
     #==================================================================================================================#
@@ -159,9 +159,9 @@ routes = [
     webapp2.Route('/admin/marquee/create.html', handler=marquee.create),
     webapp2.Route('/admin/marquee/edit.html', handler=marquee.edit),
 
-    webapp2.Route('/admin/product/list.html', handler=product.list),
-    webapp2.Route('/admin/product/create.html', handler=product.create),
-    webapp2.Route('/admin/product/edit.html', handler=product.edit),
+    webapp2.Route('/admin/product/list.html', handler=product.List),
+    webapp2.Route('/admin/product/create.html', handler=product.Create),
+    webapp2.Route('/admin/product/edit.html', handler=product.Edit),
 
     webapp2.Route('/admin/productcategory/list.html', handler=productcategory.list),
     webapp2.Route('/admin/productcategory/create.html', handler=productcategory.create),

@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="rightpage">
+    <div class="rightpage" style="margin-left: 10px;">
         <table style="width:100%; margin-bottom: 10px;">
             <tbody><tr>
                 <td style="width:25%; text-align: center;height: 60px;" class="step_current">
@@ -43,39 +43,43 @@
         </tbody></table>
 
     <div class="lineD"></div>
-    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderTitle">
+    <table cellpadding="0" cellspacing="0" border="0" width="800" class="orderTitle">
         <tr>
-            <th width="275">商品資訊</th>
+            <th width="375">　商品資訊</th>
             <th width="154">數量</th>
             <th width="106">價格</th>
             <th width="104">小計</th>
-            <th width="98">刪除</th>
+            <th width="28">刪除</th>
         </tr>
     </table>
     <div class="lineD"></div>
-    <table cellpadding="0" cellspacing="0" border="0" width="737" class="orderList">
+    <table cellpadding="0" cellspacing="0" border="0" width="800" class="orderList">
         {% set row_class = cycler('', 'bgColor') %}
         {% if record %}
             {% for item in order_item_list %}
             <tr class="{{ row_class.next() }}">
-                <td width="275">
-                    <table cellpadding="0" cellspacing="0" border="0" align="center">
+                <td width="375">
+                    <table cellpadding="0" cellspacing="0" border="0" align="center" style="width:375px;">
                         <tr>
                             <td>
                                 <div style="width:80px; height: 80px;"><img src="{{ item.product_image }}" class="scale" alt="" /></div></td>
-                            <td height="58" align="left">產品型號：{{ item.product_no }} <br/><span>{{ item.product_name }}</span></td>
+                            <td height="58" style="width:290px;" align="left">
+                                產品型號：{{ item.product_no }} <br/>
+                                <span>{{ item.product_name }}</span> <br/>
+                                <span>{{ item.spec }}</span>
+                            </td>
                         </tr>
                     </table>
                 </td>
                 <td width="154">{{ item.item_quantity }}</td>
                 <td width="106">{{ item.product_price|thousands_separator }} 元</td>
                 <td width="104">{{ item.item_sum|thousands_separator }} 元</td>
-                <td width="98" align="center"><a href="#" title=""><img src="images/icon12.gif" alt=""/></a></td>
+                <td width="28" align="center"><a href="#" class="remove_item" data-url="{{ 'add_shopping_cart.json'|url }}" data-info="product_id={{ item.product_id }}&quantity=-1&spec={{ item.product_spec }}" title=""><img src="images/icon12.gif" alt=""/></a></td>
             </tr>
             {% endfor %}
         {% else %}
             <tr class="{{ row_class.next() }}">
-                <td width="275">
+                <td width="375">
                     <table cellpadding="0" cellspacing="0" border="0" align="center">
                         <tr>
                             <td></td>
@@ -86,14 +90,14 @@
                 <td width="154">--</td>
                 <td width="106">--</td>
                 <td width="104">--</td>
-                <td width="98" align="center">--</td>
+                <td width="28" align="center">--</td>
             </tr>
         {% endif %}
     </table>
 
     {% if record %}
     <div class="lineD"></div>
-    <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="737">
+    <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="800">
         <tr>
             <td width="546">
                 {% if current_user %}
@@ -103,7 +107,7 @@
                 {% endif %}
                 <div class="btn" align="center">
                     <a href="{{ 'goods_list.html'|url }}" title=""><img src="images/goshop_out.gif" alt="" class="img_change"/></a>
-                    <a href="#" title=""><img src="images/recar_out.gif" alt="" class="img_change"/></a>
+                    <a href="#" class="remove_all" title=""><img src="images/recar_out.gif" alt="" class="img_change"/></a>
                 </div>
             </td>
             <td width="191" align="right" class="bgColor02">總金額 {{ record.total_amount|thousands_separator }} 元<br/>
@@ -114,4 +118,33 @@
     {% endif %}
 </div>
  </div>
+
+<script type="text/javascript">
+    $(function(){
+        $(".remove_item").click(function(){
+            var _this = $(this);
+            json(_this.data("url"), _this.data("info") , function(data){
+                if (data.done != undefined) {
+                    window.location.reload();
+                }
+            }, function(data){
+                if (data.done != undefined) {
+                    window.location.reload();
+                }
+            });
+        });
+        $(".remove_all").click(function(){
+            var _this = $(this);
+            json("clean_shopping_cart.json", null , function(data){
+                if (data.done != undefined) {
+                    window.location.reload();
+                }
+            }, function(data){
+                if (data.done != undefined) {
+                    window.location.reload();
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

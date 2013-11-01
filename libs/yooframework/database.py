@@ -99,7 +99,7 @@ class CloudSQL():
         for key, value in where_params.items():
             str_where.append(key + ' = %s')
             str_new_val.append(value)
-        str_sql = 'DELETE FROM %s WHERE %s' % (table_name, (",".join(str(x) for x in str_where)))
+        str_sql = 'DELETE FROM %s WHERE %s' % (table_name, (" and ".join(str(x) for x in str_where)))
         self.__sql_cursor__.execute(str_sql, str_new_val)
 
     def pager(self, query, params=(), size = 10):
