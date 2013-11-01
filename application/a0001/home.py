@@ -873,8 +873,7 @@ class error(ProductMenuHandler):
         pass
 
 
-
-class clean_shopping_cart_json(GreenShepherdHandler):
+class clean_shopping_cart_json(MemberMenuHandler):
     def post(self, *args):
         if "order_id" in self.session:
             order_id = self.session["order_id"]
