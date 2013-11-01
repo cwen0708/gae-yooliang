@@ -873,9 +873,48 @@ class error(ProductMenuHandler):
         pass
 
 
-class clean_shopping_cart_json(MemberMenuHandler):
+
+class clean_shopping_cart_json(GreenShepherdHandler):
     def post(self, *args):
-        pass
+        if "order_id" in self.session:
+            order_id = self.session["order_id"]
+            self.json({"done": "完成"})
+            self.sql.delete("OrderItem", {
+                "order_id": order_id
+            })
+
+            temp = self.sql.query_one('SELECT count(1) as items_count, sum(item_quantity) as items_total, sum(item_sum) as total_amount FROM OrderItem where order_id = %s', order_id)
+            if temp["items_count"] is None:
+                items_count = 0
+            else:
+                items_count = temp["items_count"]
+            if temp["items_total"] is None:
+                items_total = 0
+            else:
+                items_total = temp["items_total"]
+            if temp["total_amount"] is None:
+                total_amount = 0
+            else:
+                total_amount = temp["total_amount"]
+
+            if self.current_user is not None:
+                member_id = self.current_user["id"]
+                self.sql.update("OrderInfo", {
+                    "member_id": member_id,
+                    "items_count": items_count,
+                    "items_total": items_total,
+                    "total_amount": total_amount,
+                }, {
+                    "id": order_id
+                })
+            else:
+                self.sql.update("OrderInfo", {
+                    "items_count": items_count,
+                    "items_total": items_total,
+                    "total_amount": total_amount,
+                }, {
+                    "id": order_id
+                })
 
 class add_shopping_cart_json(MemberMenuHandler):
     def post(self, *args):
@@ -981,23 +1020,36 @@ class add_shopping_cart_json(MemberMenuHandler):
                 }, {
                     "id": order_item["id"]
                 })
+
         temp = self.sql.query_one('SELECT count(1) as items_count, sum(item_quantity) as items_total, sum(item_sum) as total_amount FROM OrderItem where order_id = %s', order_id)
+        if temp["items_count"] is None:
+            items_count = 0
+        else:
+            items_count = temp["items_count"]
+        if temp["items_total"] is None:
+            items_total = 0
+        else:
+            items_total = temp["items_total"]
+        if temp["total_amount"] is None:
+            total_amount = 0
+        else:
+            total_amount = temp["total_amount"]
 
         if self.current_user is not None:
             member_id = self.current_user["id"]
             self.sql.update("OrderInfo", {
                 "member_id": member_id,
-                "items_count": temp["items_count"],
-                "items_total": temp["items_total"],
-                "total_amount": temp["total_amount"],
+                "items_count": items_count,
+                "items_total": items_total,
+                "total_amount": total_amount,
             }, {
                 "id": order_id
             })
         else:
             self.sql.update("OrderInfo", {
-                "items_count": temp["items_count"],
-                "items_total": temp["items_total"],
-                "total_amount": temp["total_amount"],
+                "items_count": items_count,
+                "items_total": items_total,
+                "total_amount": total_amount,
             }, {
                 "id": order_id
             })
