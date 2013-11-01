@@ -671,6 +671,11 @@ class step01(ShopCartMenuHandler):
             if id != '':
                 self.record = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', id)
                 self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)
+            if self.record is not None and len(self.order_item_list) > 0:
+                self.is_selected = True
+            else:
+                self.is_selected = False
+
 
 class step02(ShopCartMenuHandler):
     def get(self, *args):
@@ -992,11 +997,12 @@ class add_shopping_cart_json(MemberMenuHandler):
             product_image = "image/no_pic.png"
 
         if quantity < 0:
-            self.json_message(u"remove")
+            self.json({"done": "完成"})
             self.sql.delete("OrderItem", {
                 "order_id": order_id,
                 "product_id": product_id
             })
+            return
         else:
             order_item = self.sql.query_one('SELECT * FROM OrderItem where order_id = %s and product_id = %s', (order_id, product_id))
             if order_item is None:

@@ -50,7 +50,7 @@ routes = [
     webapp2.Route('/forget_password.json', handler=home.forget_password),
 
     webapp2.Route('/add_shopping_cart.json', handler=home.add_shopping_cart_json),
-    webapp2.Route('/clean_shopping_cart.json', handler=home.add_shopping_cart_json),
+    webapp2.Route('/clean_shopping_cart.json', handler=home.clean_shopping_cart_json),
 
     webapp2.Route('/info.html', handler=home.info),
     webapp2.Route('/info.json', handler=home.info_json),
