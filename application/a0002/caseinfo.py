@@ -38,10 +38,10 @@ class List(AdministratorHandler):
         try:
             the_cid = int(cid)
             self.page_all = self.sql.pager("SELECT count(1) FROM CaseInfo WHERE customer_id = %s ORDER BY sort", the_cid, size)
-            self.results = self.sql.query_all('SELECT id, case_name as title, case_no, is_enable, is_delete, sort, customer_id FROM CaseInfo WHERE customer_id = %s ORDER BY sort DESC LIMIT %s, %s', (the_cid, (page - 1) * size, size))
+            self.results = self.sql.query_all('SELECT *, case_name as title FROM CaseInfo WHERE customer_id = %s ORDER BY sort DESC LIMIT %s, %s', (the_cid, (page - 1) * size, size))
         except:
             self.page_all = self.sql.pager('SELECT count(1) FROM CaseInfo', (), size)
-            self.results = self.sql.query_all('SELECT id, case_name as title, case_no, is_enable, is_delete, sort, customer_id FROM CaseInfo ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
+            self.results = self.sql.query_all('SELECT *, case_name as title FROM CaseInfo ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
 
         for item in self.results:
             customer_record = self.sql.query_one('SELECT customer_no FROM Customer where id = %s', item["customer_id"])
@@ -74,6 +74,7 @@ class create(AdministratorHandler):
             "type_image": self.params.get_string("type_image"),
             "image": self.params.get_string("image"),
             "image2": self.params.get_string("image2"),
+            "info": self.params.get_string("info"),
             "images": ",".join(self.params.get_list("images")),
             "woeid": self.params.get_string("woeid"),
             "is_enable": 1,
@@ -118,6 +119,7 @@ class edit(AdministratorHandler):
             "type_image": self.params.get_string("type_image"),
             "image": self.params.get_string("image"),
             "image2": self.params.get_string("image2"),
+            "info": self.params.get_string("info"),
             "images": ",".join(self.params.get_list("images")),
             "woeid": self.params.get_string("woeid"),
         }, {

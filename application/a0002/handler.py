@@ -47,7 +47,7 @@ class HomeHandler(BaseHandler):
         self.sql.cursor.execute('SELECT id FROM StatisticsData where customer_id = %s and case_id = %s and date = %s', (customer_id, case_id, date))
         statistics_record = self.sql.cursor.fetchone()
         if self.sql.cursor.rowcount > 0:
-            self.sql.cursor.execute('UPDATE StatisticsData SET kwh = %s where id = %s',(kwh, statistics_record[0]))
+            self.sql.cursor.execute('UPDATE StatisticsData SET kwh = %s where id = %s', (kwh, statistics_record[0]))
         else:
             self.sql.cursor.execute('SELECT id, kwh FROM StatisticsData where customer_id = %s and case_id = %s and date = %s', (customer_id, case_id, last_date))
             last_record = self.sql.cursor.fetchone()

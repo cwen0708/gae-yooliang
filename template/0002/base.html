@@ -16,7 +16,6 @@
 
 <body>
     <div class="wrap">
-
         <div class="top_index">
             <div class="top_box">
                 <div class="logo"><img src="{{ 'site_logo'|webimage }}" style="height: 84px;;"></div>
@@ -70,7 +69,7 @@
             <a href="#" title="專業服務">專業服務</a><span class="hr"></span>
             {% endif %}
             <a href="project_flickr.html" title="工程實績">工程實績</a><span class="hr"></span>
-            <a href="product.html" title="產品型錄">產品型錄</a><span class="hr"></span>
+            <a href="product_list.html" title="產品型錄">產品型錄</a><span class="hr"></span>
             <a href="learn.html" title="最新消息">最新消息</a><span class="hr"></span>
             <a href="contact_step_1.html" title="綠色接觸">綠色接觸</a><span class="hr"></span>
             {% if user_login %}
@@ -117,12 +116,16 @@
                 </tr>
                 <tr>
                     <td height="45" valign="middle">
-                        <div class="index_img02_txt1" id="kws" data-yesterday-kwh="{{ yesterday_kwh }}" data-yesterday-total-kwh="{{ yesterday_total_kwh }}">Loading...</div>
+                        <div class="index_img02_txt1" id="kws" data-yesterday-kwh="{{ last_5_minute_kwh }}" data-yesterday-total-kwh="{{ last_5_minute_total_kwh }}">Loading...</div>
                         <div class="index_img02_txt2">節省度數(KWH)</div>
                     </td>
                 </tr>
             </table>
         </div>
+    </div>
+
+    <div id="float_right">
+        <a href="skype:{{ 'skype-24'|websetting }}"><img src="images/icon_skype.jpg" alt="skype 線上客服"/></a>
     </div>
 </body>
 </html>

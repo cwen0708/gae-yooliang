@@ -8,7 +8,7 @@
 from libs.yooframework import record, image, page
 from application.backend import backend, administrator, websetting, webimage, webpage
 import marquee, banner, home, productcategory, news, faq, product, contact, statuscode, aboutus
-import solution, service, rawdata, customer, caseinfo, equipment, monitor, contact2
+import solution, service, rawdata, customer, caseinfo, equipment, monitor, contact2, orderinfo
 import webapp2
 
 CUSTOMER_NAME = u"牧陽能控有限公司"
@@ -38,6 +38,9 @@ routes = [
     webapp2.Route('/product.html', home.product),
     webapp2.Route('/product_view.html', home.product_view),
     webapp2.Route('/project.html', home.project),
+    webapp2.Route('/contact_step_1.html', home.contact_step_1),
+    webapp2.Route('/contact_step_1.html', home.contact_step_1),
+    webapp2.Route('/contact_step_1.html', home.contact_step_1),
     webapp2.Route('/project_detail.html', home.project_detail),
     webapp2.Route('/contact_step_1.html', home.contact_step_1),
     webapp2.Route('/contact_step_2-1.html', home.contact_step_2_1),
@@ -71,11 +74,23 @@ routes = [
     webapp2.Route('/user_logout', home.user_logout),
 
     webapp2.Route('/watermark.png', home.watermark),
+    webapp2.Route('/step01.html', handler=home.step01),
+    webapp2.Route('/step02.html', handler=home.step02),
+    webapp2.Route('/step02.json', handler=home.step02_json),
+    webapp2.Route('/step03.html', handler=home.step03),
+    webapp2.Route('/step03.json', handler=home.step03_json),
+    webapp2.Route('/step04.html', handler=home.step04),
+    webapp2.Route('/add_shopping_cart.json', handler=home.add_shopping_cart_json),
+    webapp2.Route('/clean_shopping_cart.json', handler=home.add_shopping_cart_json),
 
 
     #==================================================================================================================#
     #後台頁面#
     #==================================================================================================================#
+    webapp2.Route('/admin/orderinfo/init.html', handler=orderinfo.Init),
+    webapp2.Route('/admin/orderinfo/list.html', handler=orderinfo.list),
+    webapp2.Route('/admin/orderinfo/edit.html', handler=orderinfo.edit),
+
     webapp2.Route('/admin/faqcategory/list.html', handler=faq.category_list),
     webapp2.Route('/admin/faqcategory/create.html', handler=faq.category_create),
     webapp2.Route('/admin/faqcategory/edit.html', handler=faq.category_edit),

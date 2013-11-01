@@ -323,10 +323,11 @@ a:hover{
 }
 /*主容器右邊區塊*/
 .rightpage {
-	width: 825px;
-	float: left;
-	padding-bottom: 35px;
-	padding-top: 7px;
+    width: 810px;
+    float: left;
+    padding-bottom: 35px;
+    padding-top: 7px;
+    margin-right: 10px;
 }
 
 
@@ -1743,4 +1744,13 @@ padding: 0px;
 font-size: 0px;
 background: url(../images/line_d.gif) repeat-x;
 clear: both;
+}
+#float_right{
+    opacity: 1;
+    top: 230px;
+    right: 5px;
+    width: 111px;
+    overflow: hidden;
+    position: fixed;
+    z-index: 299;
 }

@@ -3,7 +3,8 @@
 from google.appengine.ext import db
 
 from application.a0002.handler import HomeHandler
-
+from libs.yooframework.api import random_string, validate_email
+from libs.dateutil import parser
 from datetime import datetime
 from datetime import timedelta
 import time
@@ -29,19 +30,55 @@ class GreenShepherdHandler(HomeHandler):
         else:
             self.user_login = True
 
-        self.before_yesterday = self.yesterday + timedelta(hours=-24)
-        r1 = self.sql.query_one('SELECT sum(kwh) as total_kwh_1 FROM StatisticsData WHERE date = %s ORDER BY sort DESC LIMIT %s, %s', (self.yesterday.strftime("day-%Y-%m-%d"), 0, 1))
-        r2 = self.sql.query_one('SELECT sum(kwh) as total_kwh_2 FROM StatisticsData WHERE date = %s ORDER BY sort DESC LIMIT %s, %s', (self.before_yesterday.strftime("day-%Y-%m-%d"), 0, 1))
+        minute_t = self.today + timedelta(minutes=-5)
+        minute = (int(minute_t.strftime("%M")) // 5) * 5
+        last_minute_t = self.today + timedelta(minutes=-10)
+        last_minute = (int(last_minute_t.strftime("%M")) // 5) * 5
+
+        r1 = self.sql.query_one('SELECT sum(kwh) as total_kwh_1 FROM StatisticsData WHERE date = %s ORDER BY sort DESC LIMIT %s, %s', (minute_t.strftime("minute-%Y-%m-%d %H:") + str(minute), 0, 1))
+        r2 = self.sql.query_one('SELECT sum(kwh) as total_kwh_2 FROM StatisticsData WHERE date = %s ORDER BY sort DESC LIMIT %s, %s', (last_minute_t.strftime("minute-%Y-%m-%d %H:") + str(last_minute), 0, 1))
         _total_kwh_1 = r1["total_kwh_1"]
         _total_kwh_2 = r2["total_kwh_2"]
         #_total_kwh_1 = 14980.001
         #_total_kwh_2 = 4980.001
         if _total_kwh_1 is not None:
-            self.yesterday_kwh = _total_kwh_1 - _total_kwh_2
-            self.yesterday_total_kwh = _total_kwh_1
-            if self.yesterday_kwh < 0:
-                self.yesterday_kwh *= -1
+            self.last_5_minute_kwh = _total_kwh_1 - _total_kwh_2
+            self.last_5_minute_total_kwh = _total_kwh_1
+            if self.last_5_minute_kwh < 0:
+                self.last_5_minute_kwh *= -1
 
+        self.current_user = None
+        if "member_id" in self.session:
+            if self.session["member_id"] != "0":
+                self.current_user = self.sql.query_one("select * from Member Where id = %s", self.session["member_id"])
+        self.cart_count = "%04d" % 0
+        self.cart_title = u"尚未選購產品"
+        if "order_id" in self.session:
+            order = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', self.session["order_id"])
+            if order is not None:
+                self.cart_count = "%04d" % order["items_count"]
+                self.cart_title = u"購買 %d 種產品，共計 %d 個，金額為 %6.2f 元" % (order["items_count"], order["items_total"], order["total_amount"])
+
+
+    def gen_product_category_list(self):
+        category = self.params.get_integer("category", 0)
+        parent = self.params.get_integer("parent", 0)
+        self.in_parent_category = None
+        for item in self.product_category_list:
+            if item["id"] == parent:
+                self.in_parent_category = item["category_name"]
+            item["is_not_root"] = False
+            item["is_selected"] = (item["id"] == parent)
+            item["link"] = "product.html?parent=" + str(item["id"])
+            sub_list = self.sql.query_all('SELECT * FROM ProductCategory Where parent = %s and is_enable = 1 and is_delete = 0 ORDER BY sort DESC', item["id"])
+
+            for item_sub in sub_list:
+                if item_sub["id"] == category:
+                    self.in_category = item_sub["category_name"]
+                item_sub["is_not_root"] = True,
+                item_sub["is_selected"] = (item_sub["id"] == category)
+                item_sub["link"] = "product.html?parent=" + str(item["id"]) + "&category=" + str(item_sub["id"])
+            item["sub_list"] = sub_list
 
 class index(GreenShepherdHandler):
     def get(self, *args):
@@ -441,69 +478,35 @@ class monitor_info(GreenShepherdHandler):
 
 class product(GreenShepherdHandler):
     def get(self, *args):
+        self.gen_product_category_list()
         category = self.params.get_integer("category", 0)
         parent = self.params.get_integer("parent", 0)
-        self.menu_list = []
-
-        self.in_parent_category = None
-        for item in self.product_category_list:
-            if item["id"] == parent:
-                self.in_parent_category = item["category_name"]
-            item["is_not_root"] = False
-            item["is_selected"] = (item["id"] == parent)
-            item["link"] = "product.html?parent=" + str(item["id"])
-            sub_list = self.sql.query_all('SELECT * FROM ProductCategory Where parent = %s and is_enable = 1 and is_delete = 0 ORDER BY sort DESC', item["id"])
-
-            for item_sub in sub_list:
-                if item_sub["id"] == category:
-                    self.in_category = item_sub["category_name"]
-                item_sub["is_not_root"] = True,
-                item_sub["is_selected"] = (item_sub["id"] == category)
-                item_sub["link"] = "product.html?parent=" + str(item["id"]) + "&category=" + str(item_sub["id"])
-            item["sub_list"] = sub_list
-
         size = self.params.get_integer("size", 12)
         page = self.params.get_integer("page", 1)
-
         self.page_now = page
         if category is 0 and parent is 0:
-            self.page_all = self.sql.pager('SELECT count(1) FROM Product WHERE is_enable = 1 AND is_delete = 0', (), size)
-            self.product_list = self.sql.query_all('SELECT * FROM Product WHERE is_enable = 1 AND is_delete = 0 ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size))
+            self.list = self.sql.query_all('SELECT * FROM ProductCategory WHERE parent = 0 AND is_enable = 1 AND is_delete = 0 ORDER BY sort')
+            self.render("/product_parent.html")
         else:
-            if category is not 0:
-                self.page_all = self.sql.pager('SELECT count(1) FROM Product WHERE is_enable = 1 AND is_delete = 0 AND category = %s', category, size)
-                self.product_list = self.sql.query_all('SELECT * FROM Product WHERE is_enable = 1 AND is_delete = 0 AND category = %s  ORDER BY sort DESC LIMIT %s, %s', (category, (page - 1) * size, size))
+            if category is 0:
+                self.list = self.sql.query_all('SELECT * FROM ProductCategory WHERE parent = %s AND is_enable = 1 AND is_delete = 0 ORDER BY sort DESC', parent)
+                for item in self.list:
+                    sub_list = self.sql.query_all('SELECT * FROM Product WHERE category = %s AND is_enable = 1 AND is_delete = 0 ORDER BY  sort DESC LIMIT %s, %s', (item["id"], 0, 3))
+                    for sub_item in sub_list:
+                        sub_item["link"] = "/product_view.html?parent=" + str(sub_item["parent_category"]) + "&category=" + str(sub_item["category"]) + "&id=" + str(sub_item["id"])
+                    item["sub_list"] = sub_list
+                    item["link"] = "/product.html?parent=" + str(item["parent"]) + "&category=" + str(item["id"])
+                self.render("/product_category.html")
             else:
-                self.page_all = self.sql.pager('SELECT count(1) FROM Product WHERE is_enable = 1 AND is_delete = 0 AND parent_category = %s ', parent, size)
-                self.product_list = self.sql.query_all('SELECT * FROM Product WHERE is_enable = 1 AND is_delete = 0 AND parent_category = %s ORDER BY sort DESC LIMIT %s, %s', (parent, (page - 1) * size, size))
-
-        for item in self.product_list:
-            item["link"] = "/product_view.html?parent=" + str(item["parent_category"]) + "&category=" + str(item["category"]) + "&id=" + str(item["id"])
+                self.page_all = self.sql.pager('SELECT count(1) FROM Product WHERE is_enable = 1 AND is_delete = 0 AND category = %s ', category, size)
+                self.product_list = self.sql.query_all('SELECT * FROM Product WHERE is_enable = 1 AND is_delete = 0 AND category = %s ORDER BY sort DESC LIMIT %s, %s', (category, (page - 1) * size, size))
+                for item in self.product_list:
+                    item["link"] = "/product_view.html?parent=" + str(item["parent_category"]) + "&category=" + str(item["category"]) + "&id=" + str(item["id"])
 
 
 class product_view(GreenShepherdHandler):
     def get(self, *args):
-        category = self.params.get_integer("category", 0)
-        parent = self.params.get_integer("parent", 0)
-        self.menu_list = []
-
-        self.in_parent_category = None
-        for item in self.product_category_list:
-            if item["id"] == parent:
-                self.in_parent_category = item["category_name"]
-            item["is_not_root"] = False
-            item["is_selected"] = (item["id"] == parent)
-            item["link"] = "product.html?parent=" + str(item["id"])
-            sub_list = self.sql.query_all('SELECT * FROM ProductCategory Where parent = %s and is_enable = 1 and is_delete = 0 ORDER BY sort DESC', item["id"])
-
-            for item_sub in sub_list:
-                if item_sub["id"] == category:
-                    self.in_category = item_sub["category_name"]
-                item_sub["is_not_root"] = True,
-                item_sub["is_selected"] = (item_sub["id"] == category)
-                item_sub["link"] = "product.html?parent=" + str(item["id"]) + "&category=" + str(item_sub["id"])
-            item["sub_list"] = sub_list
-
+        self.gen_product_category_list()
         id = self.params.get_integer("id", 1)
         self.record = self.sql.query_by_id("Product", id)
         self.images = self.record["images"].split(",")
@@ -883,10 +886,14 @@ class data_insert(HomeHandler):
         days = int(self.today.strftime("%d"))
         last_month = self.today + timedelta(days=-days)
         last_year = int(self.today.strftime("%Y")) - 1
+        minute = (int(self.today.strftime("%M")) // 5) * 5
+        last_minute_t = self.today + timedelta(minutes=-5)
+        last_minute = (int(last_minute_t.strftime("%M")) // 5) * 5
 
-        self.insert_statistics_data(customer_id, case_id, kwh, self.today.strftime("year-%Y") ,"year-" + str(last_year))
+        self.insert_statistics_data(customer_id, case_id, kwh, self.today.strftime("year-%Y"), "year-" + str(last_year))
         self.insert_statistics_data(customer_id, case_id, kwh, self.today.strftime("month-%Y-%m"), last_month.strftime("month-%Y-%m"))
         self.insert_statistics_data(customer_id, case_id, kwh, self.today.strftime("day-%Y-%m-%d"), self.yesterday.strftime("day-%Y-%m-%d"))
+        self.insert_statistics_data(customer_id, case_id, kwh, self.today.strftime("minute-%Y-%m-%d %H:") + str(minute), last_minute_t.strftime("minute-%Y-%m-%d %H:") + str(last_minute))
         self.sql.cursor.execute('INSERT INTO RawData (customer_id, case_id, kwh, kw, date, create_date) VALUES (%s, %s, %s, %s, %s, %s)', (customer_id, case_id, kwh, kw, self.today.strftime("%Y-%m-%d"), self.today))
         self.sql.cursor.execute('UPDATE CaseInfo SET kw = %s, last_update = %s where id = %s', (kw, self.today, case_id))
         self.json({"info": u"Done"})
@@ -1026,3 +1033,344 @@ class check_update(HomeHandler):
         self.json({"info": u"Mail notification has been sent"})
 
 
+class step01(GreenShepherdHandler):
+    def get(self, *args):
+        self.gen_product_category_list()
+        self.page_title = u"購物清單"
+        if "order_id" in self.session:
+            id = self.session["order_id"]
+            if id != '':
+                self.record = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', id)
+                self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)
+
+
+class step02(GreenShepherdHandler):
+    def get(self, *args):
+        self.gen_product_category_list()
+        self.page_title = u"填寫付款資料"
+        self.freighttype_list = self.sql.query_all('SELECT * FROM Freighttype where  is_enable = 1 and is_delete = 0')
+        if "order_id" in self.session:
+            id = self.session["order_id"]
+            if id != '':
+                self.record = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', id)
+
+
+class step02_json(GreenShepherdHandler):
+    def post(self, *args):
+        if "order_id" not in self.session:
+            return self.json({"error": u"訂單已遺失，請重新選擇商品。"})
+
+        pay_type_id = self.params.get_integer("pay_type_id", 0)
+
+        purchaser_name = self.params.get_string("purchaser_name")
+        purchaser_email = self.params.get_string("purchaser_email")
+        purchaser_mobile = self.params.get_string("purchaser_mobile")
+        purchaser_telephone = self.params.get_string("purchaser_telephone")
+        purchaser_address_county = self.params.get_string("purchaser_address_county")
+        purchaser_address_area = self.params.get_string("purchaser_address_area")
+        purchaser_address_detail = self.params.get_string("purchaser_address_detail")
+
+        recipient_name = self.params.get_string("recipient_name")
+        recipient_email = self.params.get_string("recipient_email")
+        recipient_mobile = self.params.get_string("recipient_mobile")
+        recipient_telephone = self.params.get_string("recipient_telephone")
+        recipient_address_county = self.params.get_string("recipient_address_county")
+        recipient_address_area = self.params.get_string("recipient_address_area")
+        recipient_address_detail = self.params.get_string("recipient_address_detail")
+
+        json_data = {}
+        if pay_type_id is 0:
+            json_data["pay_type_id"] = u"請選擇付款方式"
+        if purchaser_name is u"":
+            json_data["purchaser_name"] = u"請填寫購買人姓名"
+        if purchaser_telephone is u"":
+            json_data["purchaser_telephone"] = u"請填寫聯絡電話"
+        if purchaser_mobile is u"":
+            json_data["purchaser_mobile"] = u"請填寫手機號碼"
+        if purchaser_address_county is u"" or purchaser_address_area is u"" or purchaser_address_detail is u"":
+            json_data["purchaser_address_detail"] = u"請填寫聯絡地址"
+
+        if recipient_name is u"":
+            json_data["recipient_name"] = u"請填寫收件人姓名"
+        if recipient_telephone is u"":
+            json_data["recipient_telephone"] = u"請填寫聯絡電話"
+        if recipient_mobile is u"":
+            json_data["recipient_mobile"] = u"請填寫手機號碼"
+        if recipient_address_county is u"" or recipient_address_area is u"" or recipient_address_detail is u"":
+            json_data["recipient_address_detail"] = u"請填寫聯絡地址"
+
+        if len(json_data) > 0:
+            return self.json(json_data)
+        if self.is_localhost:
+            purchaser_address_county = ""
+            purchaser_address_area = ""
+            recipient_address_county = ""
+            recipient_address_area = ""
+
+        freight_amount = None
+        temp = self.sql.query_one('SELECT count(1) as items_count, sum(item_quantity) as items_total, sum(item_sum) as total_amount FROM OrderItem where order_id = %s', self.session["order_id"])
+        list = self.sql.query_all("SELECT * FROM Freight WHERE category = %s and is_enable = 1 AND is_delete = 0 ORDER BY sort desc", pay_type_id)
+        for i in list:
+            if (i["start"]-0.00001) < temp["total_amount"] < (i["end"]+0.00001) and freight_amount is None:
+                freight_amount = i["amount"]
+
+        if freight_amount is None:
+            freight_amount = 0.0
+
+        self.sql.update("OrderInfo", {
+            "pay_type": self.params.get_string("pay_type"),
+            "pay_type_id": self.params.get_integer("pay_type_id"),
+            "remark": self.params.get_string("remark"),
+
+            "purchaser_name": self.params.get_string("purchaser_name"),
+            "purchaser_email": self.params.get_string("purchaser_email"),
+            "purchaser_mobile": self.params.get_string("purchaser_mobile"),
+            "purchaser_telephone": self.params.get_string("purchaser_telephone"),
+            "purchaser_address_county": purchaser_address_county,
+            "purchaser_address_area": purchaser_address_area,
+            "purchaser_address_zip": self.params.get_string("purchaser_address_zip"),
+            "purchaser_address_detail": self.params.get_string("purchaser_address_detail"),
+
+            "recipient_name": self.params.get_string("recipient_name"),
+            "recipient_email": self.params.get_string("recipient_email"),
+            "recipient_mobile": self.params.get_string("recipient_mobile"),
+            "recipient_telephone": self.params.get_string("recipient_telephone"),
+            "recipient_address_county": recipient_address_county,
+            "recipient_address_area": recipient_address_area,
+            "recipient_address_zip": self.params.get_string("recipient_address_zip"),
+            "recipient_address_detail": self.params.get_string("recipient_address_detail"),
+            "freight": freight_amount
+        }, {
+            "id": self.session["order_id"]
+        })
+        return self.json({"done": u"完成"})
+
+
+class step03(GreenShepherdHandler):
+    def get(self, *args):
+        self.gen_product_category_list()
+        self.page_title = u"確認資料"
+        if "order_id" in self.session:
+            id = self.session["order_id"]
+            if id != '':
+                self.record = self.sql.query_one("SELECT * FROM OrderInfo where id = %s", id)
+                self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)
+            self.total = int(self.record["total_amount"] + self.record["freight"])
+
+
+class step03_json(GreenShepherdHandler):
+    def get_new_order_no(self):
+        today = datetime.today() + timedelta(hours=+8)
+        like_string = "%%%s%%" % today.strftime("%Y/%m/%d")
+        no = self.sql.query_one("select count(1) as o_count from OrderInfo Where create_date like %s and order_status > 0", like_string)
+        return today.strftime("%Y%m%d") + ("-%04d" % (int(no["o_count"])+1))
+
+    def post(self, *args):
+        if "order_id" not in self.session:
+            return self.json({"error": u"訂單已遺失，請重新選擇商品。"})
+        order_id = self.session["order_id"]
+        if order_id == '':
+            return self.json({"error": u"訂單已遺失，請重新選擇商品。"})
+        last_order_no = self.get_new_order_no()
+        order_info = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', order_id)
+
+        if self.current_user is not None:
+            member_id = self.current_user["id"]
+        else:
+            d = datetime.today()
+            user_account = order_info["purchaser_telephone"]
+            check_member = self.sql.query_one('SELECT * FROM Member where user_account = %s', user_account)
+            if check_member is not None:
+                user_account = user_account + "-" + random_string()
+                self.session["auto_member_account_error"] = True
+
+            self.sql.insert('Member', {
+                "user_account": user_account,
+                "user_password": order_info["purchaser_mobile"],
+                "user_name": order_info["purchaser_name"],
+                "birthday": d.strftime("%Y-%m-%d"),
+                "telephone": order_info["purchaser_telephone"],
+                "mobile": order_info["purchaser_mobile"],
+                "address_county": order_info["purchaser_address_county"],
+                "address_area": order_info["purchaser_address_area"],
+                "address_detail": order_info["purchaser_address_detail"],
+                "address_zip": order_info["purchaser_address_zip"],
+                "email": order_info["purchaser_email"],
+                "remark": u'',
+                "is_enable": '1',
+                "is_custom_account": '0',
+            })
+            r = self.sql.query_one("SELECT LAST_INSERT_ID() as last_id")
+            self.session["auto_member"] = True
+            member_id = r["last_id"]
+            self.session["member_id"] = member_id
+
+        self.sql.update("OrderInfo", {
+            "order_no": last_order_no,
+            "title": last_order_no,
+            "order_status": 1,
+            "pay_status": 0,
+            "send_status": 0,
+            "member_id": member_id,
+        }, {
+            "id": self.session["order_id"]
+        })
+        self.session["last_order_no"] = last_order_no
+        self.session["order_id"] = ""
+        return self.json({"done": u"完成"})
+
+
+class step04(GreenShepherdHandler):
+    def get(self, *args):
+        self.gen_product_category_list()
+        self.page_title = u"訂單完成"
+
+        if "auto_member_account_error" in self.session:
+            self.auto_member_account_error = self.session["auto_member_account_error"]
+        if "auto_member" in self.session:
+            self.auto_member = self.session["auto_member"]
+        self.last_order_no = self.session["last_order_no"]
+
+        url = "http://www.greenshepherd.com.tw/admin#/admin/orderinfo/list.html?order_status=1"
+        mail_body = u"""
+
+    ＊有一筆新的訂單！＊
+
+    訂購人為 %s
+    訂購時間為 %s
+
+    更多詳細內容請至 %s 查看。
+    """ % (self.current_user["user_name"],(datetime.today() + timedelta(hours=+8)),url)
+        mail.send_mail(sender="gs@greenshepherd.com", to="gs@greenshepherd.com", subject=u"訂單通知", body=mail_body)
+
+
+
+class clean_shopping_cart_json(GreenShepherdHandler):
+    def post(self, *args):
+        pass
+
+class add_shopping_cart_json(GreenShepherdHandler):
+    def post(self, *args):
+        today = datetime.today() + timedelta(hours=+8)
+        product_id = self.params.get_string("product_id")
+        quantity = self.params.get_integer("quantity", 0)
+
+        order = None
+        if product_id != '':
+            product = self.sql.query_one('SELECT * FROM Product where id = %s', product_id)
+        else:
+            self.json_message(u"產品不存在")
+            return
+        if "order_id" in self.session:
+            order = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', self.session["order_id"])
+            if order is not None:
+                create_date = parser.parse(order["create_date"])
+                dr = (today - create_date).seconds
+                #if dr > 86400:
+                #    # 訂單保留時間 86400
+                #    self.sql.update("OrderInfo", {
+                #        "title": u"this order is out of time",
+                #        "order_status": -1,
+                #    }, {
+                #        "id": order["id"]
+                #    })
+                #    order = None
+
+        if order is None:
+            self.sql.insert("OrderInfo", {
+                "order_no": random_string(),
+                "title": self.params.get_string(""),
+                "items_total": 0,
+                "items_count": 0,
+                "freight": 0,
+                "discount": 0,
+                "total_amount": 0,
+                "member_id": 0,
+                "purchaser_name": self.params.get_string(""),
+                "purchaser_email": self.params.get_string(""),
+                "purchaser_mobile": self.params.get_string(""),
+                "purchaser_telephone": self.params.get_string(""),
+                "purchaser_address_county": self.params.get_string(""),
+                "purchaser_address_area": self.params.get_string(""),
+                "purchaser_address_zip": self.params.get_string(""),
+                "purchaser_address_detail": self.params.get_string(""),
+
+                "recipient_name": self.params.get_string(""),
+                "recipient_email": self.params.get_string(""),
+                "recipient_mobile": self.params.get_string(""),
+                "recipient_telephone": self.params.get_string(""),
+                "recipient_address_county": self.params.get_string(""),
+                "recipient_address_area": self.params.get_string(""),
+                "recipient_address_zip": self.params.get_string(""),
+                "recipient_address_detail": self.params.get_string(""),
+
+                "pay_type": self.params.get_string(""),
+                "pay_type_id": 0,
+                "order_status": 0,
+                "pay_status": -1,
+                "send_status": -1,
+                "remark": self.params.get_string(""),
+                "create_date": today.strftime("%Y/%m/%d %H:%M:%S")
+
+            })
+            r = self.sql.query_one("SELECT LAST_INSERT_ID() as last_id")
+            self.session["order_id"] = r["last_id"]
+            order = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', self.session["order_id"])
+        product_id = product["id"]
+        order_id = order["id"]
+        member_id = 0
+        images = product["images"].split(",")
+        if len(images) > 0:
+            product_image = images[0]
+        else:
+            product_image = "image/no_pic.png"
+
+        if quantity < 0:
+            self.json_message(u"remove")
+            self.sql.delete("OrderItem", {
+                "order_id": order_id,
+                "product_id": product_id
+            })
+        else:
+            order_item = self.sql.query_one('SELECT * FROM OrderItem where order_id = %s and product_id = %s', (order_id, product_id))
+            if order_item is None:
+                self.sql.insert("OrderItem", {
+                    "product_id": product_id,
+                    "product_no": product["product_no"],
+                    "product_name": product["product_name"],
+                    "product_price": product["selling_price"],
+                    "product_image": product_image,
+                    "product_url": "/goods_view.html?parent=1&category=5&id=1",
+                    "item_quantity": quantity,
+                    "item_status": 0,
+                    "item_sum": product["selling_price"] * quantity,
+                    "order_id": order_id,
+                })
+            else:
+                self.sql.update("OrderItem", {
+                    "item_quantity": quantity,
+                    "item_sum": product["selling_price"] * quantity,
+                }, {
+                    "id": order_item["id"]
+                })
+        temp = self.sql.query_one('SELECT count(1) as items_count, sum(item_quantity) as items_total, sum(item_sum) as total_amount FROM OrderItem where order_id = %s', order_id)
+
+        if self.current_user is not None:
+            member_id = self.current_user["id"]
+            self.sql.update("OrderInfo", {
+                "member_id": member_id,
+                "items_count": temp["items_count"],
+                "items_total": temp["items_total"],
+                "total_amount": temp["total_amount"],
+            }, {
+                "id": order_id
+            })
+        else:
+            self.sql.update("OrderInfo", {
+                "items_count": temp["items_count"],
+                "items_total": temp["items_total"],
+                "total_amount": temp["total_amount"],
+            }, {
+                "id": order_id
+            })
+        self.json({"done": "完成"})
