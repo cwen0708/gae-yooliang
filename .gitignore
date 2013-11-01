@@ -1,4 +1,24 @@
 #################
+## Yooliang
+#################
+app.yaml
+.idea/
+application/__init__.py
+mysql-connector-java-5.1.26-bin.jar
+mysql-connector-license.txt
+application/
+!application/backend
+template/
+!template/backend
+!template/system
+
+#################
+## Yooliang Project
+#################
+!application/a0001
+!template/0001
+
+#################
 ## Eclipse
 #################
 .idea/
@@ -16,7 +36,6 @@ local.properties
 .classpath
 .settings/
 .loadpath
-
 # External tool builders
 .externalToolBuilders/
 
