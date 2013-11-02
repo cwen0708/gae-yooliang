@@ -323,11 +323,10 @@ a:hover{
 }
 /*主容器右邊區塊*/
 .rightpage {
-    width: 810px;
-    float: left;
+    width: 800px;
+    float: right;
     padding-bottom: 35px;
     padding-top: 7px;
-    margin-right: 10px;
 }
 
 
@@ -1736,6 +1735,12 @@ a:hover .project_box_line{
     cursor: default;
     background: url(../images/pgoods_prev_over.gif) no-repeat;
 }
+.orderTitle {
+font-size: 15px;
+color: #333;
+padding: 10px 0;
+background: url(../images/line_d02.gif) repeat;
+}
 .lineD {
 height: 4px;
 line-height: 0px;
@@ -1753,4 +1758,63 @@ clear: both;
     overflow: hidden;
     position: fixed;
     z-index: 299;
+}
+.allPric {
+margin: 5px 0;
+background: url(../images/line_d03.gif) repeat;
+}
+.allPric td {
+padding: 25px 15px;
+font-size: 15px;
+color: #fff;
+}
+.bgColor02 {
+background-color: #3a3a3a;
+}
+.allPric div span {
+color: #333;
+font-weight: bold;
+font-size: 13px;
+}
+.gbForm th, .gbForm02 th {
+background-color: #e0e0e0;
+font-size: 15px;
+font-weight: normal;
+color: #217427;
+}
+.gbForm th, .gbForm td {
+padding: 5px 6px;
+border-bottom: 1px solid #fff;
+}
+.w200 {
+width: 200px;
+}
+.input02 {
+border: 1px solid #d5d5d5;
+background-color: #ececec;
+padding: 5px;
+height: 13px;
+font-size: 12px;
+color: #555;
+}
+.gbForm, .gbForm02 {
+margin: 20px 0;
+}
+.w575 {
+width: 575px;
+}
+.input03 {
+border: 1px solid #d5d5d5;
+padding: 5px;
+font-size: 12px;
+color: #555;
+}
+.orderTitle {
+font-size: 15px;
+color: #333;
+}
+.allPric div {
+color: #666;
+font-size: 13px;
+line-height: 30px;
 }

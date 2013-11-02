@@ -8,7 +8,7 @@
 from libs.yooframework import record, image, page
 from application.backend import backend, administrator, websetting, webimage, webpage
 import marquee, banner, home, productcategory, news, faq, product, contact, statuscode, aboutus
-import solution, service, rawdata, customer, caseinfo, equipment, monitor, contact2, orderinfo
+import solution, service, rawdata, customer, caseinfo, equipment, monitor, contact2, orderinfo, freight, member
 import webapp2
 
 CUSTOMER_NAME = u"牧陽能控有限公司"
@@ -83,6 +83,15 @@ routes = [
     webapp2.Route('/add_shopping_cart.json', handler=home.add_shopping_cart_json),
     webapp2.Route('/clean_shopping_cart.json', handler=home.clean_shopping_cart_json),
 
+    webapp2.Route('/admin/freight/init.html', handler=freight.Init),
+    webapp2.Route('/admin/freight/full_list.html', handler=freight.full_list),
+    webapp2.Route('/admin/freighttype/list.html', handler=freight.type_list),
+    webapp2.Route('/admin/freighttype/create.html', handler=freight.type_create),
+    webapp2.Route('/admin/freighttype/edit.html', handler=freight.type_edit),
+    webapp2.Route('/admin/freight/list.html', handler=freight.list),
+    webapp2.Route('/admin/freight/create.html', handler=freight.create),
+    webapp2.Route('/admin/freight/edit.html', handler=freight.edit),
+
 
     #==================================================================================================================#
     #後台頁面#
@@ -154,6 +163,11 @@ routes = [
     webapp2.Route('/admin/equipment/list.html', handler=equipment.list),
     webapp2.Route('/admin/equipment/create.html', handler=equipment.create),
     webapp2.Route('/admin/equipment/edit.html', handler=equipment.edit),
+
+    webapp2.Route('/admin/member/init.html', handler=member.init),
+    webapp2.Route('/admin/member/list.html', handler=member.list),
+    webapp2.Route('/admin/member/create.html', handler=member.create),
+    webapp2.Route('/admin/member/edit.html', handler=member.edit),
 
     webapp2.Route('/admin/marquee/list.html', handler=marquee.list),
     webapp2.Route('/admin/marquee/create.html', handler=marquee.create),

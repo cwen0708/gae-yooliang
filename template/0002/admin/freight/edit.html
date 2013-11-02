@@ -1,0 +1,60 @@
+<script>
+    gs.menu.load('/admin/sell.html','/admin/freight/list.html');
+</script>
+<h3 class="page-title">freight_edit_record</h3>
+
+<form class="p18">
+    <div class="list-top-bar row-fluid">
+        <div class="span10"><br /></div>
+        <div class="span2"><button type="submit" class="btn btn-danger span12" data-lang="field_submit"></button></div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="inputNewsType" data-lang="類型"></label>
+                <div class="controls">
+                    <select id="inputNewsType" class="span12" name="category">
+                        {% for item in results %}
+                            {% if item.is_select %}
+                            <option value="{{ item.id }}" selected="selected">{{ item.title }}</option>
+                            {%else%}
+                            <option value="{{ item.id }}">{{ item.title }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="field_freight_start" data-lang="field_freight_start"></label>
+                <div class="controls">
+                    <input type="text" id="field_freight_start" placeholder="" value="{{ record.start }}" name="start" class="span12" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="field_freight_end" data-lang="field_freight_end"></label>
+                <div class="controls">
+                    <input type="text" id="field_freight_end" placeholder="" value="{{ record.end }}" name="end" class="span12" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="input-append editor_image_upload">
+            <label class="control-label" for="field_freight_amount" data-lang="field_freight_amount"></label>
+            <input type="text" id="field_freight_amount" placeholder="" value="{{ record.amount }}" name="amount" class="span12" />
+        </div>
+    </div>
+</form>
+

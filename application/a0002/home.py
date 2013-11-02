@@ -3,6 +3,7 @@
 from google.appengine.ext import db
 
 from application.a0002.handler import HomeHandler
+from google.appengine.api import mail
 from libs.yooframework.api import random_string, validate_email
 from libs.dateutil import parser
 from datetime import datetime
@@ -1057,8 +1058,16 @@ class step01(GreenShepherdHandler):
                 self.record = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', id)
                 self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)
                 for item in self.order_item_list:
-                    s = item["product_spec"].split("||")
-                    item["spec"] = s[0]
+                    if item["product_spec"] is not None:
+                        s = item["product_spec"].split("||")
+                        item["spec"] = s[0]
+                    else:
+                        item["spec"] = u""
+
+                if self.record is not None and len(self.order_item_list) > 0:
+                    can_show = True
+                else:
+                    can_show = False
 
 class step02(GreenShepherdHandler):
     def get(self, *args):
@@ -1247,18 +1256,26 @@ class step04(GreenShepherdHandler):
             self.auto_member = self.session["auto_member"]
         self.last_order_no = self.session["last_order_no"]
 
-        url = "http://www.greenshepherd.com.tw/admin#/admin/orderinfo/list.html?order_status=1"
-        mail_body = u"""
 
+        from google.appengine.api import mail
+        self.sql.cursor.execute('SELECT value FROM WebSetting where setting_no = %s', "website_mail_sender")
+        r = self.sql.cursor.fetchone()
+        self.sql.cursor.execute('SELECT value FROM WebSetting where setting_no like "%report_email_%"')
+        for item in self.sql.cursor.fetchall():
+            if item[0] is not "" and item is not None:
+                try:
+                    url = "http://www.greenshepherd.com.tw/admin#/admin/orderinfo/list.html?order_status=1"
+                    mail_body = u"""
     ＊有一筆新的訂單！＊
 
     訂購人為 %s
     訂購時間為 %s
 
     更多詳細內容請至 %s 查看。
-    """ % (self.current_user["user_name"],(datetime.today() + timedelta(hours=+8)),url)
-        mail.send_mail(sender="gs@greenshepherd.com", to="gs@greenshepherd.com", subject=u"訂單通知", body=mail_body)
-
+                """ % (self.current_user["user_name"],(datetime.today() + timedelta(hours=+8)),url)
+                    mail.send_mail(sender="gs@greenshepherd.com", to="gs@greenshepherd.com", subject=u"訂單通知", body=mail_body)
+                except:
+                    pass
 
 class clean_shopping_cart_json(GreenShepherdHandler):
     def post(self, *args):
@@ -1396,11 +1413,11 @@ class add_shopping_cart_json(GreenShepherdHandler):
             self.sql.delete("OrderItem", {
                 "order_id": order_id,
                 "product_id": product_id,
-                "product_spec": spec,
+                "product_spec": spec_can_used,
             })
             return
         else:
-            order_item = self.sql.query_one('SELECT * FROM OrderItem where order_id = %s and product_id = %s and product_spec = %s', (order_id, product_id, spec))
+            order_item = self.sql.query_one('SELECT * FROM OrderItem where order_id = %s and product_id = %s and product_spec = %s', (order_id, product_id, spec_can_used))
             if order_item is None:
                 self.sql.insert("OrderItem", {
                     "product_id": product_id,

@@ -5,6 +5,8 @@ from application.backend.handler import AdministratorHandler
 
 class Init(AdministratorHandler):
     def get(self, *args):
+        self.sql.query_one("alter  table  OrderItem add product_spec text;")
+
         self.sql.query_one("""
             create table OrderInfo(
               order_no       varchar(100),
@@ -70,7 +72,6 @@ class Init(AdministratorHandler):
             ) engine=myisam default charset=utf8;
             """)
 
-        self.sql.query_one("alter  table  CaseInfo add info text;")
 
 class list(AdministratorHandler):
     def get(self, *args):

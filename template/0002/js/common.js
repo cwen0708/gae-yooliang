@@ -355,4 +355,44 @@ $(function () {
     }).mouseout(function () {
         $(this).attr("src", $(this).attr("src").replace("_over", "_out"));
     });
+    //填寫訂單訊息
+    $("#go_step03").click(function() {
+        $(".error").hide();
+        var $form = $("form#step02");
+        json($form.attr("action"), $form.serialize(), function(data) {
+            for (var key in data) {
+                $("#info_" + key).html("<br/>&nbsp;*&nbsp;" + data[key]).slideDown();
+            }
+            if (data.done != undefined) {
+                window.location.href = $form.data("step03");;
+            }
+            if (data.error != undefined) {
+                alert(data.error);
+            }
+
+            setTimeout('$("#info_done").slideUp();', 5000);
+        }, function(data) {
+            for (var key in data) {
+                $("#info_" + key).html("&nbsp;*&nbsp;" + data[key]).slideDown();
+            }
+            if (data.done != undefined) {
+                $("#d_form").slideUp();
+            }
+        });
+    });
+
+    //填寫訂單訊息
+    $("#go_step04").click(function() {
+        $(".error").hide();
+        var $form = $("form#step03");
+        json($form.attr("action"), $form.serialize(), function(data) {
+            if (data.done != undefined) {
+                window.location.href = $form.data("step04");;
+            }
+        }, function(data) {
+            if (data.done != undefined) {
+                window.location.href = $form.data("step04");;
+            }
+        });
+    });
 });

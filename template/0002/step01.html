@@ -42,20 +42,19 @@
             </tr>
         </tbody></table>
 
-    <div class="lineD"></div>
     <table cellpadding="0" cellspacing="0" border="0" width="800" class="orderTitle">
         <tr>
             <th width="375">　商品資訊</th>
             <th width="154">數量</th>
             <th width="106">價格</th>
             <th width="104">小計</th>
-            <th width="28">刪除</th>
+            <th width="50">刪除</th>
         </tr>
     </table>
     <div class="lineD"></div>
     <table cellpadding="0" cellspacing="0" border="0" width="800" class="orderList">
         {% set row_class = cycler('', 'bgColor') %}
-        {% if record %}
+        {% if can_show %}
             {% for item in order_item_list %}
             <tr class="{{ row_class.next() }}">
                 <td width="375">
@@ -74,7 +73,7 @@
                 <td width="154">{{ item.item_quantity }}</td>
                 <td width="106">{{ item.product_price|thousands_separator }} 元</td>
                 <td width="104">{{ item.item_sum|thousands_separator }} 元</td>
-                <td width="28" align="center"><a href="#" class="remove_item" data-url="{{ 'add_shopping_cart.json'|url }}" data-info="product_id={{ item.product_id }}&quantity=-1&spec={{ item.product_spec }}" title=""><img src="images/icon12.gif" alt=""/></a></td>
+                <td width="50" align="center"><a href="#" class="remove_item" data-url="{{ 'add_shopping_cart.json'|url }}" data-info="product_id={{ item.product_id }}&quantity=-1&spec={{ item.product_spec }}" title=""><img src="images/icon12.gif" alt=""/></a></td>
             </tr>
             {% endfor %}
         {% else %}
@@ -90,12 +89,12 @@
                 <td width="154">--</td>
                 <td width="106">--</td>
                 <td width="104">--</td>
-                <td width="28" align="center">--</td>
+                <td width="50" align="center">--</td>
             </tr>
         {% endif %}
     </table>
 
-    {% if record %}
+    {% if can_show %}
     <div class="lineD"></div>
     <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="800">
         <tr>
