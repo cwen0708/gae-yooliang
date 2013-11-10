@@ -106,6 +106,8 @@ class edit(AdministratorHandler):
                             item["in_list"] = True
                             index = self.results.index(parent_item) + 1
                             self.results.insert(index, item)
+        for item in self.results:
+            item["is_select"] = (self.record["parent"] == item["id"])
 
     def post(self, *args):
         member_discount_rate = self.params.get_float("member_discount_rate")

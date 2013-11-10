@@ -14,16 +14,39 @@
         <div class="span12">
             <div class="control-group">
                 <label class="control-label" for="parent" data-lang="此分類隸屬於．．．"></label>
-                <select class="span12" name="parent" id="parent"><option value="0">根目錄</option>
+                <select class="span12" name="parent" id="parent">
                     {% for item in results %}
+                    {% if item.level == 0 %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">{{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">{{ item.category_name }}</option>
+                        {% endif %}
+                    {% endif %}
+                    {% if item.level == 1 %}
                         {% if item.is_select %}
                         <option value="{{ item.id }}" selected="selected">　　{{ item.category_name }}</option>
                         {%else%}
                         <option value="{{ item.id }}">　　{{ item.category_name }}</option>
                         {% endif %}
+                    {% endif %}
+                    {% if item.level == 2 %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">　　　　{{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">　　　　{{ item.category_name }}</option>
+                        {% endif %}
+                    {% endif %}
+                    {% if item.level == 3 %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">　　　　　　{{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">　　　　　　{{ item.category_name }}</option>
+                        {% endif %}
+                    {% endif %}
                     {% endfor %}
                 </select>
-            </div>
+                </div>
         </div>
     </div>
 
