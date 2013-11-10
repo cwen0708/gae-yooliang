@@ -47,6 +47,12 @@ class GreenShepherdHandler(HomeHandler):
             self.last_5_minute_total_kwh = _total_kwh_1
             if self.last_5_minute_kwh < 0:
                 self.last_5_minute_kwh *= -1
+        else:
+            the_word = u'%%%s%%' % "year-"
+            r0 = self.sql.query_one('SELECT sum(kwh) as total_kwh_0 FROM StatisticsData WHERE date like %s ORDER BY sort DESC LIMIT %s, %s', (the_word, 0, 1))
+            _total_kwh_0 = r0["total_kwh_0"]
+            self.last_5_minute_kwh = 0.0
+            self.last_5_minute_total_kwh = _total_kwh_0
 
         self.current_user = None
         if "member_id" in self.session:
