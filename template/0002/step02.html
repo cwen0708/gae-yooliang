@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_pro">購物車 > 購物清單</h1>
+</div>
+
+<script src="js/jquery.twzipcode-1.6.0.min.js"></script>
+<form id="step02" action="{{ 'step02.json'|url }}" data-step03="{{ 'step03.html'|url }}">
+<div class="container">
+    <div class="leftpage">
+        <div class="leftmenu">
+            <div class="arrowsidemenu">
+                {%for item in product_category_list %}
+                <div class="menuheaders"><a href="{{ item.link }}" title="{{ item.category_name }}">{{ item.category_name }}</a></div>
+                <ul class="menucontents">
+                    {%for sub_item in item.sub_list %}
+                    <li><a href="{{ sub_item.link }}">{{ sub_item.category_name }}</a></li>
+                    {%endfor%}
+                </ul>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+
+    <div class="rightpage">
+        <table style="width:100%; margin-bottom: 10px;">
+            <tbody><tr>
+                <td style="width:25%; text-align: center;height: 60px;" class="step_done">
+                    <span class="step_title">Step 1 </span><br>
+                    <span class="step_info">目前購物清單</span>
+                </td>
+                <td style="width:25%; text-align: center;" class="step_current">
+                    <span class="step_title">Step 2 </span><br>
+                    <span class="step_info">填寫聯絡資料</span>
+                </td>
+                <td style="width:25%; text-align: center;">
+                    <span class="step_title">Step 3 </span><br>
+                    <span class="step_info">確認資料</span>
+                </td>
+                <td style="width:25%; text-align: center;">
+                    <span class="step_title">Step 4 </span><br>
+                    <span class="step_info">訂單完成</span>
+                </td>
+            </tr>
+        </tbody></table>
+
+        <table cellpadding="0" cellspacing="0" border="0" width="737">
+            <tr>
+                <td width="600"><img src="images/steptitle01.gif" alt=""/></td>
+                <td width="137" align="right">
+                    {% if current_user %}
+                    <button type="button" id="use_member_data">帶入會員資料</button>
+                    <div id="member_data" style="display: none;">
+                        <span id="member_name">{{ current_user.user_name }}</span>
+                        <span id="member_email">{{ current_user.email }}</span>
+                        <span id="member_telephone">{{ current_user.telephone }}</span>
+                        <span id="member_mobile">{{ current_user.mobile }}</span>
+                        <span id="member_address_detail">{{ current_user.address_detail }}</span>
+                        <span id="member_zipcode">{{ current_user.address_zip }}</span>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm">
+            <tr>
+                <th width="77">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</th>
+                <td>
+                    <input type="text" name="purchaser_name" value="{{ record.purchaser_name }}" class="input02 w200"/>
+                    <span id="info_purchaser_name" class="error"></span>
+                </td>
+                <th width="77">電子信箱</th>
+                <td><input type="text" name="purchaser_email" value="{{ record.purchaser_email }}" class="input02 w200"/>
+                    <span id="info_purchaser_email" class="error"></span></td>
+            </tr>
+            <tr>
+                <th>電&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;話</th>
+                <td><input type="text" name="purchaser_telephone" value="{{ record.purchaser_telephone }}" class="input02 w200"/>
+                    <span id="info_purchaser_telephone" class="error"></span></td>
+                <th>手機號碼</th>
+                <td><input type="text" name="purchaser_mobile" value="{{ record.purchaser_mobile }}" class="input02 w200"/>
+                    <span id="info_purchaser_mobile" class="error"></span></td>
+            </tr>
+            <tr>
+                <th>聯絡地址</th>
+                <td colspan="3" id="address_1">
+                    <div id="twzipcode">
+                        <div data-role="zipcode" data-style="zipcode" style="float: left; display: none;"></div>
+                        <div data-role="county" data-style="county" style="float: left;"></div>
+                        <div data-role="district" data-style="district" style="float: left;"></div>
+                    </div>&nbsp;&nbsp;
+                    <input type="text" name="purchaser_address_detail" value="" class="input02 w375" />
+                    <span id="info_purchaser_address_detail" class="error"></span>
+                </td>
+            </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" border="0" width="737">
+            <tr>
+                <td width="600"><img src="images/steptitle02.gif" alt=""/></td>
+                <td width="137" align="right">
+                    <button type="button" id="use_purchaser_data">同購買人資料</button>
+                </td>
+            </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm">
+            <tr>
+                <th width="77">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</th>
+                <td><input type="text" name="recipient_name" value="{{ record.recipient_name }}" class="input02 w200"/>
+                    <span id="info_recipient_name" class="error"></span>
+                </td>
+                <th width="77">電子信箱</th>
+                <td><input type="text" name="recipient_email" value="{{ record.recipient_email }}" class="input02 w200"/>
+                    <span id="info_recipient_email" class="error"></span></td>
+            </tr>
+            <tr>
+                <th>電&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;話</th>
+                <td><input type="text" name="recipient_telephone" value="{{ record.recipient_telephone }}" class="input02 w200"/>
+                    <span id="info_recipient_telephone" class="error"></span></td>
+                <th>手機號碼</th>
+                <td><input type="text" name="recipient_mobile" value="{{ record.recipient_mobile }}" class="input02 w200"/>
+                    <span id="info_recipient_mobile" class="error"></span></td>
+            </tr>
+            <tr>
+                <th>聯絡地址</th>
+                <td colspan="3" id="address_2">
+                    <div id="twzipcode2">
+                        <div data-role="zipcode" data-style="zipcode" style="float: left; display: none;"></div>
+                        <div data-role="county" data-style="county" style="float: left;"></div>
+                        <div data-role="district" data-style="district" style="float: left;"></div>
+                    </div>&nbsp;&nbsp;
+                    <input type="text" name="recipient_address_detail" value="" class="input02 w375" />
+
+                </td>
+            </tr>
+        </table>
+        <div><img src="images/steptitle05.gif" alt=""/></div>
+        <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm">
+            <tr>
+                <th width="77">付款方式</th>
+                <td>
+                    <select name="pay_type_id" id="pay_type_id">{% for item in freighttype_list %}
+                        <option value="{{ item.id }}">{{ item.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <span id="info_pay_type_id" class="error"></span>
+                    <input type="hidden" name="pay_type" id="pay_type" />
+                </td>
+            </tr>
+            <tr>
+                <th>備註</th>
+                <td><textarea name="remark" class="input03 w575" rows="8">{{ record.remark }}</textarea></td>
+            </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="737">
+            <tr>
+                <td width="546">
+                    {% if current_user %}
+                    <div><span>小叮嚀</span>│您也可以從右上方的 "訂單查詢" 進入會員中心裡查看所有的訂單資料。</div>
+                    {% else %}
+                    <div><span>快速結帳</span>│您只要在購物的時候填寫訂單資料，系統將自動為您升級成為會員。</div>
+                    {% endif %}
+                    <div class="btn" align="center">
+                        <a href="{{ 'step01.html'|url }}" title=""><img src="images/gostep_out.gif" alt="" class="img_change"/></a>
+                        <a href="{{ 'goods_list.html'|url }}" title=""><img src="images/goshop_out.gif" alt="" class="img_change"/></a>
+                    </div>
+                </td>
+                <td width="191" align="right" class="bgColor02">總金額 {{ record.total_amount }} 元<br/>
+                    <a id="go_step03" title="確認結帳訊息" style="cursor: pointer;">確認結帳訊息 ></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</form>
+<script type="text/javascript">
+    function set_address_1(zipcode, detail){
+        $('#address_1').html('<div id="twzipcode"><div data-role="zipcode" data-style="zipcode" style="float: left; display: none;"></div><div data-role="county" data-style="county" style="float: left;"></div><div data-role="district" data-style="district" style="float: left;"></div></div>&nbsp;&nbsp;<input type="text" name="purchaser_address_detail" value="" class="input02 w375" /><span id="info_purchaser_address_detail" class="error"></span>');
+        if (zipcode != '' && zipcode != 'None'){
+            zip = parseInt(zipcode);
+            $('#twzipcode').twzipcode({
+                zipcodeSel: zip,
+                countyName: 'purchaser_address_county',
+                districtName: 'purchaser_address_area',
+                zipcodeName: 'purchaser_address_zip'
+            });
+        }else{
+            $('#twzipcode').twzipcode({
+                countyName: 'purchaser_address_county',
+                districtName: 'purchaser_address_area',
+                zipcodeName: 'purchaser_address_zip'
+            });
+        }
+        $("input[name='purchaser_address_detail']").val(detail);
+    }
+    function set_address_2(zipcode, detail){
+        $('#address_2').html('<div id="twzipcode2"><div data-role="zipcode" data-style="zipcode" style="float: left; display: none;"></div><div data-role="county" data-style="county" style="float: left;"></div><div data-role="district" data-style="district" style="float: left;"></div></div>&nbsp;&nbsp;<input type="text" name="recipient_address_detail" value="" class="input02 w375" /><span id="info_recipient_address_detail" class="error"></span>');
+        if (zipcode != '' && zipcode != 'None'){
+            zip = parseInt(zipcode);
+            $('#twzipcode2').twzipcode({
+                zipcodeSel: zip,
+                countyName: 'recipient_address_county',
+                districtName: 'recipient_address_area',
+                zipcodeName: 'recipient_address_zip'
+            });
+        }else{
+            $('#twzipcode2').twzipcode({
+                countyName: 'recipient_address_county',
+                districtName: 'recipient_address_area',
+                zipcodeName: 'recipient_address_zip'
+            });
+        }
+        $("input[name='recipient_address_detail']").val(detail);
+    }
+    
+    $(function () {
+        $("#pay_type_id").change(function(){
+            $("#pay_type").val($("#pay_type_id option:selected").text());
+        });
+        $('#pay_type_id').val("{{ record.pay_type_id }}");
+        $('#pay_type_id').change();
+        var zipcode1 = '{{ record.purchaser_address_zip }}';
+        var zipcode2 = '{{ record.recipient_address_zip }}';
+        var address_detail_1 = '{{ record.purchaser_address_detail }}';
+        var address_detail_2 = '{{ record.recipient_address_detail }}';
+        set_address_1(zipcode1, address_detail_1);
+        set_address_2(zipcode2, address_detail_2);
+        $("#use_member_data").click(function () {
+            var zipcode = $("#member_zipcode").text();
+            set_address_1(zipcode, $("#member_address_detail").text());
+            $("input[name='purchaser_name']").val($("#member_name").text());
+            $("input[name='purchaser_email']").val($("#member_email").text());
+            $("input[name='purchaser_telephone']").val($("#member_telephone").text());
+            $("input[name='purchaser_mobile']").val($("#member_mobile").text());
+            $("input[name='purchaser_address_detail']").val($("#member_address_detail").text());
+        });
+        $("#use_purchaser_data").click(function () {
+            var zipcode = $("input[name='purchaser_address_zip']").val();
+            set_address_2(zipcode, $("input[name='purchaser_address_detail']").val());
+            $("input[name='recipient_name']").val($("input[name='purchaser_name']").val());
+            $("input[name='recipient_email']").val($("input[name='purchaser_email']").val());
+            $("input[name='recipient_telephone']").val($("input[name='purchaser_telephone']").val());
+            $("input[name='recipient_mobile']").val($("input[name='purchaser_mobile']").val());
+        });
+    });
+</script>
+{% endblock %}

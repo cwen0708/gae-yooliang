@@ -1,0 +1,19 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_pro">產品型錄 {%if in_parent_category %} > {{in_parent_category }}{%endif%}{%if in_category %} > {{in_category }}{%endif%}</h1>
+</div>
+
+<div class="container">
+    <div class="newslist">
+        <ul>
+            {%for item in list %}
+                <li><a href="product.html?parent={{ item.id }}"><span></span>{{ item.category_name }}</a></li>
+            {%endfor%}
+         </ul>
+     </div>
+    <div class="clean"></div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_pro">購物車 > 購物清單</h1>
+</div>
+
+<div class="container">
+    <div class="leftpage">
+        <div class="leftmenu">
+            <div class="arrowsidemenu">
+                {%for item in product_category_list %}
+                <div class="menuheaders"><a href="{{ item.link }}" title="{{ item.category_name }}">{{ item.category_name }}</a></div>
+                <ul class="menucontents">
+                    {%for sub_item in item.sub_list %}
+                    <li><a href="{{ sub_item.link }}">{{ sub_item.category_name }}</a></li>
+                    {%endfor%}
+                </ul>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+
+    <div class="rightpage">
+        <table style="width:100%; margin-bottom: 10px;">
+            <tbody><tr>
+                <td style="width:25%; text-align: center;height: 60px;" class="step_done">
+                    <span class="step_title">Step 1 </span><br>
+                    <span class="step_info">目前購物清單</span>
+                </td>
+                <td style="width:25%; text-align: center;" class="step_done">
+                    <span class="step_title">Step 2 </span><br>
+                    <span class="step_info">填寫聯絡資料</span>
+                </td>
+                <td style="width:25%; text-align: center;" class="step_done">
+                    <span class="step_title">Step 3 </span><br>
+                    <span class="step_info">確認資料</span>
+                </td>
+                <td style="width:25%; text-align: center;" class="step_current">
+                    <span class="step_title">Step 4 </span><br>
+                    <span class="step_info">訂單完成</span>
+                </td>
+            </tr>
+        </tbody></table>
+
+    <div class="lineD"></div>
+    <div class="step04">感謝您的購買，您的訂單編號為 <span>{{ last_order_no }}</span><br/>
+        請將款項匯款至以下付款資訊。完成匯款後請來電告知，我們將會盡快處理您的訂單。<br/>
+        {% if auto_member %}
+        由於您尚未加入會員，系統已自動為您升級成為會員以方便您管理、維護訂單資訊，<br />
+        若要修改會員資料可以至 <a href="{{ 'info.html'|url }}" title="會員中心">會員中心</a> 修改，<br />
+        預設的帳號為 {{ current_user.user_account }}，密碼為 購買人的手機號碼<br />
+        {% endif %}
+    </div>
+    <div class="lineD"></div>
+    <table cellpadding="0" cellspacing="0" border="0" width="737" class="gbForm">
+        <tr>
+            <th width="77">匯款銀行</th>
+            <td>{{ 'pay_bank'| websetting }}</td>
+            <th width="77">帳號</th>
+            <td>{{ 'pay_account'| websetting }}</td>
+            <th width="77">戶名</th>
+            <td>{{ 'pay_name'| websetting }}</td>
+        </tr>
+    </table>
+    <div class="lineD"></div>
+    <div class="step04" align="center">訂單付款完成後可至 <a href="{{ 'order.html'|url }}" title="訂單查詢">訂單查詢</a> 查看訂單出貨狀況</div>
+    <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
+        <tr class="companyOther">
+            <td width="30" align="center"><img src="images/icon09.gif" alt=""/></td>
+            <td>{{ 'com_telephone'| websetting }}</td>
+            <td width="30" align="center"><img src="images/icon10.gif" alt=""/></td>
+            <td>{{ 'com_fax'| websetting }}</td>
+            <td width="30" align="center"><img src="images/icon08.gif" alt=""/></td>
+            <td><a href="mailto://{{ 'com_email'| websetting }}" title="">{{ 'com_email'| websetting }}</a></td>
+            <td width="30" align="center"><img src="images/icon07.gif" alt=""/></td>
+            <td><a href="{{ 'com_url'| websetting }}" title="">{{ 'com_url'| websetting }}</a></td>
+        </tr>
+    </table>
+    <div align="center" class="mT50"><a href="{{ 'product.html'|url }}" title=""><img src="images/shop_out.gif" alt="" class="img_change"/></a></div>
+</div>
+{% endblock %}

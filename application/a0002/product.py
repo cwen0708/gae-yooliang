@@ -21,7 +21,8 @@ create table Product(
 
 """
 
-class list(AdministratorHandler):
+
+class List(AdministratorHandler):
     def get(self, *args):
         size = self.params.get_integer("size", 10)
         page = self.params.get_integer("page", 1)
@@ -30,7 +31,7 @@ class list(AdministratorHandler):
         self.results = self.sql.query_all('SELECT * FROM Product ORDER BY sort DESC LIMIT %s, %s', ((page - 1) * size, size), (page - 1) * size)
 
 
-class create(AdministratorHandler):
+class Create(AdministratorHandler):
     def get(self, *args):
         self.results = []
         pc = self.sql.query_all('SELECT * FROM ProductCategory Where parent = 0 ORDER BY sort DESC')
@@ -43,31 +44,28 @@ class create(AdministratorHandler):
                 self.results.append(item_sub)
 
     def post(self, *args):
-        category = self.request.get('category') if self.request.get('category') is not None else u''
+        category = self.params.get_string("category")
         category_record = self.sql.query_one('SELECT * FROM ProductCategory where id = %s', category)
-        image = self.request.get('image') if self.request.get('image') is not None else u''
-        images = ",".join(self.params.get_list("images"))
 
         self.sql.insert("Product", {
-            "product_name": self.request.get('product_name') if self.request.get('product_name') is not None else u'',
-            "product_no": self.request.get('product_no') if self.request.get('product_no') is not None else u'',
-            "original_price": self.request.get('original_price') if self.request.get('original_price') is not None else u'',
-            "selling_price": self.request.get('selling_price') if self.request.get('selling_price') is not None else u'',
-            "content": self.request.get('content') if self.request.get('content') is not None else u'',
-            "category": category,
+            "product_name": self.params.get_string("product_name"),
+            "product_no": self.params.get_string("product_no"),
+            "content": self.params.get_string("content"),
             "parent_category": category_record["parent"],
-            "image": image,
-            "images": images,
+            "price": self.params.get_string("price"),
+            "images": ",".join(self.params.get_list("images")),
+            "image": self.params.get_string("image"),
+            "category": category,
             "is_enable": '1',
         })
         self.json({"info": u'產品已新增', "content": u"您已經成功的新增了一筆產品。"})
 
 
-class edit(AdministratorHandler):
+class Edit(AdministratorHandler):
     def get(self, *args):
-        id = self.request.get('id') if self.request.get('id') is not None else ''
-        if id != '':
-            self.record = self.sql.query_one('SELECT * FROM Product where id = %s', id)
+        record_id = self.params.get_string("id")
+        if record_id != '':
+            self.record = self.sql.query_one('SELECT * FROM Product where id = %s', record_id)
 
         self.results = []
         pc = self.sql.query_all('SELECT * FROM ProductCategory Where parent = 0 ORDER BY sort DESC')
@@ -84,24 +82,20 @@ class edit(AdministratorHandler):
             self.images = self.record["images"].split(",")
 
     def post(self, *args):
-        id = self.request.get('id') if self.request.get('id') is not None else ''
-        category = self.request.get('category') if self.request.get('category') is not None else u''
+        record_id = self.params.get_string("id")
+        category = self.params.get_string("category")
         category_record = self.sql.query_by_id("ProductCategory", category)
-        category_record = self.sql.query_one('SELECT * FROM ProductCategory where id = %s', category)
-        image = self.request.get('image') if self.request.get('image') is not None else u''
-        images = ",".join(self.params.get_list("images"))
 
         self.sql.update("Product", {
-            "product_name": self.request.get('product_name') if self.request.get('product_name') is not None else u'',
-            "product_no": self.request.get('product_no') if self.request.get('product_no') is not None else u'',
-            "original_price": self.request.get('original_price') if self.request.get('original_price') is not None else u'',
-            "selling_price": self.request.get('selling_price') if self.request.get('selling_price') is not None else u'',
-            "content": self.request.get('content') if self.request.get('content') is not None else u'',
-            "category": category,
+            "product_name": self.params.get_string("product_name"),
+            "product_no": self.params.get_string("product_no"),
+            "content": self.params.get_string("content"),
             "parent_category": category_record["parent"],
-            "image": image,
-            "images": images,
+            "price": self.params.get_string("price"),
+            "images": ",".join(self.params.get_list("images")),
+            "image": self.params.get_string("image"),
+            "category": category,
         }, {
-            "id": self.request.get('id') if self.request.get('id') is not None else ''
+            "id": record_id
         })
         self.json({"info": u'產品已更新', "content": u"您已經成功的變更了此筆產品。"})

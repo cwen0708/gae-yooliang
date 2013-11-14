@@ -1,0 +1,57 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_pro">產品型錄 {%if in_parent_category %} > {{in_parent_category }}{%endif%}{%if in_category %} > {{in_category }}{%endif%}</h1>
+</div>
+
+<div class="container">
+    <div class="leftpage">
+        <div class="leftmenu">
+            <div class="arrowsidemenu">
+                {%for item in product_category_list %}
+                <div class="menuheaders"><a href="{{ item.link }}" title="{{ item.category_name }}">{{ item.category_name }}</a></div>
+                <ul class="menucontents">
+                    {%for sub_item in item.sub_list %}
+                    <li><a href="{{ sub_item.link }}">{{ sub_item.category_name }}</a></li>
+                    {%endfor%}
+                </ul>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+    <div class="rightpage">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;">
+            <tbody>
+                {%for item in list %}
+                    <tr>
+                        <td><div class="subtitle" style="width: 770px; margin-left: 10px;">
+                            <a href="{{ item.link }}" style="float: right">more</a>
+                            {{ item.category_name }}
+                        </div></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {%for sub_item in item.sub_list %}
+                            <a href="{{ sub_item.link }}">
+                                <div class="pro_box_line" style="background-image: url({{ sub_item.image }});">
+                                    <div class="pro_title">{{ sub_item.product_name }}</div>
+                                    <div class="pro_more"> 詳細內容</div>
+                                </div>
+                            </a>
+                            {%endfor%}
+                        </td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <div class="clean"></div>
+        <div class="pager pagination" data-page-all="{{ page_all }}" data-page-now="{{ page_now }}" align="center"></div>
+    </div>
+    <div class="clean"></div>
+    <!--內容頁end-->
+</div>
+<div class="clean"></div>
+<!--footer start--></div>
+{% endblock %}
+
+

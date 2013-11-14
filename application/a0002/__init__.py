@@ -8,7 +8,7 @@
 from libs.yooframework import record, image, page
 from application.backend import backend, administrator, websetting, webimage, webpage
 import marquee, banner, home, productcategory, news, faq, product, contact, statuscode, aboutus
-import solution, service, rawdata, customer, caseinfo, equipment, monitor, contact2
+import solution, service, rawdata, customer, caseinfo, equipment, monitor, contact2, orderinfo, freight, member
 import webapp2
 
 CUSTOMER_NAME = u"牧陽能控有限公司"
@@ -30,14 +30,18 @@ routes = [
     webapp2.Route('/solution_view.html', home.solution_view),
 
     webapp2.Route('/login.html', home.login),
+    webapp2.Route('/login2.html', home.login),
     webapp2.Route('/service.html', home.service),
     webapp2.Route('/bcastr.xml', home.bcastr),
 
     webapp2.Route('/learn.html', home.learn),
     webapp2.Route('/learn_view.html', home.learn_view),
-    webapp2.Route('/product.html', home.product),
-    webapp2.Route('/product_view.html', home.product_view),
+    webapp2.Route('/product.html', home.Product),
+    webapp2.Route('/product_view.html', home.ProductView),
     webapp2.Route('/project.html', home.project),
+    webapp2.Route('/contact_step_1.html', home.contact_step_1),
+    webapp2.Route('/contact_step_1.html', home.contact_step_1),
+    webapp2.Route('/contact_step_1.html', home.contact_step_1),
     webapp2.Route('/project_detail.html', home.project_detail),
     webapp2.Route('/contact_step_1.html', home.contact_step_1),
     webapp2.Route('/contact_step_2-1.html', home.contact_step_2_1),
@@ -70,12 +74,53 @@ routes = [
     webapp2.Route('/user_login', home.user_login),
     webapp2.Route('/user_logout', home.user_logout),
 
+    webapp2.Route('/fix', handler=home.fix),
+    webapp2.Route('/join.html', handler=home.join),
+    webapp2.Route('/join.json', handler=home.join_json),
+    webapp2.Route('/password.html', handler=home.password),
+    webapp2.Route('/password_ch.html', handler=home.password_ch),
+    webapp2.Route('/password_ch.json', handler=home.password_ch_json),
+    webapp2.Route('/password_sw.html', handler=home.password_sw),
+    webapp2.Route('/password_sw.json', handler=home.password_sw_json),
+    webapp2.Route('/forget_password.json', handler=home.forget_password),
+
+
+    webapp2.Route('/login.json', handler=home.login_json),
+    webapp2.Route('/logout.json', handler=home.logout_json),
+
+    webapp2.Route('/info.html', handler=home.info),
+    webapp2.Route('/info.json', handler=home.info_json),
+    webapp2.Route('/password_ch.html', handler=home.password_ch),
+    webapp2.Route('/order.html', handler=home.order),
+    webapp2.Route('/order_view.html', handler=home.order_view),
+
     webapp2.Route('/watermark.png', home.watermark),
+    webapp2.Route('/step01.html', handler=home.step01),
+    webapp2.Route('/step02.html', handler=home.step02),
+    webapp2.Route('/step02.json', handler=home.step02_json),
+    webapp2.Route('/step03.html', handler=home.step03),
+    webapp2.Route('/step03.json', handler=home.step03_json),
+    webapp2.Route('/step04.html', handler=home.step04),
+    webapp2.Route('/add_shopping_cart.json', handler=home.add_shopping_cart_json),
+    webapp2.Route('/clean_shopping_cart.json', handler=home.clean_shopping_cart_json),
+
+    webapp2.Route('/admin/freight/init.html', handler=freight.Init),
+    webapp2.Route('/admin/freight/full_list.html', handler=freight.full_list),
+    webapp2.Route('/admin/freighttype/list.html', handler=freight.type_list),
+    webapp2.Route('/admin/freighttype/create.html', handler=freight.type_create),
+    webapp2.Route('/admin/freighttype/edit.html', handler=freight.type_edit),
+    webapp2.Route('/admin/freight/list.html', handler=freight.list),
+    webapp2.Route('/admin/freight/create.html', handler=freight.create),
+    webapp2.Route('/admin/freight/edit.html', handler=freight.edit),
 
 
     #==================================================================================================================#
     #後台頁面#
     #==================================================================================================================#
+    webapp2.Route('/admin/orderinfo/init.html', handler=orderinfo.Init),
+    webapp2.Route('/admin/orderinfo/list.html', handler=orderinfo.list),
+    webapp2.Route('/admin/orderinfo/edit.html', handler=orderinfo.edit),
+
     webapp2.Route('/admin/faqcategory/list.html', handler=faq.category_list),
     webapp2.Route('/admin/faqcategory/create.html', handler=faq.category_create),
     webapp2.Route('/admin/faqcategory/edit.html', handler=faq.category_edit),
@@ -140,13 +185,18 @@ routes = [
     webapp2.Route('/admin/equipment/create.html', handler=equipment.create),
     webapp2.Route('/admin/equipment/edit.html', handler=equipment.edit),
 
+    webapp2.Route('/admin/member/init.html', handler=member.init),
+    webapp2.Route('/admin/member/list.html', handler=member.list),
+    webapp2.Route('/admin/member/create.html', handler=member.create),
+    webapp2.Route('/admin/member/edit.html', handler=member.edit),
+
     webapp2.Route('/admin/marquee/list.html', handler=marquee.list),
     webapp2.Route('/admin/marquee/create.html', handler=marquee.create),
     webapp2.Route('/admin/marquee/edit.html', handler=marquee.edit),
 
-    webapp2.Route('/admin/product/list.html', handler=product.list),
-    webapp2.Route('/admin/product/create.html', handler=product.create),
-    webapp2.Route('/admin/product/edit.html', handler=product.edit),
+    webapp2.Route('/admin/product/list.html', handler=product.List),
+    webapp2.Route('/admin/product/create.html', handler=product.Create),
+    webapp2.Route('/admin/product/edit.html', handler=product.Edit),
 
     webapp2.Route('/admin/productcategory/list.html', handler=productcategory.list),
     webapp2.Route('/admin/productcategory/create.html', handler=productcategory.create),

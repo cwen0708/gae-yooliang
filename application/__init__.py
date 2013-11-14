@@ -13,9 +13,6 @@ RELATIONSHIP = [
     {"app": u"a0000", "name": u"侑良科技", "host": u"www.yooliang.com"},
     {"app": u"a0001", "name": u"一品夫人", "host": u"www.063318866.com"},
     {"app": u"a0002", "name": u"牧陽能控", "host": u"www.greenshepherd.com.tw"},
-    {"app": u"a0003", "name": u"全日昇建設", "host": u"crs.yooliang.com"},
-    #{"app": u"a0004", "name": u"頂好童裝", "host": u"www.uno-clothing.com.tw"},
-    {"app": u"a0005", "name": u"亞米服飾", "host": u"www.yami-yami.com.tw"},
     {"app": u"a0005", "name": u"亞米服飾", "host": u"yami.yooliang.com"},
 ]
 

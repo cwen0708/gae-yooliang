@@ -1,0 +1,29 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1 class="title_customer">客戶專區</h1>
+</div><!--top_抬頭區end-->
+
+<div class="container">
+    <div class="c_main">
+        <div class="login_l">
+            {{ 'member_login'|webpage }}
+        </div>
+        <div class="login_r">
+            <form id="login" action="{{ 'login.json'|url }}">
+                <div class="login_box">
+                    <label for="account">帳號</label><br/>
+                    <input type="text" id="account" name="account" class="login_box_text"/>
+                    <label for="password">密碼<br/></label>
+                    <input type="password" id="password" name="password" class="login_box_text"/>
+                    <div style="text-align: right;">
+                        <button type="button" value="" id="but_login" class="step_button">登入</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="clean"> </div>
+
+    </div>
+</div>
+{% endblock %}
