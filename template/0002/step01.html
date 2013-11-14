@@ -54,9 +54,8 @@
     <div class="lineD"></div>
     <table cellpadding="0" cellspacing="0" border="0" width="800" class="orderList">
         {% set row_class = cycler('', 'bgColor') %}
-        {% if can_show %}
-            {% for item in order_item_list %}
-            <tr class="{{ row_class.next() }}">
+        {% for item in order_item_list %}
+            <tr class="{{ row_class.next() }} hasRecord">
                 <td width="375">
                     <table cellpadding="0" cellspacing="0" border="0" align="center" style="width:375px;">
                         <tr>
@@ -75,9 +74,8 @@
                 <td width="104">{{ item.item_sum|thousands_separator }} 元</td>
                 <td width="50" align="center"><a href="#" class="remove_item" data-url="{{ 'add_shopping_cart.json'|url }}" data-info="product_id={{ item.product_id }}&quantity=-1&spec={{ item.product_spec }}" title=""><img src="images/icon12.gif" alt=""/></a></td>
             </tr>
-            {% endfor %}
-        {% else %}
-            <tr class="{{ row_class.next() }}">
+        {% endfor %}
+            <tr class="{{ row_class.next() }} notRecord" style="display: none;">
                 <td width="375">
                     <table cellpadding="0" cellspacing="0" border="0" align="center">
                         <tr>
@@ -91,35 +89,37 @@
                 <td width="104">--</td>
                 <td width="50" align="center">--</td>
             </tr>
-        {% endif %}
     </table>
-
-    {% if can_show %}
-    <div class="lineD"></div>
-    <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="800">
-        <tr>
-            <td width="546">
-                {% if current_user %}
-                <div><span>小叮嚀</span>│您也可以從右上方的 "訂單查詢" 進入會員中心裡查看所有的訂單資料。</div>
-                {% else %}
-                <div><span>快速結帳</span>│您只要在購物的時候填寫訂單資料，系統將自動為您升級成為會員。</div>
-                {% endif %}
-                <div class="btn" align="center">
-                    <a href="{{ 'goods_list.html'|url }}" title=""><img src="images/goshop_out.gif" alt="" class="img_change"/></a>
-                    <a href="#" class="remove_all" title=""><img src="images/recar_out.gif" alt="" class="img_change"/></a>
-                </div>
-            </td>
-            <td width="191" align="right" class="bgColor02">總金額 {{ record.total_amount|thousands_separator }} 元<br/>
-                <a href="{{ 'step02.html'|url }}" title="">前往結帳 ></a>
-            </td>
-        </tr>
-    </table>
-    {% endif %}
-</div>
+    <div style="display: none;" class="hasRecord">
+        <div class="lineD"></div>
+        <table cellpadding="0" cellspacing="0" border="0" class="allPric" width="800">
+            <tr>
+                <td width="546">
+                    {% if current_user %}
+                    <div><span>小叮嚀</span>│您也可以從右上方的 "訂單查詢" 進入會員中心裡查看所有的訂單資料。</div>
+                    {% else %}
+                    <div><span>快速結帳</span>│您只要在購物的時候填寫訂單資料，系統將自動為您升級成為會員。</div>
+                    {% endif %}
+                    <div class="btn" align="center">
+                        <a href="{{ 'goods_list.html'|url }}" title=""><img src="images/goshop_out.gif" alt="" class="img_change"/></a>
+                        <a href="#" class="remove_all" title=""><img src="images/recar_out.gif" alt="" class="img_change"/></a>
+                    </div>
+                </td>
+                <td width="191" align="right" class="bgColor02">總金額 {{ record.total_amount|thousands_separator }} 元<br/>
+                    <a href="{{ 'step02.html'|url }}" title="">前往結帳 ></a>
+                </td>
+            </tr>
+        </table>
+    </div>
  </div>
 
 <script type="text/javascript">
     $(function(){
+        if ($(".hasRecord").length == 0){
+            $(".notRecord").show();
+        }else{
+            $(".hasRecord").show();
+        }
         $(".remove_item").click(function(){
             var _this = $(this);
             json(_this.data("url"), _this.data("info") , function(data){

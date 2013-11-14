@@ -36,10 +36,15 @@
                     <li><a class="f" href="product.html" title="產品型錄">產品型錄</a><ul>{% for item in product_category_list %}<li><a href="product.html?parent={{ item.id }}">{{ item.category_name }}</a></li>{% endfor %}</ul></li>
                     <li><a class="f" href="learn.html" title="最新消息">最新消息</a></li>
                     <li><a class="f" href="contact_step_1.html" title="綠色接觸">綠色接觸</a></li>
-                    {% if user_login %}
-                    <li><a class="f" href="monitor.html" title="客戶專區">客戶專區</a></li>
+                    {% if customer_login %}
+                    <li><a class="f" href="monitor.html" title="監控中心">監控中心</a></li>
                     {% else %}
-                    <li><a class="f" href="login.html" title="客戶專區">客戶專區</a></li>
+                    <li><a class="f" href="login.html" title="監控中心">監控中心</a></li>
+                    {% endif %}
+                    {% if member_login %}
+                    <li><a class="f" href="info.html" title="客戶專區">客戶專區</a></li>
+                    {% else %}
+                    <li><a class="f" href="login2.html" title="客戶專區">客戶專區</a></li>
                     {% endif %}
                 </ul>
             </div>

@@ -313,9 +313,9 @@ function google_picker_before_editor_select() {
     var picker = new google.picker.PickerBuilder().
         addViewGroup(
             new google.picker.ViewGroup(google.picker.ViewId.PHOTOS).
+                addView(google.picker.ViewId.PHOTO_UPLOAD)).
                 addView(google.picker.ViewId.PHOTO_ALBUMS).
                 addView(google.picker.ViewId.PHOTOS).
-                addView(google.picker.ViewId.PHOTO_UPLOAD)).
         setCallback(google_picker_after_editor_select).
         build();
     picker.setVisible(true);
@@ -343,17 +343,17 @@ function google_picker_after_editor_select(data) {
 function createImagePicker() {
     var picker = new google.picker.PickerBuilder().
         addViewGroup(
+            new google.picker.ViewGroup(google.picker.ViewId.PHOTOS).
+                addView(google.picker.ViewId.PHOTO_UPLOAD)).
+                addView(google.picker.ViewId.PHOTO_ALBUMS).
+                addView(google.picker.ViewId.PHOTOS).
+        addViewGroup(
             new google.picker.ViewGroup(google.picker.ViewId.DOCS).
                 addView(google.picker.ViewId.FOLDERS).
                 addView(google.picker.ViewId.IMAGE_SEARCH).
                 addView(google.picker.ViewId.RECENTLY_PICKED).
                 addView(google.picker.ViewId.DOCS_IMAGES)
         ).
-        addViewGroup(
-            new google.picker.ViewGroup(google.picker.ViewId.PHOTOS).
-                addView(google.picker.ViewId.PHOTO_ALBUMS).
-                addView(google.picker.ViewId.PHOTOS).
-                addView(google.picker.ViewId.PHOTO_UPLOAD)).
         setCallback(pickerImageCallback).
         build();
     picker.setVisible(true);

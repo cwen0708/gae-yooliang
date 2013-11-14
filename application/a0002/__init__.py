@@ -30,6 +30,7 @@ routes = [
     webapp2.Route('/solution_view.html', home.solution_view),
 
     webapp2.Route('/login.html', home.login),
+    webapp2.Route('/login2.html', home.login),
     webapp2.Route('/service.html', home.service),
     webapp2.Route('/bcastr.xml', home.bcastr),
 
@@ -72,6 +73,26 @@ routes = [
     webapp2.Route('/error.html', home.error),
     webapp2.Route('/user_login', home.user_login),
     webapp2.Route('/user_logout', home.user_logout),
+
+    webapp2.Route('/fix', handler=home.fix),
+    webapp2.Route('/join.html', handler=home.join),
+    webapp2.Route('/join.json', handler=home.join_json),
+    webapp2.Route('/password.html', handler=home.password),
+    webapp2.Route('/password_ch.html', handler=home.password_ch),
+    webapp2.Route('/password_ch.json', handler=home.password_ch_json),
+    webapp2.Route('/password_sw.html', handler=home.password_sw),
+    webapp2.Route('/password_sw.json', handler=home.password_sw_json),
+    webapp2.Route('/forget_password.json', handler=home.forget_password),
+
+
+    webapp2.Route('/login.json', handler=home.login_json),
+    webapp2.Route('/logout.json', handler=home.logout_json),
+
+    webapp2.Route('/info.html', handler=home.info),
+    webapp2.Route('/info.json', handler=home.info_json),
+    webapp2.Route('/password_ch.html', handler=home.password_ch),
+    webapp2.Route('/order.html', handler=home.order),
+    webapp2.Route('/order_view.html', handler=home.order_view),
 
     webapp2.Route('/watermark.png', home.watermark),
     webapp2.Route('/step01.html', handler=home.step01),

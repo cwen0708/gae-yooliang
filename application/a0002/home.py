@@ -10,6 +10,9 @@ from datetime import datetime
 from datetime import timedelta
 import time
 
+class fix(HomeHandler):
+    def get(self, *args):
+        self.sql.query_one('alter table Member add validate_key text;')
 
 class GreenShepherdHandler(HomeHandler):
     def init(self):
@@ -27,37 +30,38 @@ class GreenShepherdHandler(HomeHandler):
         if "customer_id" not in self.session:
             self.session["customer_id"] = u""
         if self.session["customer_id"] is u"":
-            self.user_login = False
+            self.customer_login = False
         else:
-            self.user_login = True
+            self.customer_login = True
 
         minute_t = self.today + timedelta(minutes=-5)
         minute = (int(minute_t.strftime("%M")) // 5) * 5
         last_minute_t = self.today + timedelta(minutes=-10)
         last_minute = (int(last_minute_t.strftime("%M")) // 5) * 5
-
+        the_word = u'%%%s%%' % "year-"
+        r0 = self.sql.query_one('SELECT sum(kwh) as total_kwh_0 FROM StatisticsData WHERE date like %s ORDER BY sort DESC LIMIT %s, %s', (the_word, 0, 1))
         r1 = self.sql.query_one('SELECT sum(kwh) as total_kwh_1 FROM StatisticsData WHERE date = %s ORDER BY sort DESC LIMIT %s, %s', (minute_t.strftime("minute-%Y-%m-%d %H:") + str(minute), 0, 1))
         r2 = self.sql.query_one('SELECT sum(kwh) as total_kwh_2 FROM StatisticsData WHERE date = %s ORDER BY sort DESC LIMIT %s, %s', (last_minute_t.strftime("minute-%Y-%m-%d %H:") + str(last_minute), 0, 1))
+        _total_kwh_0 = r0["total_kwh_0"]
         _total_kwh_1 = r1["total_kwh_1"]
         _total_kwh_2 = r2["total_kwh_2"]
         #_total_kwh_1 = 14980.001
         #_total_kwh_2 = 4980.001
         if _total_kwh_1 is not None:
             self.last_5_minute_kwh = _total_kwh_1 - _total_kwh_2
-            self.last_5_minute_total_kwh = _total_kwh_1
+            self.last_5_minute_total_kwh = _total_kwh_0
             if self.last_5_minute_kwh < 0:
                 self.last_5_minute_kwh *= -1
         else:
-            the_word = u'%%%s%%' % "year-"
-            r0 = self.sql.query_one('SELECT sum(kwh) as total_kwh_0 FROM StatisticsData WHERE date like %s ORDER BY sort DESC LIMIT %s, %s', (the_word, 0, 1))
-            _total_kwh_0 = r0["total_kwh_0"]
             self.last_5_minute_kwh = 0.0
             self.last_5_minute_total_kwh = _total_kwh_0
 
         self.current_user = None
+        self.member_login = False
         if "member_id" in self.session:
             if self.session["member_id"] != "0":
                 self.current_user = self.sql.query_one("select * from Member Where id = %s", self.session["member_id"])
+                self.member_login = True
         self.cart_count = "%04d" % 0
         self.cart_title = u"尚未選購產品"
         if "order_id" in self.session:
@@ -66,6 +70,14 @@ class GreenShepherdHandler(HomeHandler):
                 self.cart_count = "%04d" % order["items_count"]
                 #self.cart_title = u"購買 %d 種產品，共計 %d 個，金額為 %6.2f 元" % (order["items_count"], order["items_total"], order["total_amount"])
 
+        self.menu_list = []
+        if self.current_user is None:
+            self.menu_list.append({"link": u"join.html", "category_name": u"加入會員"})
+            self.menu_list.append({"link": u"password.html", "category_name": u"忘記密碼"})
+        else:
+            self.menu_list.append({"link": u"info.html", "category_name": u"會員資料"})
+            self.menu_list.append({"link": u"password_ch.html", "category_name": u"修改密碼"})
+            self.menu_list.append({"link": u"order.html", "category_name": u"訂單查詢"})
 
     def gen_product_category_list(self):
         category = self.params.get_integer("category", 0)
@@ -86,6 +98,49 @@ class GreenShepherdHandler(HomeHandler):
                 item_sub["is_selected"] = (item_sub["id"] == category)
                 item_sub["link"] = "product.html?parent=" + str(item["id"]) + "&category=" + str(item_sub["id"])
             item["sub_list"] = sub_list
+
+
+
+class login_json(GreenShepherdHandler):
+    def post(self, *args):
+        account = self.params.get_string("account")
+        password = self.params.get_string("password")
+        if account is u"":
+            self.json_message(u"請輸入帳號")
+        if password is u"":
+            self.json_message(u"請輸入六位數以上的密碼")
+        r = self.sql.query_one("select * from Member Where user_account = %s AND user_password = %s", (account, password))
+        if r is not None:
+            self.session["member_id"] = r["id"]
+            self.current_user = r
+            self.json_message("done")
+            if "order_id" in self.session:
+                order_id = self.session["order_id"]
+                self.sql.update("OrderInfo", {
+                    "member_id": self.current_user["id"],
+                }, {
+                    "id": order_id
+                })
+            return
+        r = self.sql.query_one("select * from Member Where email = %s AND user_password = %s", (account, password))
+        if r is not None:
+            self.session["member_id"] = r["id"]
+            self.current_user = r
+            self.json_message("done")
+            if "order_id" in self.session:
+                order_id = self.session["order_id"]
+                self.sql.update("OrderInfo", {
+                    "member_id": self.current_user["id"],
+                }, {
+                    "id": order_id
+                })
+            return
+        self.json_message(u"帳號密碼有誤")
+        
+class logout_json(GreenShepherdHandler):
+    def post(self, *args):
+        self.session["member_id"] = "0"
+        self.json_message("done")
 
 class index(GreenShepherdHandler):
     def get(self, *args):
@@ -1070,10 +1125,6 @@ class step01(GreenShepherdHandler):
                     else:
                         item["spec"] = u""
 
-                if self.record is not None and len(self.order_item_list) > 0:
-                    can_show = True
-                else:
-                    can_show = False
 
 class step02(GreenShepherdHandler):
     def get(self, *args):
@@ -1466,3 +1517,256 @@ class add_shopping_cart_json(GreenShepherdHandler):
                 "id": order_id
             })
         self.json({"done": "完成"})
+
+class join(GreenShepherdHandler):
+    def get(self, *args):
+        self.page_title = u"加入會員"
+        if self.current_user is not None:
+            return self.redirect("/info.html")
+
+class join_json(GreenShepherdHandler):
+    def validateEmail(self, email):
+        import re
+        if len(email) > 6:
+            if re.match('^[a-zA-Z0-9._%-+]+@[a-zA-Z0-9._%-]+.[a-zA-Z]{2,6}$', email) is not None:
+                return True
+        return False
+
+    def post(self, *args):
+        email = self.params.get_string("email")
+        password = self.params.get_string("password")
+        password2 = self.params.get_string("password2")
+        json_data = {}
+        if email is u"":
+            json_data["email"] = u"請輸入電子信箱"
+        if validate_email(email) is False:
+            json_data["email"] = u"請電子信箱格式有誤"
+
+
+        if len(password) < 6:
+            json_data["password"] = u"請密碼長度不足"
+        if password != password2:
+            json_data["password2"] = u"請確認密碼是否一致"
+        if password is u"":
+            json_data["password"] = u"請輸入密碼"
+        if password2 is u"":
+            json_data["password2"] = u"請輸入確認密碼"
+        r = self.sql.query_one("select * from Member Where email = %s", email)
+        if r is not None:
+            json_data["email"] = u"此信箱已有人使用"
+        if len(json_data) > 0:
+            return self.json(json_data)
+        else:
+            d = datetime.today()
+            self.sql.insert('Member',{
+                "user_account": email,
+                "user_password": password,
+                "user_name": email,
+                "birthday": d.strftime("%Y-%m-%d"),
+                "telephone": u'',
+                "mobile": u'',
+                "address_county": u'',
+                "address_area": u'',
+                "address_detail": u'',
+                "address_zip": u'',
+                "email": email,
+                "remark": u'',
+                "is_enable": '1',
+                "is_custom_account": '0',
+            })
+            return self.json({"done": u"感謝您的加入。"})
+        
+class info(GreenShepherdHandler):
+    def get(self, *args):
+        self.page_title = u"會員資料"
+        if self.current_user is None:
+            return self.redirect("/join.html")
+
+class info_json(GreenShepherdHandler):
+    def post(self, *args):
+        json_data = {}
+        if self.current_user is None:
+            json_data["user_name"] = u"您尚未登入，或登入已逾期，請先登入"
+            return self.json(json_data)
+
+        if self.current_user["is_custom_account"] == 0:
+            user_account = self.params.get_string("user_account")
+            if user_account is u"":
+                json_data["user_account"] = u"初次設定請填寫會員帳號，設定完成後無法更改"
+                return self.json(json_data)
+        else:
+            user_account = self.current_user["user_account"]
+
+        user_name = self.params.get_string("user_name")
+        birthday = self.params.get_string("birthday")
+        telephone = self.params.get_string("telephone")
+        mobile = self.params.get_string("mobile")
+        email = self.params.get_string("email")
+        address_county = self.params.get_string("address_county")
+        address_area = self.params.get_string("address_area")
+        address_zip = self.params.get_string("address_zip")
+        address_detail = self.params.get_string("address_detail")
+
+        if self.is_localhost:
+            address_county = ""
+            address_area = ""
+        self.sql.update("Member", {
+            "user_account": user_account,
+            "user_name": user_name,
+            "birthday": birthday,
+            "telephone": telephone,
+            "mobile": mobile,
+            "email": email,
+            "address_county": address_county,
+            "address_area": address_area,
+            "address_zip": address_zip,
+            "address_detail": address_detail,
+            "is_custom_account": 1,
+        }, {
+            "id": self.current_user["id"]
+        })
+        json_data["done"] = u"您的資料已經更新了。"
+        return self.json(json_data)
+
+
+class password(GreenShepherdHandler):
+    def get(self, *args):
+        self.page_title = u"忘記密碼"
+
+class password_ch(GreenShepherdHandler):
+    def get(self, *args):
+        if self.current_user is None:
+            return self.redirect("/")
+
+
+class password_ch_json(GreenShepherdHandler):
+    def post(self, *args):
+        old_password = self.params.get_string("old_password")
+        password = self.params.get_string("password")
+        password2 = self.params.get_string("password2")
+        json_data = {}
+        if self.current_user is None:
+            json_data["old_password"] = u"您尚未登入，或登入已逾期，請先登入"
+            return self.json(json_data)
+        if self.current_user["user_password"] != old_password:
+            json_data["old_password"] = u"舊密碼不相符，請重新輸入"
+        if len(password) < 6:
+            json_data["password"] = u"請密碼長度不足"
+        if password != password2:
+            json_data["password2"] = u"請確認密碼是否一致"
+        if password is u"":
+            json_data["password"] = u"請輸入密碼"
+        if password2 is u"":
+            json_data["password2"] = u"請輸入確認密碼"
+
+        if len(json_data) > 0:
+            return self.json(json_data)
+        else:
+            self.sql.update("Member",{
+                "user_password": password
+            },{
+                "id": self.current_user["id"]
+            })
+            return self.json({"done": u"您的密碼已經成功變更了。"})
+
+
+class password_sw(GreenShepherdHandler):
+    def get(self, *args):
+        self.validate_key = self.params.get_string("validate_key")
+
+
+class password_sw_json(GreenShepherdHandler):
+    def post(self, *args):
+        validate_key = self.params.get_string("validate_key")
+        password = self.params.get_string("password")
+        password2 = self.params.get_string("password2")
+        json_data = {}
+        member = self.sql.query_one("select * from Member where validate_key = %s", validate_key)
+        if len(password) < 6:
+            json_data["password"] = u"請密碼長度不足"
+        if password != password2:
+            json_data["password2"] = u"請確認密碼是否一致"
+        if password is u"":
+            json_data["password"] = u"請輸入密碼"
+        if password2 is u"":
+            json_data["password2"] = u"請輸入確認密碼"
+
+        if member is None:
+            json_data["password"] = u"此連結已經失效了，請重新寄發「忘記密碼」郵件"
+        if len(json_data) > 0:
+            return self.json(json_data)
+        else:
+            self.sql.update("Member",{
+                "user_password": password,
+                "validate_key": ""
+            },{
+                "id": member["id"]
+            })
+            return self.json({"done": u"您的密碼已經成功變更了。"})
+
+
+class forget_password(GreenShepherdHandler):
+    def post(self, *args):
+        email = self.params.get_string("email")
+        json_data = {}
+        if email is u"":
+            json_data["email"] = u"請輸入電子信箱"
+        if validate_email(email) is False:
+            json_data["email"] = u"請電子信箱格式有誤"
+
+        if len(json_data) > 0:
+            return self.json(json_data)
+        rs = random_string(20)
+        member = self.sql.query_one("select * from Member where email = %s", email)
+        self.sql.update("Member",{
+            "validate_key": rs
+        }, {
+            "email": email
+        })
+        url = "http://www.greenshepherd.com.tw/password_sw.html?validate_key=" + rs
+        mail_body = u"""
+
+    ＊此信件為系統發出信件，請勿直接回覆，感謝您的配合。謝謝！＊
+
+    親愛的牧陽能控會員 %s 您好：
+
+    這封認證信是由牧陽能控發出，處理您忘記密碼，
+    當您收到此「認證信函」後，
+    請直接點選下方連結重新填入新的密碼，無需回信。
+    若您
+
+    會員登入
+    %s
+
+    如果您有任何問題，
+    請您至牧陽能控中心官網查詢相關訊息或來信給我們，
+
+    服務電話：(06)3318866
+    服務時間：週一～週五 09:00~17:30 例假日除外
+    客戶服務信箱：gs@greenshepherd.com.tw
+    """ % (member["user_name"],url)
+        mail.send_mail(sender="gs@greenshepherd.com.tw", to=email, subject=u"牧陽能控官網訊息通知", body=mail_body)
+        return self.json({"done": u"密碼修改信件已經成功送出。"})
+
+
+class order(GreenShepherdHandler):
+    def get(self, *args):
+        size = self.params.get_integer("size", 10)
+        page = self.params.get_integer("page", 1)
+        self.page_now = page
+        self.page_title = u"訂單查詢"
+        if self.current_user is None:
+            return self.redirect("/")
+        else:
+            self.page_all = self.sql.pager('SELECT count(1) FROM OrderInfo Where member_id = %s', self.current_user["id"], size)
+            self.order_list = self.sql.query_all('SELECT * FROM OrderInfo Where member_id = %s ORDER BY sort DESC LIMIT %s, %s', (self.current_user["id"], (page - 1) * size, size), (page - 1) * size)
+            for item in self.order_list:
+                item["link"] = "/order_view.html?id=" + str(item["id"])
+
+class order_view(GreenShepherdHandler):
+    def get(self, *args):
+        id = self.request.get('id') if self.request.get('id') is not None else ''
+        if id != '':
+            self.record = self.sql.query_one('SELECT * FROM OrderInfo where id = %s', id)
+            self.page_title = self.record["order_no"] + u" - 訂單詳細資訊"
+            self.order_item_list = self.sql.query_all('SELECT * FROM OrderItem where order_id = %s', id)

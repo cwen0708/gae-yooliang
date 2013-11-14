@@ -126,7 +126,7 @@ function rf_data() {
 
     var d = new Date();
     var total_second = (d.getHours() * 3600) + (d.getMinutes() * 60) + d.getSeconds();
-    var pre_second_kwh = (yesterday_kwh / 12 / 60 / 60);
+    var pre_second_kwh = (yesterday_kwh / 5 / 60);
     var now_kwh = Math.ceil((yesterday_kwh_total + (total_second * pre_second_kwh)) * 100) / 100;
     if (d.getHours() < 6 || d.getHours() > 19) {
         now_kwh = yesterday_kwh_total;
@@ -394,5 +394,111 @@ $(function () {
                 window.location.href = $form.data("step04");;
             }
         });
+    });
+    //更改密碼
+    $("#but_pw_ch_send").click(function() {
+        $(".error").hide();
+        var $form = $("form#pw_ch");
+        json($form.attr("action"), $form.serialize(), function(data) {
+            for (var key in data) {
+                $("#info_" + key).html("&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;" + data[key]).slideDown();
+            }
+            if (data.done != undefined) {
+                $("#d_form").slideUp();
+            }
+        }, function(data) {
+            for (var key in data) {
+                $("#info_" + key).html("&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;" + data[key]).slideDown();
+            }
+            if (data.done != undefined) {
+                $("#d_form").slideUp();
+            }
+        });
+    });
+    //更改密碼-清空
+    $("#but_pw_ch_reset").click(function() {
+        $("#old_pw").val("");
+        $("#pw").val("");
+        $("#pw2").val("");
+    });
+    //修改會員資料
+    $("#but_info_send").click(function() {
+        $(".error").hide();
+        var $form = $("form#info");
+        json($form.attr("action"), $form.serialize(), function(data) {
+            for (var key in data) {
+                $("#info_" + key).html("&nbsp;*&nbsp;" + data[key]).slideDown();
+            }
+            if (data.done != undefined) {
+                $("#d_form").slideUp();
+            }
+            setTimeout('$("#info_done").slideUp();', 5000);
+        }, function(data) {
+            for (var key in data) {
+                $("#info_" + key).html("&nbsp;*&nbsp;" + data[key]).slideDown();
+            }
+            if (data.done != undefined) {
+                $("#d_form").slideUp();
+            }
+            setTimeout('$("#info_done").slideUp();', 5000);
+        });
+    });
+    //加入會員
+    $("#but_join_send").click(function() {
+        if ($("#must_check").is(":checked")) {
+            $(".error").hide();
+            var $form = $("form#res");
+            json($form.attr("action"), $form.serialize(), function(data) {
+                for (var key in data) {
+                    $("#info_" + key).html("&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;" + data[key]).slideDown();
+                }
+                if (data.done != undefined) {
+                    $("#d_form").slideUp();
+                }
+            }, function(data) {
+                for (var key in data) {
+                    $("#info_" + key).html("&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;" + data[key]).slideDown();
+                }
+                if (data.done != undefined) {
+                    $("#d_form").slideUp();
+                }
+            });
+        } else {
+            $("#info_must_check").html("&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;請先閱讀並同意條約規範");
+        }
+    });
+    //加入會員-清空
+    $("#but_join_reset").click(function() {
+        $("#email").val("");
+        $("#pw").val("");
+        $("#pw2").val("");
+    });
+    //會員登入
+    $("#but_login").click(function() {
+        var $form = $("form#login");
+        json($form.attr("action"), $form.serialize(), function(data) {
+            if (data.info == "done") {
+                location.reload();
+            } else {
+                for (var key in data) {
+                    alert(data[key]);
+                }
+            }
+        }, function(data) {});
+    });
+    //會員登出
+    $("#but_logout").click(function() {
+        json($(this).data("action"), null, function(data) {
+            if (data.info == "done") {
+                location.reload();
+            }
+        }, function(data) {});
+    });
+
+    //換圖
+    jQuery('.img_change').mouseover(function() {
+        $(this).attr("src", $(this).attr("src").replace("_out", "_over"));
+    }).mouseout(function() {
+        $(this).attr("src", $(this).attr("src").replace("_over", "_out"));
     });
 });

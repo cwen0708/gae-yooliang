@@ -1,7 +1,7 @@
 ﻿{% extends "base.html" %}
 {% block content %}
     <div class="title">
-        <h1 class="title_monitor">監控中心 > {{ customer_name }} > {{ case.case_name }} <a href="/user_logout" style="float: right;">【登出】</a></h1>
+        <h1 class="title_monitor">監控中心 > {{ customer_name }} > {{ case.case_name }} <a id="but_logout" href="#" style="float: right;" data-action="http://www.greenshepherd.com.tw/logout.json">【登出】</a></h1>
     </div><!--top_抬頭區end-->
 
     <script src="/template/0002/js/weather.js"></script>
