@@ -1,6 +1,8 @@
+#application: yooliang-technology
+#application: yooliang-technology
+#application: ashine-lin
 application: greenshepherdcomtw
-#application: yooliang-technology-test
-version: 1
+version: 3
 runtime: python27
 api_version: 1
 threadsafe: true
