@@ -166,7 +166,7 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	width:165px;
 	height:105px;
 	border:3px solid #fff;
-	color:#765c30;
+	color:#462c00;
 	text-align:center;
 	font-size:15px;
 	font-family:"Century Gothic", "微軟正黑體";
@@ -219,14 +219,14 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	white-space: nowrap;
 	}
 .menu a{
-	color:#765c30;
+	color:#462c00;
 	display:block;
 	padding:15px 25px;
 	margin:0 auto;
-	border-bottom:1px solid #765c30;
+	border-bottom:1px solid #462c00;
 	}
 .menu a:hover{
-	background-color:#765c30;
+	background-color:#462c00;
 	color:#fff;
 	}
 	
@@ -240,8 +240,6 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	right:-5%;
 	position:absolute;
 	top:50%;
-	text-shadow: 1px 0 #fff, 0 1px #fff, 
-    0 -1px #fff, -1px 0 #fff;
 	}
 .h542{
 	height:542px;
@@ -256,8 +254,8 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	font-family:"Century Gothic", "微軟正黑體";
 	font-weight:bold;
 	letter-spacing:1px;
-	color:#765c30;
-	border-bottom:1px solid #765c30;
+	color:#462c00;
+	border-bottom:1px solid #462c00;
 	padding-left:10px;
 	}
 .caseList, .caseView{
@@ -281,21 +279,21 @@ a:hover .caseList{
 	margin-left:20px;
 	}
 .caseTitle{
-	color:#765c30;
+	color:#462c00;
 	font-weight:bold;
 	font-size:15px;
 	padding-bottom:10px;
 	
 	}
 .caseTitle a{
-	color:#765c30;
+	color:#462c00;
 	
 	}
 .caseTitle a:hover{
 	text-decoration:underline;
 	}
 .caseText{
-	color:#9b7d4b;
+	color:#6b4d1b;
 	line-height:20px;
 	max-height: 350px;
     overflow-y: auto;
@@ -316,7 +314,7 @@ a:hover .caseList{
 	}
 .bPicView{
 	width:490px;
-	height:490px;
+	height:590px;
 	float:left;
 	border:5px solid #fff;
 	overflow:hidden;
@@ -324,8 +322,17 @@ a:hover .caseList{
 	}
 .caseView .caseSPic {
 	margin-top:5px;
+    min-width: 300px;
+    height: 200px;
+    overflow: hidden;
 	}
 .caseView .caseSPic div{
+	margin:10px 10px 10px 0;
+	width:65px;
+	height:65px;
+	}
+
+.caseView .caseSPic li{
 	margin:10px 30px 10px 0;
 	}
 .btn{
@@ -368,7 +375,7 @@ a:hover .caseList{
 	padding:5px 0;
 	}
 .copyright, .copyright a, #pFooter, #pFooter a, .common, .common a{
-	color:#765c30;
+	color:#462c00;
 	text-shadow: 1px 0 #fff, 0 1px #fff, 
     0 -1px #fff, -1px 0 #fff;
 	}
@@ -386,14 +393,14 @@ a:hover .caseList{
 	}
 .pager a{
 	margin:0px 10px;
-	color:#765c30;
+	color:#462c00;
 	padding:2px 5px;
 	}
 .pager a:hover, .pager .current{
 	margin:0px 10px;
 	padding:2px 5px;
 	color:#fff;
-	background-color:#765c30;
+	background-color:#462c00;
 	}
 	.nano { background: #bba; width: 500px; height: 500px; font-size:12px;border-radius:8px; }
 
@@ -428,7 +435,7 @@ a:hover .caseList{
 
 .caseText::-webkit-scrollbar-thumb
 {
-	background-color: #765C30;
+	background-color: #462c00;
 	background-image: -webkit-linear-gradient(45deg,
 	                                          rgba(255, 255, 255, .2) 25%,
 											  transparent 25%,
