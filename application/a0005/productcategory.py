@@ -16,7 +16,6 @@ create table ProductCategory(
 
 class list(AdministratorHandler):
     def get(self, *args):
-
         self.results = []
         pc = self.sql.query_all('SELECT * FROM ProductCategory ORDER BY sort DESC')
         for item in pc:
@@ -107,11 +106,23 @@ class edit(AdministratorHandler):
                             item["in_list"] = True
                             index = self.results.index(parent_item) + 1
                             self.results.insert(index, item)
+        for item in self.results:
+            item["is_select"] = (self.record["parent"] == item["id"])
 
     def post(self, *args):
+        member_discount_rate = self.params.get_float("member_discount_rate")
+        if member_discount_rate < 0 or member_discount_rate > 100:
+            self.json({"info": u'新增失敗', "content": u"會員折扣率必須介於 1~100 之間"})
+            return
+        seller_discount_rate = self.params.get_float("seller_discount_rate")
+        if seller_discount_rate < 0 or seller_discount_rate > 100:
+            self.json({"info": u'新增失敗', "content": u"經銷折扣率必須介於 1~100 之間"})
+            return
         self.sql.update('ProductCategory', {
             "category_name": self.request.get('title') if self.request.get('title') is not None else u'',
             "parent": self.request.get('parent') if self.request.get('parent') is not None else u'',
+            "member_discount_rate": member_discount_rate,
+            "seller_discount_rate": seller_discount_rate,
         }, {
             "id": self.request.get('id') if self.request.get('id') is not None else ''
         })

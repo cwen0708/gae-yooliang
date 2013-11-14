@@ -8,12 +8,8 @@
 
 RELATIONSHIP = [
     {"app": u"a0002", "name": u"開發環境", "host": u"localhost"},
-    {"app": u"a0000", "name": u"測試環境", "host": u"5.yooliang-technology.appspot.com"},
-    {"app": u"a0000", "name": u"侑良科技", "host": u"yooliang-technology.appspot.com"},
-    {"app": u"a0000", "name": u"侑良科技", "host": u"www.yooliang.com"},
-    {"app": u"a0001", "name": u"一品夫人", "host": u"www.063318866.com"},
+    {"app": u"a0002", "name": u"測試環境", "host": u"test.yooliang.com"},
     {"app": u"a0002", "name": u"牧陽能控", "host": u"www.greenshepherd.com.tw"},
-    {"app": u"a0005", "name": u"亞米服飾", "host": u"yami.yooliang.com"},
 ]
 
 DEBUG = True

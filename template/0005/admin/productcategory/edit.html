@@ -14,16 +14,39 @@
         <div class="span12">
             <div class="control-group">
                 <label class="control-label" for="parent" data-lang="此分類隸屬於．．．"></label>
-                <select class="span12" name="parent" id="parent"><option value="0">根目錄</option>
+                <select class="span12" name="parent" id="parent">
                     {% for item in results %}
+                    {% if item.level == 0 %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">{{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">{{ item.category_name }}</option>
+                        {% endif %}
+                    {% endif %}
+                    {% if item.level == 1 %}
                         {% if item.is_select %}
                         <option value="{{ item.id }}" selected="selected">　　{{ item.category_name }}</option>
                         {%else%}
                         <option value="{{ item.id }}">　　{{ item.category_name }}</option>
                         {% endif %}
+                    {% endif %}
+                    {% if item.level == 2 %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">　　　　{{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">　　　　{{ item.category_name }}</option>
+                        {% endif %}
+                    {% endif %}
+                    {% if item.level == 3 %}
+                        {% if item.is_select %}
+                        <option value="{{ item.id }}" selected="selected">　　　　　　{{ item.category_name }}</option>
+                        {%else%}
+                        <option value="{{ item.id }}">　　　　　　{{ item.category_name }}</option>
+                        {% endif %}
+                    {% endif %}
                     {% endfor %}
                 </select>
-            </div>
+                </div>
         </div>
     </div>
 
@@ -32,7 +55,7 @@
             <div class="control-group">
                 <label class="control-label" for="member_discount_rate" data-lang="會員折扣率"></label>
                 <div class="controls">
-                    <input type="text" id="member_discount_rate" placeholder="請輸入 1~100 的折扣率, 9折 = 90 , 75折 = 75" name="member_discount_rate" class="span12" value="{{ item.member_discount_rate }}" />
+                    <input type="text" id="member_discount_rate" placeholder="請輸入 1~100 的折扣率, 9折 = 90 , 75折 = 75" name="member_discount_rate" class="span12" value="{{ record.member_discount_rate }}" />
                 </div>
             </div>
         </div>
@@ -43,7 +66,7 @@
             <div class="control-group">
                 <label class="control-label" for="seller_discount_rate" data-lang="經銷折扣率"></label>
                 <div class="controls">
-                    <input type="text" id="seller_discount_rate" placeholder="請輸入 1~100 的折扣率, 9折 = 90 , 75折 = 75" name="seller_discount_rate" class="span12" value="{{ item.seller_discount_rate }}" />
+                    <input type="text" id="seller_discount_rate" placeholder="請輸入 1~100 的折扣率, 9折 = 90 , 75折 = 75" name="seller_discount_rate" class="span12" value="{{ record.seller_discount_rate }}" />
                 </div>
             </div>
         </div>

@@ -40,6 +40,8 @@
             <td>{{ item.category_name }}</td>
         {% endif %}
         {% if item.level > 0 %}
+        <td>{{ item.seller_discount_rate }} %</td>
+        <td>{{ item.member_discount_rate }} %</td>
         <td><button type="button" class="btn btn-edit-page" data-lang="edit"></button></td>
         <td>
             <div class="btn-group" data-toggle="buttons-radio">
@@ -47,12 +49,10 @@
                 <button class="btn btn-set-disable {% if item.is_enable == false %} active{% endif %}" data-lang="disable"></button>
             </div>
         </td>
-        <td><br /></td>
-        <td><br /></td>
         <td><button type="button" class="btn btn-delete" data-lang="delete"></button></td>
         {% else %}
-        <td><br /></td>
-        <td><br /></td>
+        <td>{{ item.seller_discount_rate }} %</td>
+        <td>{{ item.member_discount_rate }} %</td>
         <td><button type="button" class="btn btn-edit-page" data-lang="edit"></button></td>
         <td><br /></td>
         <td><br /></td>

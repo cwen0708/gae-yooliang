@@ -18,8 +18,40 @@
     <div class="row-fluid">
         <div class="span12">
             <div class="control-group">
-                <label class="control-label" for="parent" data-lang="所屬分類"></label>
-                <select class="span12" name="category" id="parent">
+                <label class="control-label" for="category" data-lang="所屬分類一"></label>
+                <select class="span12" name="category" id="category">
+                    {% for item in results %}
+                        {% if item.is_not_root %}
+                            <option value="{{ item.id }}">　　{{ item.category_name }}</option>
+                        {% else %}
+                            <optgroup label="{{ item.category_name }}">{{ item.category_name }}</optgroup>
+                        {% endif %}
+                    {% endfor %}</select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="category2" data-lang="所屬分類二"></label>
+                <select class="span12" name="category2" id="category2">
+                    {% for item in results %}
+                        {% if item.is_not_root %}
+                            <option value="{{ item.id }}">　　{{ item.category_name }}</option>
+                        {% else %}
+                            <optgroup label="{{ item.category_name }}">{{ item.category_name }}</optgroup>
+                        {% endif %}
+                    {% endfor %}</select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="control-group">
+                <label class="control-label" for="category3" data-lang="所屬分類三"></label>
+                <select class="span12" name="category3" id="category3">
                     {% for item in results %}
                         {% if item.is_not_root %}
                             <option value="{{ item.id }}">　　{{ item.category_name }}</option>
